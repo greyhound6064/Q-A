@@ -213,6 +213,7 @@ export async function renderGalleryList() {
                             preload="auto"
                             disablePictureInPicture
                             x-webkit-airplay="allow"
+                            onloadedmetadata="this.volume = 0.3"
                             style="width: 100%; height: 100%; max-height: 600px; object-fit: contain;">
                             <source src="${escapeHtml(fileUrl)}" type="video/mp4">
                             브라우저가 비디오를 지원하지 않습니다.
@@ -228,7 +229,7 @@ export async function renderGalleryList() {
                                 <circle cx="6" cy="18" r="3"></circle>
                                 <circle cx="18" cy="16" r="3"></circle>
                             </svg>
-                            <audio controls class="gallery-audio-player">
+                            <audio controls class="gallery-audio-player" onloadedmetadata="this.volume = 0.3">
                                 <source src="${escapeHtml(fileUrl)}" type="audio/mpeg">
                                 브라우저가 오디오를 지원하지 않습니다.
                             </audio>

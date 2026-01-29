@@ -337,6 +337,7 @@ function updateArtworkMedia() {
                 playsinline
                 disablePictureInPicture
                 x-webkit-airplay="allow"
+                onloadedmetadata="this.volume = 0.3"
                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 <source src="${escapeHtml(currentUrl)}" type="video/mp4">
                 브라우저가 비디오를 지원하지 않습니다.
@@ -351,7 +352,7 @@ function updateArtworkMedia() {
                         <circle cx="6" cy="18" r="3"></circle>
                         <circle cx="18" cy="16" r="3"></circle>
                     </svg>
-                    <audio controls class="feed-audio-player">
+                    <audio controls class="feed-audio-player" onloadedmetadata="this.volume = 0.3">
                         <source src="${escapeHtml(currentUrl)}" type="audio/mpeg">
                         브라우저가 오디오를 지원하지 않습니다.
                     </audio>

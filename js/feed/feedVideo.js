@@ -14,6 +14,11 @@ export function toggleVideoMute(postId) {
     
     video.muted = !video.muted;
     
+    // 뮤트 해제 시 볼륨을 30으로 설정
+    if (!video.muted) {
+        video.volume = 0.3;
+    }
+    
     // 아이콘 변경
     if (video.muted) {
         // 음소거 아이콘

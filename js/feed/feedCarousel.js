@@ -244,14 +244,14 @@ function updateFeedDetailMedia() {
     let mediaHTML = '';
     if (['mp4', 'webm', 'ogg', 'mov'].includes(extension)) {
         mediaHTML = `
-            <video controls muted loop playsinline>
+            <video controls muted loop playsinline onloadedmetadata="this.volume = 0.3">
                 <source src="${escapeHtml(fileUrl)}" type="video/mp4">
                 브라우저가 비디오를 지원하지 않습니다.
             </video>
         `;
     } else if (['mp3', 'wav', 'ogg', 'm4a', 'aac'].includes(extension)) {
         mediaHTML = `
-            <audio controls>
+            <audio controls onloadedmetadata="this.volume = 0.3">
                 <source src="${escapeHtml(fileUrl)}" type="audio/mpeg">
                 브라우저가 오디오를 지원하지 않습니다.
             </audio>

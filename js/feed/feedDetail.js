@@ -109,7 +109,7 @@ export async function openFeedDetail(postId, showComments = false, feedPosts = [
         if (mediaType === 'video') {
             mediaHTML = `
                 <div id="feed-detail-media-content">
-                    <video id="feed-detail-video" controls loop playsinline autoplay>
+                    <video id="feed-detail-video" controls loop playsinline autoplay onloadedmetadata="this.volume = 0.3">
                         <source src="${escapeHtml(fileUrl)}" type="video/mp4">
                         브라우저가 비디오를 지원하지 않습니다.
                     </video>
@@ -133,7 +133,7 @@ export async function openFeedDetail(postId, showComments = false, feedPosts = [
         } else if (mediaType === 'audio') {
             mediaHTML = `
                 <div id="feed-detail-media-content" class="audio-content">
-                    <audio controls>
+                    <audio controls onloadedmetadata="this.volume = 0.3">
                         <source src="${escapeHtml(fileUrl)}" type="audio/mpeg">
                         브라우저가 오디오를 지원하지 않습니다.
                     </audio>
