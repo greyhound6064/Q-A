@@ -257,7 +257,7 @@ body.dark-mode .music-volume-control {
 .tabs {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.2rem;
     position: relative;
     margin-top: auto;
     margin-bottom: auto;
