@@ -4,6 +4,10 @@
 import { Icons } from '../shared/icons.js';
 
 export function createWelcomeModal() {
+    // 다크모드 설정 확인하여 초기 로고 결정
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+    const logoSrc = isDarkMode ? '로고1_다크모드.png' : '로고2_작은버전2.png';
+    
     return `
     <!-- 웰컴 모달 -->
     <div id="welcome-modal" class="modal" style="display:none;">
@@ -18,7 +22,7 @@ export function createWelcomeModal() {
             </div>
             <div class="modal-body">
                 <div class="welcome-logo">
-                    <img src="로고2_작은버전2.png" alt="VIBING Logo" id="welcome-logo-img" style="cursor: pointer;">
+                    <img src="${logoSrc}" alt="VIBING Logo" id="welcome-logo-img" style="cursor: pointer;">
                 </div>
                 
                 <div class="welcome-terminal-output">
