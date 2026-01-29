@@ -8,11 +8,18 @@
  */
 export function initDarkMode() {
     // 로컬스토리지에서 다크모드 설정 불러오기
+    // localStorage에 값이 없으면 기본값은 다크모드(enabled)
     const savedMode = localStorage.getItem('darkMode');
-    const isDarkMode = savedMode === 'enabled';
+    const isDarkMode = savedMode === null || savedMode === 'enabled';
     
     if (isDarkMode) {
         document.body.classList.add('dark-mode');
+        // 기본값이 다크모드이므로 localStorage에 저장
+        if (savedMode === null) {
+            localStorage.setItem('darkMode', 'enabled');
+        }
+    } else {
+        document.body.classList.remove('dark-mode');
     }
     
     // 초기 로고 설정

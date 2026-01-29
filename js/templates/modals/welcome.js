@@ -5,7 +5,9 @@ import { Icons } from '../shared/icons.js';
 
 export function createWelcomeModal() {
     // 다크모드 설정 확인하여 초기 로고 결정
-    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+    // localStorage에 값이 없으면 기본값은 다크모드(enabled)
+    const darkModeSetting = localStorage.getItem('darkMode');
+    const isDarkMode = darkModeSetting === null || darkModeSetting === 'enabled';
     const logoSrc = isDarkMode ? '로고1_다크모드.png' : '로고2_작은버전2.png';
     
     return `

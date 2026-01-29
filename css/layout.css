@@ -55,11 +55,11 @@
     visibility: hidden;
     background: transparent;
     padding: 0.75rem 1rem 0.75rem 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease, color 0.3s ease;
     pointer-events: none;
-    z-index: 3;
+    z-index: 1000;
     color: var(--text);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 500;
 }
 

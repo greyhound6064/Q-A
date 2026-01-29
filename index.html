@@ -31,7 +31,7 @@
         <div class="sidebar" id="sidebar">
             <!-- 로고 -->
             <div class="sidebar-logo">
-                <img src="로고2_작은버전2.png" alt="VIBING Logo" id="sidebar-logo-img" style="cursor: pointer;">
+                <img src="로고2_작은버전2.png" alt="VIBING Logo" id="sidebar-logo-img" style="cursor: pointer;" title="화면 모드">
                 <span class="sidebar-logo-tooltip">화면 모드</span>
             </div>
             
@@ -376,114 +376,101 @@
 
             <div id="gallery-tab-content" class="tab-content active" style="display:block;">
                 <div class="gallery-container">
-                    <!-- 검색 토글 버튼 -->
-                    <div class="search-toggle-wrapper">
-                        <button class="search-toggle-btn" id="gallery-search-toggle-btn" onclick="toggleGallerySearchPanel()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- 검색 바 -->
+                    <div class="feed-search-bar">
+                        <div class="feed-search-input-wrapper">
+                            <svg class="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
+                            <input 
+                                type="text" 
+                                id="gallery-search-input" 
+                                class="feed-search-input" 
+                                placeholder="제목 또는 내용 검색..."
+                                onkeypress="if(event.key==='Enter') performGallerySearch()"
+                            >
+                            <button class="feed-search-btn" onclick="performGallerySearch()">
+                                검색
+                            </button>
+                            <button class="feed-search-clear" id="gallery-search-clear" onclick="clearGallerySearch()" style="display:none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 필터 버튼 -->
+                    <div class="feed-filter-buttons">
+                        <button class="feed-filter-toggle-btn" id="gallery-sort-filter-btn" onclick="toggleGallerySortFilter()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="4" y1="6" x2="16" y2="6"></line>
+                                <line x1="8" y1="12" x2="20" y2="12"></line>
+                                <line x1="4" y1="18" x2="12" y2="18"></line>
+                            </svg>
+                            정렬
+                        </button>
+                        <button class="feed-filter-toggle-btn" id="gallery-tag-filter-btn" onclick="toggleGalleryTagFilterDropdown()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            태그
                         </button>
                     </div>
 
-                    <!-- 검색 패널 (숨김) -->
-                    <div class="search-panel" id="gallery-search-panel" style="display:none;">
-                        <!-- 검색 바 -->
-                        <div class="feed-search-bar">
-                            <div class="feed-search-input-wrapper">
-                                <svg class="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.35-4.35"></path>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    id="gallery-search-input" 
-                                    class="feed-search-input" 
-                                    placeholder="제목 또는 내용 검색..."
-                                    onkeypress="if(event.key==='Enter') performGallerySearch()"
-                                >
-                                <button class="feed-search-btn" onclick="performGallerySearch()">
-                                    검색
-                                </button>
-                                <button class="feed-search-clear" id="gallery-search-clear" onclick="clearGallerySearch()" style="display:none;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 필터 버튼 -->
-                        <div class="feed-filter-buttons">
-                            <button class="feed-filter-toggle-btn" id="gallery-sort-filter-btn" onclick="toggleGallerySortFilter()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="4" y1="6" x2="16" y2="6"></line>
-                                    <line x1="8" y1="12" x2="20" y2="12"></line>
-                                    <line x1="4" y1="18" x2="12" y2="18"></line>
-                                </svg>
-                                정렬
-                            </button>
-                            <button class="feed-filter-toggle-btn" id="gallery-tag-filter-btn" onclick="toggleGalleryTagFilterDropdown()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                </svg>
-                                태그
-                            </button>
-                        </div>
-
-                        <!-- 정렬 필터 (숨김) -->
-                        <div class="feed-sort-dropdown" id="gallery-sort-dropdown" style="display:none;">
-                            <button class="feed-sort-option active" data-sort="latest" onclick="changeGallerySortMode('latest')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 4 23 10 17 10"></polyline>
-                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                                </svg>
-                                최신순
-                            </button>
-                            <button class="feed-sort-option" data-sort="popular" onclick="changeGallerySortMode('popular')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                인기순
-                            </button>
-                            <button class="feed-sort-option" data-sort="trending" onclick="changeGallerySortMode('trending')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                                    <polyline points="17 6 23 6 23 12"></polyline>
-                                </svg>
-                                떠오르는순
-                            </button>
-                        </div>
-
-                        <!-- 태그 필터 (숨김) -->
-                        <div class="feed-tag-dropdown" id="gallery-tag-dropdown" style="display:none;">
-                            <div class="feed-tag-input-wrapper">
-                                <svg class="feed-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    id="gallery-tag-input" 
-                                    class="feed-tag-input" 
-                                    placeholder="태그 검색..."
-                                    oninput="searchGalleryTagSuggestions()"
-                                    onkeypress="if(event.key==='Enter') addGalleryTagFilter()"
-                                    onfocus="searchGalleryTagSuggestions()"
-                                >
-                                <button class="feed-tag-add-btn" onclick="addGalleryTagFilter()">
-                                    추가
-                                </button>
-                            </div>
-                            <!-- 태그 자동완성 -->
-                            <div class="feed-tag-suggestions" id="gallery-tag-suggestions" style="display:none;"></div>
-                        </div>
-
-                        <!-- 선택된 태그 -->
-                        <div class="feed-selected-tags" id="gallery-selected-tags" style="display:none;"></div>
+                    <!-- 정렬 필터 (숨김) -->
+                    <div class="feed-sort-dropdown" id="gallery-sort-dropdown" style="display:none;">
+                        <button class="feed-sort-option active" data-sort="latest" onclick="changeGallerySortMode('latest')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                            최신순
+                        </button>
+                        <button class="feed-sort-option" data-sort="popular" onclick="changeGallerySortMode('popular')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            </svg>
+                            인기순
+                        </button>
+                        <button class="feed-sort-option" data-sort="trending" onclick="changeGallerySortMode('trending')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            떠오르는순
+                        </button>
                     </div>
+
+                    <!-- 태그 필터 (숨김) -->
+                    <div class="feed-tag-dropdown" id="gallery-tag-dropdown" style="display:none;">
+                        <div class="feed-tag-input-wrapper">
+                            <svg class="feed-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            <input 
+                                type="text" 
+                                id="gallery-tag-input" 
+                                class="feed-tag-input" 
+                                placeholder="태그 검색..."
+                                oninput="searchGalleryTagSuggestions()"
+                                onkeypress="if(event.key==='Enter') addGalleryTagFilter()"
+                                onfocus="searchGalleryTagSuggestions()"
+                            >
+                            <button class="feed-tag-add-btn" onclick="addGalleryTagFilter()">
+                                추가
+                            </button>
+                        </div>
+                        <!-- 태그 자동완성 -->
+                        <div class="feed-tag-suggestions" id="gallery-tag-suggestions" style="display:none;"></div>
+                    </div>
+
+                    <!-- 선택된 태그 -->
+                    <div class="feed-selected-tags" id="gallery-selected-tags" style="display:none;"></div>
                     
                     <!-- 작품관 리스트 -->
                     <div class="gallery-list" id="gallery-list">
@@ -496,114 +483,101 @@
 
             <div id="feed-tab-content" class="tab-content" style="display:none;">
                 <div class="feed-container">
-                    <!-- 검색 토글 버튼 -->
-                    <div class="search-toggle-wrapper">
-                        <button class="search-toggle-btn" id="feed-search-toggle-btn" onclick="toggleFeedSearchPanel()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- 검색 바 -->
+                    <div class="feed-search-bar">
+                        <div class="feed-search-input-wrapper">
+                            <svg class="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
+                            <input 
+                                type="text" 
+                                id="feed-search-input" 
+                                class="feed-search-input" 
+                                placeholder="제목 또는 내용 검색..."
+                                onkeypress="if(event.key==='Enter') performSearch()"
+                            >
+                            <button class="feed-search-btn" onclick="performSearch()">
+                                검색
+                            </button>
+                            <button class="feed-search-clear" id="feed-search-clear" onclick="clearSearch()" style="display:none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 필터 버튼 -->
+                    <div class="feed-filter-buttons">
+                        <button class="feed-filter-toggle-btn" id="sort-filter-btn" onclick="toggleSortFilter()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="4" y1="6" x2="16" y2="6"></line>
+                                <line x1="8" y1="12" x2="20" y2="12"></line>
+                                <line x1="4" y1="18" x2="12" y2="18"></line>
+                            </svg>
+                            정렬
+                        </button>
+                        <button class="feed-filter-toggle-btn" id="tag-filter-btn" onclick="toggleTagFilterDropdown()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            태그
                         </button>
                     </div>
 
-                    <!-- 검색 패널 (숨김) -->
-                    <div class="search-panel" id="feed-search-panel" style="display:none;">
-                        <!-- 검색 바 -->
-                        <div class="feed-search-bar">
-                            <div class="feed-search-input-wrapper">
-                                <svg class="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.35-4.35"></path>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    id="feed-search-input" 
-                                    class="feed-search-input" 
-                                    placeholder="제목 또는 내용 검색..."
-                                    onkeypress="if(event.key==='Enter') performSearch()"
-                                >
-                                <button class="feed-search-btn" onclick="performSearch()">
-                                    검색
-                                </button>
-                                <button class="feed-search-clear" id="feed-search-clear" onclick="clearSearch()" style="display:none;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 필터 버튼 -->
-                        <div class="feed-filter-buttons">
-                            <button class="feed-filter-toggle-btn" id="sort-filter-btn" onclick="toggleSortFilter()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="4" y1="6" x2="16" y2="6"></line>
-                                    <line x1="8" y1="12" x2="20" y2="12"></line>
-                                    <line x1="4" y1="18" x2="12" y2="18"></line>
-                                </svg>
-                                정렬
-                            </button>
-                            <button class="feed-filter-toggle-btn" id="tag-filter-btn" onclick="toggleTagFilterDropdown()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                </svg>
-                                태그
-                            </button>
-                        </div>
-
-                        <!-- 정렬 필터 (숨김) -->
-                        <div class="feed-sort-dropdown" id="feed-sort-dropdown" style="display:none;">
-                            <button class="feed-sort-option active" data-sort="latest" onclick="changeSortMode('latest')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 4 23 10 17 10"></polyline>
-                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                                </svg>
-                                최신순
-                            </button>
-                            <button class="feed-sort-option" data-sort="popular" onclick="changeSortMode('popular')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                인기순
-                            </button>
-                            <button class="feed-sort-option" data-sort="trending" onclick="changeSortMode('trending')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                                    <polyline points="17 6 23 6 23 12"></polyline>
-                                </svg>
-                                떠오르는순
-                            </button>
-                        </div>
-
-                        <!-- 태그 필터 (숨김) -->
-                        <div class="feed-tag-dropdown" id="feed-tag-dropdown" style="display:none;">
-                            <div class="feed-tag-input-wrapper">
-                                <svg class="feed-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    id="feed-tag-input" 
-                                    class="feed-tag-input" 
-                                    placeholder="태그 검색..."
-                                    oninput="searchTagSuggestions()"
-                                    onkeypress="if(event.key==='Enter') addTagFilter()"
-                                    onfocus="searchTagSuggestions()"
-                                >
-                                <button class="feed-tag-add-btn" onclick="addTagFilter()">
-                                    추가
-                                </button>
-                            </div>
-                            <!-- 태그 자동완성 -->
-                            <div class="feed-tag-suggestions" id="feed-tag-suggestions" style="display:none;"></div>
-                        </div>
-
-                        <!-- 선택된 태그 -->
-                        <div class="feed-selected-tags" id="feed-selected-tags" style="display:none;"></div>
+                    <!-- 정렬 필터 (숨김) -->
+                    <div class="feed-sort-dropdown" id="feed-sort-dropdown" style="display:none;">
+                        <button class="feed-sort-option active" data-sort="latest" onclick="changeSortMode('latest')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                            최신순
+                        </button>
+                        <button class="feed-sort-option" data-sort="popular" onclick="changeSortMode('popular')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            </svg>
+                            인기순
+                        </button>
+                        <button class="feed-sort-option" data-sort="trending" onclick="changeSortMode('trending')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            떠오르는순
+                        </button>
                     </div>
+
+                    <!-- 태그 필터 (숨김) -->
+                    <div class="feed-tag-dropdown" id="feed-tag-dropdown" style="display:none;">
+                        <div class="feed-tag-input-wrapper">
+                            <svg class="feed-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            <input 
+                                type="text" 
+                                id="feed-tag-input" 
+                                class="feed-tag-input" 
+                                placeholder="태그 검색..."
+                                oninput="searchTagSuggestions()"
+                                onkeypress="if(event.key==='Enter') addTagFilter()"
+                                onfocus="searchTagSuggestions()"
+                            >
+                            <button class="feed-tag-add-btn" onclick="addTagFilter()">
+                                추가
+                            </button>
+                        </div>
+                        <!-- 태그 자동완성 -->
+                        <div class="feed-tag-suggestions" id="feed-tag-suggestions" style="display:none;"></div>
+                    </div>
+
+                    <!-- 선택된 태그 -->
+                    <div class="feed-selected-tags" id="feed-selected-tags" style="display:none;"></div>
                     
                     <!-- 피드 리스트 -->
                     <div class="feed-list" id="feed-list">
