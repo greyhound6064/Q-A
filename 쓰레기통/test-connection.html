@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase 연결 테스트</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Supabase 연결 테스트</h1>
+        
+        <div id="config-info"></div>
+        <div id="status"></div>
+        <div id="details"></div>
+        
+        <button onclick="testConnection()">연결 테스트</button>
+        <button onclick="testDatabase()">데이터베이스 테스트</button>
+        <button onclick="location.reload()">새로고침</button>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        // 설정 정보 표시
+        document.getElementById('config-info').innerHTML = `
+            <div class="info">
+                <strong>📋 현재 설정:</strong><br>
+                URL: ${SUPABASE_URL}<br>
+                API Key: ${SUPABASE_ANON_KEY.substring(0, 50)}...
+            </div>
+        `;
+
+        // 연결 테스트
+        async function testConnection() {
+            const statusDiv = document.getElementById('status');
+            const detailsDiv = document.getElementById('details');
+            
+            statusDiv.innerHTML = '<div class="info">⏳ 테스트 중...</div>';
+            detailsDiv.innerHTML = '';
+            
+            try {
+                if (!_supabase) {
+                    throw new Error('Supabase 클라이언트가 초기화되지 않았습니다.');
+                }
+                
+                console.log('Supabase 클라이언트:', _supabase);
+                
+                // 세션 확인
+                const { data: { session }, error } = await _supabase.auth.getSession();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                statusDiv.innerHTML = '<div class="success">✅ Supabase 연결 성공!</div>';
+                detailsDiv.innerHTML = `
+                    <pre>세션 정보:
+${JSON.stringify({ 
+    connected: true,
+    hasSession: !!session,
+    user: session?.user?.email || '로그인 필요'
+}, null, 2)}</pre>
+                `;
+                
+            } catch (err) {
+                console.error('연결 테스트 실패:', err);
+                statusDiv.innerHTML = '<div class="error">❌ 연결 실패</div>';
+                detailsDiv.innerHTML = `
+                    <pre>오류 내용:
+${err.message || err}
+
+Stack:
+${err.stack || '없음'}</pre>
+                `;
+            }
+        }
+        
+        // 데이터베이스 테스트
+        async function testDatabase() {
+            const statusDiv = document.getElementById('status');
+            const detailsDiv = document.getElementById('details');
+            
+            statusDiv.innerHTML = '<div class="info">⏳ 데이터베이스 테스트 중...</div>';
+            detailsDiv.innerHTML = '';
+            
+            try {
+                if (!_supabase) {
+                    throw new Error('Supabase 클라이언트가 초기화되지 않았습니다.');
+                }
+                
+                // profiles 테이블 조회 테스트
+                const { data, error, count } = await _supabase
+                    .from('profiles')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                statusDiv.innerHTML = '<div class="success">✅ 데이터베이스 접근 성공!</div>';
+                detailsDiv.innerHTML = `
+                    <pre>테이블 정보:
+- profiles 테이블: ${count !== null ? count + '개 레코드' : '접근 가능'}
+
+다른 테이블 테스트 중...</pre>
+                `;
+                
+                // posts 테이블 테스트
+                const { data: posts, error: postsError } = await _supabase
+                    .from('posts')
+                    .select('*', { count: 'exact', head: true });
+                
+                const postsInfo = postsError 
+                    ? `❌ 오류: ${postsError.message}` 
+                    : `✅ 접근 가능`;
+                
+                detailsDiv.innerHTML += `
+                    <pre>
+- posts 테이블: ${postsInfo}</pre>
+                `;
+                
+            } catch (err) {
+                console.error('데이터베이스 테스트 실패:', err);
+                statusDiv.innerHTML = '<div class="error">❌ 데이터베이스 접근 실패</div>';
+                detailsDiv.innerHTML = `
+                    <pre>오류 내용:
+${err.message || err}
+
+힌트:
+- RLS 정책이 설정되어 있는지 확인하세요
+- 테이블이 생성되어 있는지 확인하세요
+- API 키 권한을 확인하세요</pre>
+                `;
+            }
+        }
+        
+        // 페이지 로드 시 자동 테스트
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                testConnection();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

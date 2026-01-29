@@ -1,0 +1,91 @@
+/**
+ * @file gallery.css
+ * @description 작품 그리드 레이아웃 (인스타그램 스타일)
+ */
+
+/* ========== 작품 그리드 레이아웃 (인스타그램 스타일) ========== */
+.artworks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+}
+
+.artwork-grid-item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg);
+}
+
+.artwork-grid-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.artwork-grid-item:hover img {
+    transform: scale(1.05);
+}
+
+.artwork-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.artwork-grid-item:hover .artwork-overlay {
+    opacity: 1;
+}
+
+.artwork-overlay-stats {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.overlay-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.overlay-stat svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* 여러 이미지 인디케이터 */
+.grid-multiple-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.grid-multiple-indicator svg {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}

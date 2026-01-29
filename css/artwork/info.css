@@ -1,0 +1,222 @@
+/**
+ * @file info.css
+ * @description 작품 정보 영역 (작성자, 제목, 설명, 태그)
+ */
+
+/* ========== 정보 영역 (중간) ========== */
+.artwork-info-section {
+    flex: 0 0 500px;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* 파일이 없는 경우 정보 섹션 스타일 */
+.artwork-modal-body.no-media .artwork-info-section {
+    flex: 1;
+    max-width: 600px;
+    border-left: none;
+    border-right: none;
+}
+
+/* 작성자 정보 */
+.artwork-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    padding-right: 60px; /* 닫기 버튼과 겹치지 않도록 */
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.artwork-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.artwork-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.artwork-author-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.artwork-author-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+}
+
+.artwork-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+/* 메뉴 컨테이너 */
+.artwork-menu-container {
+    position: relative;
+}
+
+.artwork-menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.artwork-menu-btn:hover {
+    background: var(--bg);
+}
+
+/* 메뉴 드롭다운 */
+.artwork-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.artwork-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.artwork-menu-item:hover {
+    background: var(--bg);
+}
+
+.artwork-menu-item.delete {
+    color: var(--danger);
+}
+
+.artwork-menu-item.delete:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.artwork-menu-item svg {
+    flex-shrink: 0;
+}
+
+/* ========== 제목 및 설명 ========== */
+.artwork-content {
+    flex: 0 0 auto;
+    padding: 20px;
+}
+
+.artwork-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.artwork-description {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+}
+
+.artwork-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.artwork-tag {
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.artwork-tag:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.artwork-vibe-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.artwork-vibe-link-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    flex-shrink: 0;
+}
+
+.artwork-vibe-link-text {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artwork-vibe-link-text:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}

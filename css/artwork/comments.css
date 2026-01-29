@@ -1,0 +1,304 @@
+/**
+ * @file comments.css
+ * @description 작품 상세보기 댓글 시스템
+ */
+
+/* ========== 댓글 섹션 (오른쪽) ========== */
+.artwork-comments-section {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+}
+
+.artwork-comments-header {
+    padding: 16px 20px 12px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.artwork-comments-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+/* 댓글 리스트 */
+.artwork-comments-list {
+    flex: 1 1 auto;
+    padding: 16px 20px 100px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.artwork-comment-item {
+    display: flex;
+    gap: 12px;
+}
+
+.artwork-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.artwork-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.artwork-comment-avatar svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-light);
+}
+
+.artwork-comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.artwork-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.artwork-comment-author {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.artwork-comment-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.artwork-comment-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.artwork-comment-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.artwork-comment-action-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.artwork-comment-action-btn:hover {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+.artwork-comment-action-btn.delete {
+    color: var(--danger);
+}
+
+.artwork-comment-action-btn.delete:hover {
+    background: #fee;
+}
+
+.artwork-comment-action-btn.reply {
+    color: var(--primary);
+}
+
+.artwork-comment-action-btn.reply:hover {
+    background: #eff6ff;
+}
+
+.artwork-comment-action-btn.toggle-replies {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.artwork-comment-action-btn.toggle-replies:hover {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+/* 대댓글 스타일 */
+.artwork-comment-reply {
+    margin-left: 42px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+}
+
+.artwork-comment-reply .artwork-comment-item {
+    background: var(--card-bg);
+}
+
+.artwork-comment-reply .artwork-comment-item:hover {
+    background: var(--bg);
+}
+
+.artwork-comment-reply-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.artwork-comment-reply-indicator svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* 댓글 입력 폼 */
+.artwork-comment-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.artwork-reply-tag {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.reply-tag-text {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.reply-tag-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    transition: color 0.2s ease;
+}
+
+.reply-tag-close:hover {
+    color: var(--danger);
+}
+
+.artwork-comment-form {
+    display: flex;
+    align-items: flex-end; /* 하단 정렬 ⭐ */
+    gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--card-bg);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.artwork-comment-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 40px;
+    max-height: 120px;
+    transition: border-color 0.2s ease;
+}
+
+.artwork-comment-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.artwork-comment-input::placeholder {
+    color: var(--text-light);
+}
+
+.artwork-comment-submit {
+    padding: 10px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0; /* 버튼 크기 고정 ⭐ */
+    height: 40px; /* textarea와 동일한 최소 높이 ⭐ */
+}
+
+.artwork-comment-submit:hover {
+    background: var(--primary-hover);
+}
+
+.artwork-comment-submit:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+}
+
+body.dark-mode .artwork-comment-submit {
+    background: var(--primary);
+    color: #000000 !important;
+}
+
+body.dark-mode .artwork-comment-submit:hover {
+    background: var(--primary-hover);
+    color: #000000 !important;
+}
+
+/* 댓글 없음 상태 */
+.artwork-comments-empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* 댓글 로딩 */
+.artwork-comments-loading {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+    font-size: 14px;
+}

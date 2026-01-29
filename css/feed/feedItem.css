@@ -1,0 +1,606 @@
+/**
+ * @file feedItem.css
+ * @description 피드 아이템 스타일 (카드, 헤더, 이미지, 액션, 콘텐츠)
+ */
+
+/* ========== 피드 아이템 ========== */
+.feed-item {
+    background: var(--card-bg);
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+    box-shadow: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.feed-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ========== 피드 헤더 ========== */
+.feed-item-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 16px 0 16px;
+    gap: 12px;
+    position: relative;
+}
+
+/* ========== 상세보기 클릭 영역 ========== */
+.feed-detail-click-area {
+    display: none;
+}
+
+.feed-author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.feed-author-avatar:hover {
+    opacity: 0.8;
+}
+
+.feed-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feed-author-avatar svg {
+    color: var(--text-light);
+}
+
+.feed-author-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-author-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.feed-author-name:hover {
+    text-decoration: underline;
+}
+
+.feed-post-date {
+    font-size: 14px;
+    color: var(--text-light);
+    display: inline-block;
+}
+
+/* ========== 피드 이미지 ========== */
+.feed-item-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: var(--bg);
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 12px;
+    margin-top: 12px;
+    z-index: 2;
+}
+
+.feed-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.2s ease;
+}
+
+.feed-item-image:hover img {
+    opacity: 0.95;
+}
+
+/* ========== 피드 오디오 ========== */
+.feed-item-audio {
+    height: 300px !important;
+}
+
+.feed-audio-container {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.feed-audio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.feed-audio-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.feed-audio-player {
+    width: 100%;
+    max-width: 500px;
+    height: 48px;
+}
+
+/* 다중 이미지 인디케이터 */
+.feed-multiple-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 2;
+}
+
+.feed-multiple-indicator svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========== 피드 이미지 캐러셀 ========== */
+.feed-carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.feed-carousel-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.feed-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 3;
+    color: white;
+}
+
+.feed-carousel-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.feed-carousel-prev {
+    left: 12px;
+}
+
+.feed-carousel-next {
+    right: 12px;
+}
+
+.feed-carousel-indicators {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.feed-carousel-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.feed-carousel-indicator.active {
+    background: white;
+    width: 20px;
+    border-radius: 3px;
+}
+
+/* ========== 이미지 뷰어 모달 ========== */
+.image-viewer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    cursor: zoom-out;
+}
+
+.image-viewer-content {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+}
+
+.image-viewer-content img {
+    max-width: 100%;
+    max-height: 95vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.image-viewer-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    color: white;
+}
+
+.image-viewer-close:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: rotate(90deg);
+}
+
+.image-viewer-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    color: white;
+}
+
+.image-viewer-nav:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.image-viewer-prev {
+    left: 20px;
+}
+
+.image-viewer-next {
+    right: 20px;
+}
+
+.image-viewer-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.image-viewer-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.image-viewer-indicator.active {
+    background: white;
+    width: 28px;
+    border-radius: 5px;
+}
+
+/* ========== 피드 액션 바 ========== */
+.feed-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px 16px 16px;
+    position: relative;
+    z-index: 2;
+}
+
+.feed-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #65676b;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.feed-action-btn:hover {
+    background: #f2f3f5;
+}
+
+.feed-action-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: all 0.2s ease;
+}
+
+.feed-action-btn.liked {
+    color: #e41e3f;
+}
+
+.feed-action-btn.liked svg {
+    fill: #e41e3f;
+    stroke: #e41e3f;
+}
+
+.feed-action-btn.disliked {
+    color: #5b51d8;
+}
+
+.feed-action-btn.disliked svg {
+    fill: #5b51d8;
+    stroke: #5b51d8;
+}
+
+.feed-action-btn.saved {
+    color: var(--primary);
+}
+
+.feed-action-btn.saved svg {
+    fill: var(--primary);
+    stroke: var(--primary);
+}
+
+/* ========== 피드 콘텐츠 ========== */
+.feed-item-content {
+    padding: 0 16px 0 64px;
+}
+
+.feed-item-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.5;
+}
+
+.feed-item-description {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 8px;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+/* 더보기 버튼이 있을 때 ellipsis 숨기기 */
+.feed-item-description.has-read-more {
+    text-overflow: clip;
+}
+
+.feed-item-description.expanded {
+    -webkit-line-clamp: unset;
+    display: block !important;
+    white-space: pre-line;
+}
+
+.feed-read-more {
+    color: #65676b;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 400;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.feed-read-more:hover {
+    text-decoration: underline;
+}
+
+/* 피드 아이템 태그 */
+.feed-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.feed-item-tag {
+    padding: 4px 0;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #0095f6;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.feed-item-tag:hover {
+    opacity: 0.7;
+}
+
+/* ========== 반응형 디자인 ========== */
+@media (max-width: 768px) {
+    .feed-item-header {
+        padding: 12px;
+    }
+
+    .feed-author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .feed-author-name {
+        font-size: 14px;
+    }
+
+    .feed-post-date {
+        font-size: 12px;
+    }
+
+    .feed-item-actions {
+        padding: 10px 12px;
+        gap: 12px;
+    }
+
+    .feed-action-btn {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+
+    .feed-action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .feed-item-content {
+        padding: 0 12px 12px 12px;
+    }
+
+    .feed-item-title {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .feed-item-description {
+        font-size: 15px;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden;
+        white-space: pre-line;
+    }
+    
+    .feed-item-description.expanded {
+        -webkit-line-clamp: unset;
+        display: block !important;
+        white-space: pre-line;
+    }
+
+    .feed-item-tags {
+        margin-top: 10px;
+        gap: 5px;
+    }
+
+    .feed-item-tag {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+
+    .feed-carousel-nav {
+        width: 32px;
+        height: 32px;
+    }
+
+    .feed-carousel-prev {
+        left: 8px;
+    }
+
+    .feed-carousel-next {
+        right: 8px;
+    }
+
+    .image-viewer-close {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .image-viewer-nav {
+        width: 48px;
+        height: 48px;
+    }
+
+    .image-viewer-prev {
+        left: 12px;
+    }
+
+    .image-viewer-next {
+        right: 12px;
+    }
+}
+
+/* ========== 다크모드 대응 ========== */
+@media (prefers-color-scheme: dark) {
+    .feed-item {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .feed-item:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+}

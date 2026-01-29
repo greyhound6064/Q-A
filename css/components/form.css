@@ -1,0 +1,54 @@
+/**
+ * @file form.css
+ * @description 폼 요소 공통 스타일
+ */
+
+/* ========== 폼 요소 ========== */
+.edit-form-group {
+    margin-bottom: 20px;
+}
+
+.edit-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.edit-form-group input,
+.edit-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--card-bg);
+    transition: border-color 0.2s;
+}
+
+.edit-form-group input:focus,
+.edit-form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 44, 44, 0.1);
+}
+
+body.dark-mode .edit-form-group input:focus,
+body.dark-mode .edit-form-group textarea:focus {
+    box-shadow: 0 0 0 3px rgba(224, 224, 224, 0.1);
+}
+
+.edit-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 6px;
+}

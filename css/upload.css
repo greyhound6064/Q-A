@@ -1,0 +1,277 @@
+/**
+ * @file upload.css
+ * @description 작품 업로드 및 수정 모달 스타일
+ */
+
+/* ========== 업로드 모달 ========== */
+.upload-modal-content {
+    max-width: 600px;
+}
+
+/* 수정 모달은 상세보기 모달보다 위에 표시 */
+#edit-artwork-modal {
+    z-index: 1100;
+}
+
+/* ========== 이미지 업로드 영역 ========== */
+.upload-image-section {
+    margin-bottom: 24px;
+}
+
+.upload-image-carousel {
+    position: relative;
+}
+
+.upload-image-preview {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text-light);
+    margin-bottom: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.upload-image-preview:hover {
+    border-color: var(--primary);
+    background: rgba(44, 44, 44, 0.02);
+}
+
+.upload-image-preview svg {
+    margin-bottom: 12px;
+}
+
+.upload-image-preview p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.upload-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.upload-image-preview.has-image {
+    border-style: solid;
+    border-color: var(--success);
+}
+
+/* ========== 업로드 액션 버튼 ========== */
+.upload-image-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.upload-select-btn,
+.upload-remove-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.upload-select-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.upload-remove-btn {
+    background: transparent;
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.upload-remove-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* ========== 캐러셀 네비게이션 ========== */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+    color: white;
+}
+
+.carousel-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev {
+    left: 12px;
+}
+
+.carousel-nav.next {
+    right: 12px;
+}
+
+/* ========== 캐러셀 인디케이터 ========== */
+.carousel-indicators {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.carousel-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.carousel-indicator.active {
+    background: white;
+    width: 24px;
+    border-radius: 4px;
+}
+
+.carousel-indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* ========== 플로팅 업로드 버튼 ========== */
+.floating-upload-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 16px rgba(44, 44, 44, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.floating-upload-btn:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 12px 24px rgba(44, 44, 44, 0.5);
+}
+
+.floating-upload-btn:active {
+    transform: scale(1.05) translateY(0);
+}
+
+/* ========== 공개 설정 및 게시 위치 선택 ========== */
+.visibility-options,
+.post-type-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.radio-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card-bg);
+}
+
+.radio-option:hover {
+    border-color: var(--primary);
+    background: rgba(44, 44, 44, 0.05);
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-option input[type="radio"]:checked + .radio-label {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary);
+    background: rgba(44, 44, 44, 0.1);
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text);
+    transition: all 0.2s;
+}
+
+.radio-label svg {
+    flex-shrink: 0;
+}
+
+#upload-post-type-group {
+    transition: all 0.3s ease;
+}
+
+#upload-post-type-group.hidden {
+    display: none;
+}
+
+/* ========== 반응형 ========== */
+@media (max-width: 768px) {
+    .floating-upload-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+    }
+    
+    .visibility-options,
+    .post-type-options {
+        flex-direction: column;
+    }
+}

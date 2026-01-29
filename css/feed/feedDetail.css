@@ -1,0 +1,842 @@
+/**
+ * @file feedDetail.css
+ * @description 자유게시판 상세보기 모달 (스레드 스타일)
+ */
+
+/* ========== 피드 상세보기 모달 (작품관 스타일 - 좌우 레이아웃) ========== */
+.feed-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    padding: 20px;
+}
+
+.feed-detail-content {
+    background: var(--card-bg);
+    border-radius: 0;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+}
+
+/* 파일이 없는 경우 단일 컬럼 */
+.feed-detail-content.no-media {
+    max-width: 600px;
+    flex-direction: column;
+}
+
+/* ========== 미디어 섹션 (좌측) ========== */
+.feed-detail-media-section {
+    flex: 1;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* 비디오 영역 최적화 */
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout style paint;
+    isolation: isolate;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.feed-detail-media-section img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.feed-detail-media-section video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    /* 하드웨어 가속 및 렌더링 최적화 */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* 미디어 컨텐츠 컨테이너 */
+#feed-detail-media-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 최적화 */
+    transform: translateZ(0);
+    will-change: transform;
+    isolation: isolate;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* 오디오 플레이어 스타일 */
+.feed-detail-media-section audio {
+    width: 80%;
+    max-width: 500px;
+}
+
+#feed-detail-media-content.audio-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* 파일이 없는 경우 미디어 섹션 숨김 */
+.feed-detail-content.no-media .feed-detail-media-section {
+    display: none;
+}
+
+/* 캐러셀 네비게이션 버튼 */
+.feed-detail-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    color: #000;
+}
+
+.feed-detail-carousel-nav:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.feed-detail-carousel-nav.feed-detail-carousel-prev {
+    left: 16px;
+}
+
+.feed-detail-carousel-nav.feed-detail-carousel-next {
+    right: 16px;
+}
+
+.feed-detail-carousel-nav svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 캐러셀 인디케이터 */
+.feed-detail-carousel-indicators {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.feed-detail-carousel-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.feed-detail-carousel-indicator.active {
+    background: rgba(255, 255, 255, 1);
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* ========== 정보 섹션 (우측) ========== */
+.feed-detail-info-section {
+    width: 500px;
+    height: 100%; /* 높이 고정 ⭐ */
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    overflow: hidden; /* 하위 요소만 스크롤 ⭐ */
+}
+
+/* 파일이 없는 경우 정보 섹션 전체 너비 */
+.feed-detail-content.no-media .feed-detail-info-section {
+    width: 100%;
+    height: 100%;
+}
+
+/* ========== 헤더 ========== */
+.feed-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.feed-detail-header-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.feed-detail-header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.feed-detail-header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feed-detail-header-avatar svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-light);
+}
+
+.feed-detail-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.feed-detail-header-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.feed-detail-header-name:hover {
+    text-decoration: underline;
+}
+
+.feed-detail-header-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.feed-detail-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.feed-detail-menu-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text);
+}
+
+.feed-detail-menu-btn:hover {
+    background: var(--bg);
+}
+
+.feed-detail-close {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text);
+}
+
+.feed-detail-close:hover {
+    background: var(--bg);
+}
+
+.feed-detail-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ========== 본문 ========== */
+.feed-detail-body {
+    flex: 1; /* 남은 공간 차지 */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto; /* 여기서 스크롤 ⭐ */
+}
+
+.feed-detail-post {
+    flex-shrink: 0; /* 고정 크기 */
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+/* 메뉴 드롭다운 */
+.feed-detail-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 40px; /* X 버튼 너비만큼 왼쪽으로 */
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.feed-detail-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.feed-detail-menu-item:hover {
+    background: var(--bg);
+}
+
+.feed-detail-menu-item.delete {
+    color: var(--danger);
+}
+
+.feed-detail-menu-item.delete:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.feed-detail-menu-item svg {
+    flex-shrink: 0;
+}
+
+/* 게시물 내용 */
+.feed-detail-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.feed-detail-description {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 태그 */
+.feed-detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.feed-detail-tag {
+    color: #0095f6;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.feed-detail-tag:hover {
+    opacity: 0.7;
+}
+
+/* 작품 링크 */
+.feed-detail-vibe-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.feed-detail-vibe-link-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    flex-shrink: 0;
+}
+
+.feed-detail-vibe-link-text {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.feed-detail-vibe-link-text:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* 좋아요/싫어요 버튼 */
+.feed-detail-reactions {
+    display: flex;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.feed-detail-reaction-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 16px;
+    transition: all 0.2s ease;
+}
+
+.feed-detail-reaction-btn:hover {
+    background: var(--bg);
+}
+
+.feed-detail-reaction-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.feed-detail-reaction-btn.like-btn.active {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.feed-detail-reaction-btn.like-btn.active svg {
+    fill: #ef4444;
+    stroke: #ef4444;
+}
+
+.feed-detail-reaction-btn.dislike-btn.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.feed-detail-reaction-btn.dislike-btn.active svg {
+    fill: #3b82f6;
+    stroke: #3b82f6;
+}
+
+.feed-detail-reaction-btn.save-btn.active {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.feed-detail-reaction-btn.save-btn.active svg {
+    fill: #10b981;
+    stroke: #10b981;
+}
+
+
+/* ========== 댓글 섹션 ========== */
+.feed-detail-comments {
+    flex-shrink: 0; /* 내용만큼만 차지 */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 20px;
+}
+
+.feed-detail-comments-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+/* 댓글 리스트 */
+.feed-detail-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+/* 댓글 입력 폼 (하단 고정) */
+.feed-detail-comment-form {
+    display: flex;
+    align-items: flex-end; /* 하단 정렬 ⭐ */
+    gap: 8px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--card-bg);
+    flex-shrink: 0; /* 절대 축소되지 않음 ⭐ */
+    z-index: 10;
+}
+
+.feed-detail-comment-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 답글 태그 */
+.feed-detail-reply-tag {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.reply-tag-text {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.reply-tag-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    transition: color 0.2s ease;
+}
+
+.reply-tag-close:hover {
+    color: var(--danger);
+}
+
+.feed-detail-comment-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 40px;
+    max-height: 120px;
+    transition: border-color 0.2s ease;
+}
+
+.feed-detail-comment-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.feed-detail-comment-textarea::placeholder {
+    color: var(--text-light);
+}
+
+.feed-detail-comment-submit {
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0; /* 버튼 크기 고정 ⭐ */
+    height: 40px; /* textarea와 동일한 최소 높이 ⭐ */
+}
+
+.feed-detail-comment-submit:hover {
+    background: var(--primary-hover);
+}
+
+/* 댓글 아이템 */
+.feed-detail-comment-item {
+    display: flex;
+    gap: 12px;
+}
+
+.feed-detail-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.feed-detail-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feed-detail-comment-avatar svg {
+    width: 16px;
+    height: 16px;
+    color: var(--text-light);
+}
+
+.feed-detail-comment-content {
+    flex: 1;
+}
+
+.feed-detail-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.feed-detail-comment-author {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.feed-detail-comment-author:hover {
+    text-decoration: underline;
+}
+
+.feed-detail-comment-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.feed-detail-comment-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.feed-detail-comment-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feed-detail-comment-action {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.feed-detail-comment-action:hover {
+    color: var(--text);
+}
+
+/* 답글 인디케이터 (@멘션) */
+.feed-detail-reply-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.feed-detail-reply-indicator svg {
+    width: 12px;
+    height: 12px;
+}
+
+.feed-detail-reply-indicator span {
+    color: #0095f6;
+    font-weight: 500;
+}
+
+/* 댓글 액션 버튼 (답글 달기, 삭제 등) */
+.feed-detail-comment-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.feed-detail-comment-action {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.feed-detail-comment-action:hover {
+    color: var(--text);
+}
+
+/* 대댓글 */
+.feed-detail-replies {
+    margin-left: 44px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feed-detail-reply-item {
+    display: flex;
+    gap: 12px;
+}
+
+/* ========== 반응형 ========== */
+@media (max-width: 1024px) {
+    .feed-detail-content {
+        flex-direction: column;
+        max-width: 600px;
+    }
+    
+    .feed-detail-media-section {
+        flex: 0 0 auto;
+        max-height: 50vh;
+    }
+    
+    .feed-detail-info-section {
+        width: 100%;
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .feed-detail-modal {
+        padding: 0;
+    }
+
+    .feed-detail-content {
+        max-width: 100%;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .feed-detail-body {
+        padding: 16px;
+    }
+
+    .feed-detail-replies {
+        margin-left: 32px;
+    }
+}
+
+/* ========== 스크롤바 ========== */
+.feed-detail-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.feed-detail-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.feed-detail-body::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.feed-detail-body::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* ========== 다크모드 ========== */
+body.dark-mode .feed-detail-comment-submit {
+    color: #1a1a1a;
+}
+
+body.dark-mode .feed-detail-comment-submit:hover {
+    color: #1a1a1a;
+}
+
+body.dark-mode .feed-detail-body::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+body.dark-mode .feed-detail-body::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}

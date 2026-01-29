@@ -1,0 +1,41 @@
+/* ===================================
+   닉네임 검증 UI 스타일
+   =================================== */
+
+/* 닉네임 입력 필드 상태 */
+#edit-nickname.valid {
+    border-color: var(--success);
+}
+
+#edit-nickname.invalid {
+    border-color: var(--danger);
+}
+
+/* 닉네임 피드백 메시지 */
+.nickname-feedback {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    min-height: 18px;
+}
+
+.nickname-feedback.success {
+    color: var(--success);
+}
+
+.nickname-feedback.error {
+    color: var(--danger);
+}
+
+/* 프로필 편집 모달 내 닉네임 필드 */
+.edit-form-group #edit-nickname {
+    transition: border-color 0.2s ease;
+}
+
+.edit-form-group .form-hint {
+    color: var(--text-light);
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}

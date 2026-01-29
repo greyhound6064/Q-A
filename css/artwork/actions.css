@@ -1,0 +1,77 @@
+/**
+ * @file actions.css
+ * @description 작품 액션 버튼 (좋아요, 싫어요, 저장) + 수정/삭제 버튼
+ */
+
+/* ========== 액션 버튼 ========== */
+.artwork-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.artwork-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.artwork-action-btn:hover {
+    background: var(--bg);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.artwork-action-btn.like-btn:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.artwork-action-btn.save-btn:hover {
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.artwork-action-btn.liked {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.artwork-action-btn.liked svg {
+    fill: #ef4444;
+    stroke: #ef4444;
+}
+
+.artwork-action-btn.disliked {
+    color: #6366f1;
+    border-color: #6366f1;
+}
+
+.artwork-action-btn.disliked svg {
+    fill: #6366f1;
+    stroke: #6366f1;
+}
+
+.artwork-action-btn.saved {
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.artwork-action-btn.saved svg {
+    fill: var(--success);
+    stroke: var(--success);
+}
+

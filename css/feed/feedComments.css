@@ -1,0 +1,268 @@
+/**
+ * @file feedComments.css
+ * @description 피드 댓글 스타일
+ */
+
+/* ========== 댓글 섹션 ========== */
+.feed-comments-section {
+    border-top: 1px solid var(--border);
+    padding: 16px;
+}
+
+.feed-comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.feed-comments-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.feed-comments-toggle {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.feed-comments-toggle:hover {
+    background: var(--bg);
+}
+
+/* ========== 댓글 입력 폼 ========== */
+.feed-comment-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.feed-comment-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 40px;
+    max-height: 120px;
+    transition: border-color 0.2s ease;
+}
+
+.feed-comment-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.feed-comment-input::placeholder {
+    color: var(--text-light);
+}
+
+.feed-comment-submit {
+    padding: 10px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
+
+.feed-comment-submit:hover {
+    background: var(--primary-hover);
+}
+
+.feed-comment-submit:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+}
+
+/* ========== 댓글 리스트 ========== */
+.feed-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feed-comment-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.feed-comment-item:hover {
+    background: #f1f5f9;
+}
+
+.feed-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.feed-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feed-comment-avatar svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-light);
+}
+
+.feed-comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.feed-comment-author {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.feed-comment-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.feed-comment-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.feed-comment-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.feed-comment-action-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.feed-comment-action-btn:hover {
+    background: var(--card-bg);
+    color: var(--primary);
+}
+
+.feed-comment-action-btn.delete {
+    color: var(--danger);
+}
+
+.feed-comment-action-btn.delete:hover {
+    background: #fee;
+}
+
+.feed-comment-action-btn.reply {
+    color: var(--primary);
+}
+
+.feed-comment-action-btn.reply:hover {
+    background: #eff6ff;
+}
+
+.feed-comment-action-btn.toggle-replies {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.feed-comment-action-btn.toggle-replies:hover {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+/* ========== 대댓글 스타일 ========== */
+.feed-comment-reply {
+    margin-left: 42px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+}
+
+.feed-comment-reply .feed-comment-item {
+    background: var(--card-bg);
+}
+
+.feed-comment-reply .feed-comment-item:hover {
+    background: var(--bg);
+}
+
+.feed-comment-reply-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.feed-comment-reply-indicator svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ========== 댓글 빈 상태 ========== */
+.feed-comments-empty {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+/* ========== 댓글 로딩 ========== */
+.feed-comments-loading {
+    text-align: center;
+    padding: 16px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+/* ========== 다크모드 대응 ========== */
+@media (prefers-color-scheme: dark) {
+    .feed-comment-item:hover {
+        background: #1e293b;
+    }
+}

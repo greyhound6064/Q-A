@@ -1,0 +1,30 @@
+/**
+ * @file artwork.css
+ * @description 작품 그리드, 상세보기 모달 스타일 (리팩토링 v2)
+ * 
+ * 구조:
+ * - artwork/gallery.css     - 그리드 레이아웃 (~90줄)
+ * - artwork/modal.css       - 모달 + 이미지/오디오 (~240줄)
+ * - artwork/info.css        - 정보 영역 (~160줄)
+ * - artwork/actions.css     - 액션 버튼 (~125줄)
+ * - artwork/comments.css    - 댓글 시스템 (~290줄)
+ * - artwork/responsive.css  - 반응형 (~65줄)
+ */
+
+/* 그리드 레이아웃 */
+@import url('./artwork/gallery.css');
+
+/* 모달 + 이미지/오디오 영역 */
+@import url('./artwork/modal.css');
+
+/* 정보 영역 (작성자, 제목, 설명, 태그) */
+@import url('./artwork/info.css');
+
+/* 액션 버튼 (좋아요, 저장, 수정, 삭제) */
+@import url('./artwork/actions.css');
+
+/* 댓글 시스템 */
+@import url('./artwork/comments.css');
+
+/* 반응형 */
+@import url('./artwork/responsive.css');

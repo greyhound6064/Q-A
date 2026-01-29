@@ -1,0 +1,386 @@
+/**
+ * 웰컴 모달 스타일 - 터미널 테마
+ */
+
+.welcome-modal-content {
+    max-width: 805px;
+    padding: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+/* 다크모드 */
+body.dark-mode .welcome-modal-content {
+    background: #1e1e1e;
+    border: 1px solid #3e3e3e;
+}
+
+/* 터미널 헤더 */
+.welcome-terminal-header {
+    background: #f5f5f5;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-terminal-header {
+    background: #2d2d2d;
+    border-bottom: 1px solid #3e3e3e;
+}
+
+.welcome-terminal-buttons {
+    display: flex;
+    gap: 9px;
+}
+
+.terminal-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.terminal-close {
+    background: #ff5f56;
+}
+
+.terminal-minimize {
+    background: #ffbd2e;
+}
+
+.terminal-maximize {
+    background: #27c93f;
+}
+
+.welcome-terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    color: #999999;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-terminal-title {
+    color: #8b8b8b;
+}
+
+.welcome-modal-content .modal-body {
+    padding: 37px 46px 46px;
+    background: #ffffff;
+    color: #333333;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-modal-content .modal-body {
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+
+/* 로고 */
+.welcome-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.welcome-logo img {
+    width: 115px;
+    height: auto;
+}
+
+/* 터미널 출력 */
+.welcome-terminal-output {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.terminal-line {
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+}
+
+.terminal-line.terminal-blank {
+    height: 9px;
+}
+
+.terminal-prompt {
+    color: #10b981;
+    margin-right: 9px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-prompt {
+    color: #4ec9b0;
+}
+
+.terminal-command {
+    color: #f59e0b;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-command {
+    color: #ce9178;
+}
+
+.terminal-line.terminal-output {
+    color: #333333;
+    padding-left: 18px;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-output {
+    color: #d4d4d4;
+}
+
+.terminal-line.terminal-output .vibing-text {
+    color: #10b981;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-output .vibing-text {
+    color: #4ec9b0;
+}
+
+.terminal-line.terminal-output .version-number {
+    color: #333333;
+    font-weight: normal;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-output .version-number {
+    color: #d4d4d4;
+}
+
+/* 기능 소개 */
+.welcome-features {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 9px;
+}
+
+.terminal-line.terminal-feature {
+    padding-left: 18px;
+    gap: 9px;
+    color: #333333;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-feature {
+    color: #d4d4d4;
+}
+
+.terminal-line.terminal-feature .feature-number {
+    color: #10b981;
+    font-weight: bold;
+    min-width: 23px;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-feature .feature-number {
+    color: #4ec9b0;
+}
+
+.terminal-line.terminal-feature .feature-text {
+    color: #333333;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .terminal-line.terminal-feature .feature-text {
+    color: #d4d4d4;
+}
+
+/* 액션 버튼 */
+.welcome-actions {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.welcome-btn {
+    flex: 1;
+    padding: 16px 23px;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid #e0e0e0;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: #f5f5f5;
+    color: #333333;
+}
+
+body.dark-mode .welcome-btn {
+    background: #2d2d2d;
+    color: #d4d4d4;
+    border: 1px solid #3e3e3e;
+}
+
+.welcome-btn .btn-prompt {
+    color: #10b981;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-btn .btn-prompt {
+    color: #4ec9b0;
+}
+
+.welcome-btn.browse:hover {
+    background: #e8e8e8;
+    border-color: #10b981;
+    transform: translateY(-1px);
+}
+
+body.dark-mode .welcome-btn.browse:hover {
+    background: #3e3e3e;
+    border-color: #4ec9b0;
+}
+
+.welcome-btn.login {
+    background: #f5f5f5;
+    border-color: #10b981;
+}
+
+body.dark-mode .welcome-btn.login {
+    background: #2d2d2d;
+    border-color: #4ec9b0;
+}
+
+.welcome-btn.login:hover {
+    background: #e8e8e8;
+    border-color: #059669;
+    transform: translateY(-1px);
+}
+
+body.dark-mode .welcome-btn.login:hover {
+    background: #3e3e3e;
+    border-color: #6ee7b7;
+}
+
+/* 푸터 */
+.welcome-footer {
+    text-align: center;
+    padding-top: 23px;
+    border-top: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-footer {
+    border-top: 1px solid #3e3e3e;
+}
+
+.welcome-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 16px;
+    color: #999999;
+    cursor: pointer;
+    user-select: none;
+    padding: 14px 23px;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+body.dark-mode .welcome-checkbox {
+    color: #8b8b8b;
+}
+
+.welcome-checkbox:hover {
+    color: #333333;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+body.dark-mode .welcome-checkbox:hover {
+    color: #d4d4d4;
+    background: rgba(78, 201, 176, 0.1);
+}
+
+.welcome-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+}
+
+.welcome-checkbox .checkbox-text {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.4;
+    padding-left: 0;
+}
+
+.welcome-checkbox .checkbox-text::before {
+    content: '[ ] ';
+    color: #10b981;
+    margin-right: 9px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-checkbox .checkbox-text::before {
+    color: #4ec9b0;
+}
+
+.welcome-checkbox input[type="checkbox"]:checked + .checkbox-text::before {
+    content: '[✓] ';
+    color: #10b981;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .welcome-checkbox input[type="checkbox"]:checked + .checkbox-text::before {
+    color: #4ec9b0;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .welcome-modal-content {
+        max-width: 95%;
+        margin: 20px;
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 24px 20px 28px;
+    }
+
+    .welcome-terminal-output {
+        font-size: 13px;
+    }
+
+    .welcome-actions {
+        flex-direction: column;
+    }
+
+    .welcome-btn {
+        width: 100%;
+        font-size: 13px;
+    }
+    
+    .welcome-logo img {
+        width: 80px;
+    }
+}

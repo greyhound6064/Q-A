@@ -1,0 +1,498 @@
+/**
+ * @file gallery.css
+ * @description 작품관 전용 스타일 (인스타그램 스타일)
+ */
+
+/* ========== 작품관 컨테이너 ========== */
+.gallery-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: calc(50% - 300px - 35px);
+}
+
+/* ========== 작품관 리스트 ========== */
+.gallery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ========== 작품관 아이템 ========== */
+.gallery-item {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== 작품관 헤더 ========== */
+.gallery-item-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+    position: relative;
+}
+
+.gallery-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.gallery-author-avatar:hover {
+    transform: scale(1.05);
+}
+
+.gallery-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-author-avatar svg {
+    color: var(--text-light);
+}
+
+.gallery-author-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.gallery-author-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    display: inline-block;
+    margin-bottom: 2px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.gallery-author-name:hover {
+    color: var(--primary);
+}
+
+.gallery-post-date {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+/* ========== 작품관 이미지 ========== */
+.gallery-item-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: var(--bg);
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.gallery-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item-image:hover img {
+    transform: scale(1.05);
+}
+
+/* ========== 작품관 오디오 ========== */
+.gallery-item-audio {
+    height: 300px !important;
+}
+
+.gallery-audio-container {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.gallery-audio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.gallery-audio-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.gallery-audio-player {
+    width: 100%;
+    max-width: 500px;
+    height: 48px;
+}
+
+/* 다중 이미지 인디케이터 */
+.gallery-multiple-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 2;
+}
+
+.gallery-multiple-indicator svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========== 작품관 캐러셀 ========== */
+.gallery-carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-carousel-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 3;
+    color: white;
+}
+
+.gallery-carousel-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-carousel-prev {
+    left: 12px;
+}
+
+.gallery-carousel-next {
+    right: 12px;
+}
+
+.gallery-carousel-indicators {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.gallery-carousel-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.gallery-carousel-indicator.active {
+    background: white;
+    width: 20px;
+    border-radius: 3px;
+}
+
+/* ========== 작품관 액션 바 ========== */
+.gallery-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    position: relative;
+    z-index: 2;
+}
+
+.gallery-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.gallery-action-btn:hover {
+    background: var(--bg);
+}
+
+.gallery-action-btn svg {
+    width: 22px;
+    height: 22px;
+    transition: all 0.2s ease;
+}
+
+.gallery-action-btn.liked {
+    color: #ef4444;
+}
+
+.gallery-action-btn.liked svg {
+    fill: #ef4444;
+    stroke: #ef4444;
+}
+
+.gallery-action-btn.disliked {
+    color: #6366f1;
+}
+
+.gallery-action-btn.disliked svg {
+    fill: #6366f1;
+    stroke: #6366f1;
+}
+
+.gallery-action-btn.saved svg {
+    fill: var(--primary);
+    stroke: var(--primary);
+}
+
+/* ========== 작품관 콘텐츠 ========== */
+.gallery-item-title-wrapper {
+    padding: 0 16px 12px 16px;
+}
+
+.gallery-item-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.gallery-item-content {
+    padding: 0 16px 12px 16px;
+}
+
+.gallery-item-description {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+/* 더보기 버튼이 있을 때 ellipsis 숨기기 */
+.gallery-item-description.has-read-more {
+    text-overflow: clip;
+}
+
+.gallery-item-description.expanded {
+    -webkit-line-clamp: unset;
+    display: block !important;
+    white-space: pre-line;
+}
+
+.gallery-read-more {
+    color: var(--text-light);
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.gallery-read-more:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* 작품관 태그 */
+.gallery-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+}
+
+.gallery-item-tag {
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gallery-item-tag:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* ========== 반응형 디자인 ========== */
+@media (max-width: 768px) {
+    .gallery-container {
+        padding: 12px;
+    }
+
+    .gallery-item-header {
+        padding: 12px;
+    }
+
+    .gallery-author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .gallery-author-name {
+        font-size: 14px;
+    }
+
+    .gallery-post-date {
+        font-size: 12px;
+    }
+
+    .gallery-item-actions {
+        padding: 10px 12px;
+        gap: 12px;
+    }
+
+    .gallery-action-btn {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+
+    .gallery-action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .gallery-item-title-wrapper {
+        padding: 0 12px 12px 12px;
+    }
+
+    .gallery-item-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .gallery-item-content {
+        padding: 0 12px 12px 12px;
+    }
+
+    .gallery-item-description {
+        font-size: 15px;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden;
+        white-space: pre-line;
+    }
+    
+    .gallery-item-description.expanded {
+        -webkit-line-clamp: unset;
+        display: block !important;
+        white-space: pre-line;
+    }
+
+    .gallery-item-tags {
+        margin: 0;
+        gap: 5px;
+    }
+
+    .gallery-item-tag {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+
+    .gallery-carousel-nav {
+        width: 32px;
+        height: 32px;
+    }
+
+    .gallery-carousel-prev {
+        left: 8px;
+    }
+
+    .gallery-carousel-next {
+        right: 8px;
+    }
+}
+
+/* ========== 다크모드 대응 ========== */
+body.dark-mode .gallery-item-tag:hover {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+    .gallery-item {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery-item:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+}

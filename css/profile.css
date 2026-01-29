@@ -1,0 +1,1032 @@
+/**
+ * @file profile.css
+ * @description 프로필 페이지 스타일 (인스타그램 스타일)
+ */
+
+/* ========== 프로필 컨테이너 ========== */
+.profile-container {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: 0;
+    background: var(--card-bg);
+    min-height: 100vh;
+    margin-left: calc(50% - 467.5px - 35px);
+}
+
+/* 프로필 탭이 활성화될 때 content-area 패딩 조정 */
+.content-area:has(#profile-tab-content.active) {
+    padding: 0;
+}
+
+/* ========== 프로필 헤더 ========== */
+.profile-header {
+    display: flex;
+    gap: 60px;
+    padding: 40px 40px 30px 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+    align-items: flex-start;
+}
+
+.profile-avatar-container {
+    flex-shrink: 0;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar svg {
+    width: 60px;
+    height: 60px;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ========== 프로필 정보 ========== */
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-username-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-username {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text);
+    margin: 0;
+}
+
+.profile-edit-btn,
+.profile-follow-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-edit-btn:hover {
+    background: var(--bg);
+}
+
+.profile-follow-btn {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.profile-follow-btn:hover {
+    background: var(--primary-hover);
+}
+
+.profile-follow-btn.following {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.profile-follow-btn.following:hover {
+    background: var(--bg);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.profile-upload-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+}
+
+.profile-upload-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 44, 44, 0.3);
+}
+
+.profile-upload-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== 프로필 통계 ========== */
+.profile-stats {
+    display: flex;
+    gap: 50px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.stat-item:hover {
+    opacity: 0.7;
+}
+
+.stat-number {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.profile-bio {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ========== 프로필 상태 ========== */
+.profile-status-container {
+    position: relative;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.profile-status-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* 상태 추가 버튼이 리스트 내부에 있을 때 간격 조정 */
+.profile-status-list > .profile-status-add-btn {
+    margin-left: 4px;
+}
+
+.profile-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+}
+
+.profile-status-badge .status-emoji {
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-status-badge .status-text {
+    user-select: none;
+    display: flex;
+    align-items: center;
+    line-height: 1.2;
+}
+
+.profile-status-badge .status-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.2s;
+    color: var(--text-light);
+}
+
+.profile-status-badge .status-remove:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.profile-status-badge .status-remove svg {
+    width: 12px;
+    height: 12px;
+}
+
+.profile-status-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-light);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.profile-status-add-btn:hover {
+    background: rgba(44, 44, 44, 0.05);
+    border-color: var(--primary);
+    border-style: solid;
+    color: var(--primary);
+}
+
+.profile-status-add-btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.profile-status-add-btn .add-btn-text {
+    user-select: none;
+}
+
+.profile-status-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 200px;
+    overflow: hidden;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: left;
+}
+
+.status-option:hover {
+    background: var(--bg);
+}
+
+.status-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.status-option.disabled:hover {
+    background: transparent;
+}
+
+.status-option .status-emoji {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.status-option .status-text {
+    flex: 1;
+}
+
+/* 타인 프로필에서는 상태를 클릭 불가능하게 */
+.profile-status-container.readonly .profile-status-add-btn {
+    display: none;
+}
+
+.profile-status-container.readonly .profile-status-badge .status-remove {
+    display: none;
+}
+
+/* 드롭다운 구분선 */
+.status-dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+}
+
+.status-custom-option {
+    color: var(--primary);
+}
+
+.status-custom-option:hover {
+    background: rgba(44, 44, 44, 0.05);
+}
+
+/* ========== 커스텀 상태 모달 ========== */
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.emoji-option {
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emoji-option:hover {
+    border-color: var(--primary);
+    background: rgba(44, 44, 44, 0.05);
+    transform: scale(1.1);
+}
+
+.emoji-option.selected {
+    border-color: var(--primary);
+    background: rgba(44, 44, 44, 0.1);
+    box-shadow: 0 0 0 2px rgba(44, 44, 44, 0.2);
+}
+
+.custom-status-preview {
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.preview-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.preview-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.preview-emoji {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.preview-text {
+    user-select: none;
+    color: var(--text-light);
+}
+
+.preview-text:not(:empty) {
+    color: var(--text);
+}
+
+/* ========== 프로필 탭 ========== */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+}
+
+.profile-tab {
+    background: transparent;
+    border: none;
+    padding: 16px 32px;
+    cursor: pointer;
+    color: var(--text-light);
+    border-top: 2px solid transparent;
+    margin-top: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.profile-tab svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ========== 프로필 서브 탭 (게시물 필터) ========== */
+.profile-sub-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card-bg);
+    overflow-x: auto;
+}
+
+.profile-sub-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.profile-sub-tab svg {
+    width: 16px;
+    height: 16px;
+}
+
+.profile-sub-tab:hover {
+    background: rgba(44, 44, 44, 0.05);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.profile-sub-tab.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.profile-sub-tab.active svg {
+    stroke: white;
+}
+
+#profile-posts-grid {
+    min-height: 200px;
+}
+
+/* ========== 프로필 안내 문구 ========== */
+.profile-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    margin: 0 20px 16px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-size: 13px;
+}
+
+.profile-notice svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* ========== 팔로우 리스트 (인라인) ========== */
+.follow-list-container {
+    padding: 20px;
+}
+
+.follow-list {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.follow-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+}
+
+.follow-item:hover {
+    background: var(--bg);
+}
+
+.follow-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.follow-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.follow-info {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.follow-nickname {
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 4px 0;
+    font-size: 14px;
+}
+
+.follow-bio {
+    color: var(--text-light);
+    font-size: 13px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.follow-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.follow-btn:hover {
+    background: var(--bg);
+}
+
+.follow-btn.following {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.follow-btn.following:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.follow-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.profile-tab:hover {
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.profile-tab.active {
+    color: var(--text);
+    border-top-color: var(--text);
+}
+
+.profile-tab.logout-tab {
+    color: var(--danger);
+    margin-left: auto;
+}
+
+.profile-tab.logout-tab:hover {
+    color: var(--danger-hover);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+/* ========== 프로필 콘텐츠 ========== */
+.profile-content {
+    padding: 20px;
+}
+
+.profile-tab-content {
+    min-height: 500px;
+}
+
+.profile-tab-content:not(.active) {
+    display: none;
+}
+
+/* 프로필 페이지에서 타이틀 숨기기 */
+#profile-tab-content ~ * #current-tab-title {
+    display: none;
+}
+
+#profile-tab-content.active ~ * #current-tab-title {
+    display: none;
+}
+
+#profile-tab-content.active #current-tab-title {
+    display: none;
+}
+
+/* ========== 프로필 편집 모달 ========== */
+.edit-avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.edit-avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: 3px solid var(--border);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.edit-avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-avatar-preview svg {
+    width: 36px;
+    height: 36px;
+}
+
+.edit-avatar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.avatar-change-btn,
+.avatar-remove-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.avatar-change-btn {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.avatar-change-btn:hover {
+    background: var(--primary-hover);
+}
+
+.avatar-remove-btn {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.avatar-remove-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* ========== 팔로우 모달 ========== */
+.follow-modal-content {
+    max-width: 400px;
+    max-height: 500px;
+}
+
+.follow-modal-content .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.follow-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.follow-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+}
+
+.follow-item:hover {
+    background: var(--bg);
+}
+
+.follow-item:last-child {
+    border-bottom: none;
+}
+
+.follow-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.follow-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.follow-avatar svg {
+    width: 20px;
+    height: 20px;
+}
+
+.follow-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.follow-nickname {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.follow-bio {
+    font-size: 13px;
+    color: var(--text-light);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.follow-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: var(--primary);
+    color: white;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.follow-btn:hover {
+    background: var(--primary-hover);
+}
+
+.follow-btn.following {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.follow-btn.following:hover {
+    background: var(--bg);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.follow-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+/* ========== 닉네임 변경 제한 안내 ========== */
+/* 기본 안내 문구 (항상 표시) */
+.nickname-limit-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #f0f7ff;
+    border: 1px solid #d0e7ff;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1565c0;
+    line-height: 1.5;
+}
+
+.nickname-limit-notice svg {
+    flex-shrink: 0;
+    stroke: #1976d2;
+}
+
+.nickname-limit-notice strong {
+    font-weight: 600;
+    color: #0d47a1;
+}
+
+/* 동적 안내 문구 (변경 이력에 따라 표시) */
+.nickname-change-notice {
+    margin-top: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.nickname-change-notice > div {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.nickname-change-notice svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notice-info {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-left: 3px solid #1976d2;
+}
+
+.notice-info svg {
+    stroke: #1976d2;
+}
+
+.notice-warning {
+    background: #fff3e0;
+    color: #e65100;
+    border-left: 3px solid #f57c00;
+}
+
+.notice-warning svg {
+    stroke: #f57c00;
+}
+
+.notice-error {
+    background: #ffebee;
+    color: #c62828;
+    border-left: 3px solid #d32f2f;
+}
+
+.notice-error svg {
+    stroke: #d32f2f;
+}
+
+.nickname-change-notice strong {
+    font-weight: 600;
+}
+
+/* ========== 다크모드 ========== */
+body.dark-mode .profile-sub-tab.active {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode .profile-sub-tab.active svg {
+    stroke: #1a1a1a;
+}
+
+body.dark-mode .profile-follow-btn {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode .profile-follow-btn:hover {
+    background: var(--primary-hover);
+    color: #1a1a1a;
+}
+
+body.dark-mode .avatar-change-btn {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode .avatar-change-btn:hover {
+    background: var(--primary-hover);
+    color: #1a1a1a;
+}
+
+body.dark-mode .follow-btn.following {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode .follow-btn.following:hover {
+    background: var(--primary-hover);
+    color: #1a1a1a;
+}

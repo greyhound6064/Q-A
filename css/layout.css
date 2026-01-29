@@ -1,0 +1,608 @@
+/**
+ * @file layout.css
+ * @description 레이아웃, 그리드, 사이드바, 탭 네비게이션
+ */
+
+/* ========== 메인 레이아웃 ========== */
+.main-layout {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg);
+}
+
+/* ========== 사이드바 ========== */
+.sidebar {
+    width: 70px;
+    background: var(--card-bg);
+    padding: 1.5rem 0.5rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: visible;
+    z-index: 100;
+    justify-content: flex-start;
+}
+
+/* 사이드바 로고 - 항상 고정 */
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.sidebar-logo img {
+    width: 60px;
+    height: auto;
+}
+
+/* 로고 툴팁 */
+.sidebar-logo-tooltip {
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    background: transparent;
+    padding: 0.75rem 1rem 0.75rem 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+    z-index: 3;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ========== 배경음악 컨트롤 ========== */
+.music-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-top: auto;
+    margin-bottom: 1rem;
+    gap: 0;
+    position: relative;
+    order: 2;
+}
+
+.music-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    padding: 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.music-toggle-btn:hover {
+    background: var(--primary-hover);
+    color: white;
+    transform: scale(1.05);
+}
+
+.music-toggle-btn.playing {
+    color: var(--primary);
+    background: rgba(var(--primary-rgb, 99, 102, 241), 0.1);
+}
+
+.music-toggle-btn.playing:hover {
+    color: white;
+    background: var(--primary-hover);
+}
+
+/* 재생 중 사운드 웨이브 애니메이션 */
+.music-toggle-btn.playing .sound-waves {
+    animation: soundWave 1.5s ease-in-out infinite;
+}
+
+@keyframes soundWave {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.music-icon {
+    width: 28px;
+    height: 28px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+
+/* 음량 조절 컨트롤 */
+.music-volume-control {
+    position: absolute;
+    left: 63px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    display: flex;
+    align-items: center;
+    
+    gap: 0.75rem;
+    background: var(--card-bg);
+    padding:0.5rem 1rem 0.5rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 3;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* 호버 시 볼륨 컨트롤 표시 */
+.music-control:hover .music-volume-control,
+.music-volume-control:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+    pointer-events: auto;
+}
+
+
+.music-volume-slider {
+    width:70px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+.music-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.music-volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.music-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.music-volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.volume-percentage {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 35px;
+    text-align: right;
+}
+
+/* 다크모드 음악 컨트롤 */
+body.dark-mode .music-toggle-btn {
+    color: var(--text-light);
+}
+
+body.dark-mode .music-toggle-btn:hover {
+    background: var(--primary-hover);
+    color: #1a1a1a;
+}
+
+body.dark-mode .music-toggle-btn.playing {
+    color: var(--primary);
+    background: rgba(var(--primary-rgb, 99, 102, 241), 0.15);
+}
+
+body.dark-mode .music-toggle-btn.playing:hover {
+    color: #1a1a1a;
+}
+
+body.dark-mode .music-volume-control {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+}
+
+.sidebar #auth-section {
+    padding: 0;
+    box-shadow: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    display: none;
+}
+
+.sidebar #user-info {
+    display: none;
+}
+
+/* ========== 탭 네비게이션 ========== */
+.tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    order: 1;
+}
+
+.tab-button {
+    display: flex;
+    align-items: center;
+    width: 50px;
+    padding: 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+    justify-content: center;
+    overflow: visible;
+}
+
+/* 호버 시 배경 */
+.tab-button::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    background: transparent;
+    border-radius: 0.5rem;
+    transition: background 0.2s ease;
+    z-index: 998;
+    pointer-events: none;
+}
+
+.tab-button:hover::after {
+    background: var(--primary-hover);
+}
+
+.tab-button svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    position: relative;
+    z-index: 1001;
+    transition: color 0.3s ease, stroke 0.3s ease;
+}
+
+.tab-button span {
+    position: absolute;
+    left: 70px;
+    margin-left: 0;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    background: transparent;
+    padding: 0.75rem 1rem 0.75rem 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease, color 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.tab-button:hover {
+    background: transparent;
+    color: white;
+}
+
+.tab-button:hover svg {
+    color: white;
+    stroke: white;
+}
+
+.tab-button:hover span {
+    color: white;
+}
+
+/* 사이드바 호버 시 모든 툴팁 표시 */
+.sidebar:hover .tab-button span {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar:hover .sidebar-logo-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar:hover .music-volume-control,
+.music-volume-control:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+    pointer-events: auto;
+}
+
+/* 활성 탭 배경 */
+.tab-button.active::after {
+    background: var(--primary);
+    width: 50px;
+}
+
+.tab-button.active {
+    background: transparent;
+    color: white;
+    box-shadow: none;
+}
+
+.tab-button.active:hover::after {
+    width: 200px;
+    background: var(--primary-hover);
+}
+
+.tab-button.active:hover {
+    color: white;
+}
+
+.tab-button.active span {
+    color: var(--text);
+}
+
+.tab-button.active:hover span {
+    color: white;
+}
+
+/* ========== 다크모드 탭 스타일 ========== */
+body.dark-mode .tab-button {
+    color: var(--text-light);
+}
+
+body.dark-mode .tab-button svg {
+    color: var(--text-light);
+    stroke: var(--text-light);
+}
+
+body.dark-mode .tab-button:hover {
+    color: #1a1a1a;
+}
+
+body.dark-mode .tab-button:hover svg {
+    color: #1a1a1a;
+    stroke: #1a1a1a;
+}
+
+body.dark-mode .tab-button:hover span {
+    color: #1a1a1a;
+}
+
+body.dark-mode .tab-button.active {
+    color: #1a1a1a;
+}
+
+body.dark-mode .tab-button.active svg {
+    color: #1a1a1a;
+    stroke: #1a1a1a;
+}
+
+body.dark-mode .tab-button.active span {
+    color: var(--text-light);
+}
+
+body.dark-mode .tab-button.active:hover {
+    color: #1a1a1a;
+}
+
+body.dark-mode .tab-button.active:hover svg {
+    color: #1a1a1a;
+    stroke: #1a1a1a;
+}
+
+body.dark-mode .tab-button.active:hover span {
+    color: #1a1a1a;
+}
+
+/* ========== 콘텐츠 영역 ========== */
+.content-area {
+    flex-grow: 1;
+    padding: 2rem;
+    max-width: calc(100% - 70px);
+    overflow-y: auto;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 헤더 로그인 섹션 */
+#auth-section-header {
+    position: fixed;
+    top: 2rem;
+    right: 3rem;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#auth-section-header button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+}
+
+#auth-section-header button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(44, 44, 44, 0.3);
+}
+
+#auth-section-header button svg {
+    flex-shrink: 0;
+}
+
+#auth-section-header #user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 다크모드 로그인 버튼 */
+body.dark-mode #auth-section-header button {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode #auth-section-header button:hover {
+    background: var(--primary-hover);
+    color: #1a1a1a;
+}
+
+/* 쪽지함 탭일 때 content-area 스타일 오버라이드 */
+.content-area:has(#messages-tab-content.active) {
+    padding: 0;
+    overflow: hidden;
+}
+
+#current-tab-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text);
+    text-align: center;
+}
+
+/* 기존 컨테이너 (더 이상 사용하지 않음) */
+.container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========== 반응형 디자인 ========== */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: var(--shadow-lg);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem;
+    }
+
+    .sidebar-logo img {
+        width: 40px;
+    }
+
+    .music-control {
+        margin-bottom: 0.5rem;
+    }
+
+    .music-toggle-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0.5rem;
+    }
+
+    .music-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .music-volume-control {
+        position: fixed;
+        left: 50%;
+        top: auto;
+        bottom: 80px;
+        transform: translateX(-50%) translateY(10px);
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .music-control:hover .music-volume-control {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .music-volume-slider {
+        width: 150px;
+    }
+
+    .tabs {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .tab-button {
+        width: auto;
+        text-align: center;
+        padding: 0.5rem 0.75rem;
+        justify-content: center;
+    }
+
+    .tab-button span {
+        position: static;
+        opacity: 0;
+        visibility: hidden;
+        display: none;
+    }
+
+    .content-area {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    #current-tab-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+}

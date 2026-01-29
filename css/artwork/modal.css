@@ -1,0 +1,276 @@
+/**
+ * @file modal.css
+ * @description 작품 상세보기 모달 + 이미지/오디오 영역
+ */
+
+/* ========== 작품 상세보기 모달 ========== */
+.artwork-modal {
+    z-index: 1001;
+    /* 모달 자체도 GPU 레이어로 승격 */
+    transform: translateZ(0);
+    will-change: transform;
+    /* backdrop-filter 제거 - 비디오 성능 저하 방지 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* 배경을 단순하게 */
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.artwork-modal-content {
+    background: var(--card-bg);
+    border-radius: 0;
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+    max-height: 800px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    /* 렌더링 최적화 */
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout style paint;
+}
+
+/* 파일이 없는 경우 모달 컨텐츠 크기 조정 */
+.artwork-modal-content.no-media {
+    max-width: 600px;
+    width: 100%;
+}
+
+.artwork-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.artwork-close svg {
+    stroke: white;
+}
+
+.artwork-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: rotate(90deg);
+}
+
+/* 파일이 없는 경우 닫기 버튼 스타일 조정 */
+.artwork-modal-content.no-media .artwork-close {
+    background: transparent;
+    color: var(--text);
+}
+
+.artwork-modal-content.no-media .artwork-close svg {
+    stroke: currentColor;
+}
+
+.artwork-modal-content.no-media .artwork-close:hover {
+    background: var(--bg);
+    transform: none;
+}
+
+.artwork-modal-body {
+    display: flex;
+    height: 100%;
+}
+
+/* 파일이 없는 경우 단일 컬럼 레이아웃 */
+.artwork-modal-body.no-media {
+    justify-content: center;
+    flex-direction: column;
+}
+
+.artwork-modal-body.no-media .artwork-image-section {
+    display: none !important;
+}
+
+.artwork-modal-body.no-media .artwork-info-section {
+    flex: 1;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+}
+
+/* ========== 이미지 영역 (왼쪽) ========== */
+.artwork-image-section {
+    flex: 1;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    /* 비디오 영역 최적화 - 완전한 격리 */
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout style paint;
+    isolation: isolate; /* Stacking context 분리 */
+    /* backdrop-filter 영향 제거 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.artwork-carousel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#artwork-carousel-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 캐러셀 컨텐츠 최적화 - 완전한 격리 */
+    transform: translateZ(0);
+    will-change: transform;
+    isolation: isolate; /* Stacking context 분리 */
+    /* GPU 레이어 강제 */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.artwork-image-section img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#artwork-carousel-content video,
+#artwork-carousel-content audio {
+    max-width: 100%;
+    max-height: 100%;
+    /* 하드웨어 가속 및 렌더링 최적화 - 최대 성능 */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* GPU 레이어 강제 */
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    /* 렌더링 최적화 */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+#artwork-carousel-content video {
+    /* 비디오 전용 최적화 - 최대 성능 */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* 비디오 디코딩 최적화 힌트 */
+    object-fit: contain;
+    /* GPU 메모리 최적화 */
+    -webkit-transform: translateZ(0) scale(1);
+    transform: translateZ(0) scale(1);
+}
+
+/* ========== 상세화면 오디오 스타일 (피드와 동일) ========== */
+#artwork-carousel-content .feed-audio-container {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+#artwork-carousel-content .feed-audio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    width: 100%;
+    max-width: 500px;
+}
+
+#artwork-carousel-content .feed-audio-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+#artwork-carousel-content .feed-audio-player {
+    width: 100%;
+    max-width: 500px;
+    height: 48px;
+}
+
+/* 작품 상세보기 캐러셀 네비게이션 */
+.artwork-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+    color: white;
+}
+
+.artwork-carousel-nav:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.artwork-carousel-nav.prev {
+    left: 20px;
+}
+
+.artwork-carousel-nav.next {
+    right: 20px;
+}
+
+.artwork-carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.artwork-carousel-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.artwork-carousel-indicator.active {
+    background: white;
+    width: 28px;
+    border-radius: 5px;
+}
+
+.artwork-carousel-indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
