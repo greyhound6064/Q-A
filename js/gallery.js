@@ -11,6 +11,7 @@ import { getCommentCount } from './services/commentService.js';
 import { getBatchSavedStatus } from './services/saveService.js';
 import { sortPosts } from './services/sortingService.js';
 import * as FeedLikes from './feed/feedLikes.js';
+import { keepSearchToggleVisible, hideSearchToggle } from './scrollToggle.js';
 
 // ========== 전역 상태 관리 ==========
 window._galleryState = {
@@ -237,7 +238,24 @@ export async function renderGalleryList() {
                     </div>
                 `;
             } else {
-                mediaHTML = `
+                // 모바일 스크롤 뷰 (768px 이하 - 레딧 스타일)
+                const scrollHTML = `
+                    <div class="gallery-images-scroll" data-gallery-scroll="${post.id}">
+                        <div class="gallery-images-scroll-container" data-scroll-container="${post.id}">
+                            ${allFiles.map((file, idx) => `
+                                <div class="gallery-scroll-image" data-scroll-index="${idx}">
+                                    <img src="${escapeHtml(file)}" alt="${escapeHtml(post.title)} ${idx + 1}" loading="lazy" draggable="false">
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${hasMultipleFiles ? `
+                            <div class="gallery-scroll-page-indicator" data-page-indicator="${post.id}">1/${fileCount}</div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                // 데스크톱 캐러셀 뷰
+                const carouselHTML = `
                     <div class="gallery-carousel-container" data-feed-carousel="${post.id}">
                         <img src="${escapeHtml(fileUrl)}" alt="${escapeHtml(post.title)}" loading="lazy" data-file-index="0">
                         ${hasMultipleFiles ? `
@@ -257,6 +275,8 @@ export async function renderGalleryList() {
                         ` : ''}
                     </div>
                 `;
+                
+                mediaHTML = carouselHTML + scrollHTML;
             }
         }
         
@@ -345,6 +365,7 @@ export async function renderGalleryList() {
     setTimeout(() => {
         checkGalleryDescriptions();
         setupVideoIntersectionObserver();
+        setupGalleryScrollObservers();
     }, 100);
 }
 
@@ -495,6 +516,73 @@ function setupVideoIntersectionObserver() {
     videos.forEach(video => observer.observe(video));
 }
 
+/**
+ * 스크롤 인디케이터 업데이트 (레딧 스타일)
+ */
+function setupGalleryScrollObservers() {
+    const scrollContainers = document.querySelectorAll('.gallery-images-scroll-container');
+    
+    scrollContainers.forEach(container => {
+        const postId = container.dataset.scrollContainer;
+        const indicatorsContainer = document.querySelector(`[data-scroll-indicators="${postId}"]`);
+        
+        if (!indicatorsContainer) return;
+        
+        // 스크롤 이벤트로 인디케이터 업데이트
+        let scrollTimeout;
+        container.addEventListener('scroll', () => {
+            // 스크롤이 멈춘 후에만 업데이트 (성능 최적화)
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollLeft = container.scrollLeft;
+                const containerWidth = container.offsetWidth;
+                const currentIndex = Math.round(scrollLeft / containerWidth);
+                
+                // 모든 인디케이터 비활성화
+                const indicators = indicatorsContainer.querySelectorAll('.gallery-scroll-indicator');
+                indicators.forEach((indicator, idx) => {
+                    if (idx === currentIndex) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }, 50);
+        });
+        
+        // 터치 스와이프 개선 (데스크톱 드래그)
+        let isDown = false;
+        let startX;
+        let scrollLeftStart;
+        
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - container.offsetLeft;
+            scrollLeftStart = container.scrollLeft;
+            container.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        });
+        
+        container.addEventListener('mouseup', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        });
+        
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeftStart - walk;
+        });
+    });
+}
+
 // ========== Search 함수 (Gallery 전용) ==========
 export async function performGallerySearch() {
     const searchInput = document.getElementById('gallery-search-input');
@@ -588,7 +676,7 @@ export async function changeGallerySortMode(mode) {
 // ========== 검색 패널 토글 ==========
 export function toggleGallerySearchPanel() {
     const panel = document.getElementById('gallery-search-panel');
-    const toggleBtn = document.getElementById('gallery-search-toggle-btn');
+    const toggleBtn = document.getElementById('gallery-search-toggle');
     
     if (panel) {
         const isVisible = panel.style.display === 'block';
@@ -597,8 +685,10 @@ export function toggleGallerySearchPanel() {
         if (toggleBtn) {
             if (isVisible) {
                 toggleBtn.classList.remove('active');
+                hideSearchToggle('gallery');
             } else {
                 toggleBtn.classList.add('active');
+                keepSearchToggleVisible('gallery');
             }
         }
     }

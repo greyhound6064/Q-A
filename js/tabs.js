@@ -27,6 +27,52 @@ export function initTabs() {
     
     // 프로필 페이지 내부 탭 초기화
     initProfileTabs();
+    
+    // 모바일 네비게이션 초기화
+    initMobileNav();
+}
+
+// ========== 모바일 네비게이션 초기화 ==========
+function initMobileNav() {
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    const mobileNav = document.querySelector('.mobile-bottom-nav');
+    
+    // 화면 크기에 따라 모바일 네비게이션 표시/숨김
+    function toggleMobileNav() {
+        if (window.innerWidth <= 768) {
+            if (mobileNav) mobileNav.style.display = 'flex';
+        } else {
+            if (mobileNav) mobileNav.style.display = 'none';
+        }
+    }
+    
+    // 초기 실행
+    toggleMobileNav();
+    
+    // 리사이즈 이벤트 리스너
+    window.addEventListener('resize', toggleMobileNav);
+    
+    // 모바일 네비게이션 아이템 클릭 이벤트
+    mobileNavItems.forEach(item => {
+        item.addEventListener('click', async function() {
+            const targetTab = this.getAttribute('data-tab');
+            
+            // 로그인 필요 탭 체크
+            if (targetTab === 'profile' || targetTab === 'messages') {
+                const { data: { session } } = await window._supabase.auth.getSession();
+                if (!session) {
+                    alert('로그인 후 이용 가능합니다.');
+                    return;
+                }
+            }
+            
+            // 모바일 네비게이션 아이템 active 클래스 업데이트
+            mobileNavItems.forEach(navItem => navItem.classList.remove('active'));
+            this.classList.add('active');
+            
+            switchToTab(targetTab);
+        });
+    });
 }
 
 // ========== 타인 프로필로 전환 (탭 활성화 없음) ==========
@@ -55,12 +101,22 @@ export function switchToOtherProfile() {
 export function switchToTab(targetTab) {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     
     // 모든 탭 버튼의 active 클래스 제거
     tabButtons.forEach(btn => btn.classList.remove('active'));
     // 대상 탭 버튼에 active 클래스 추가
     const targetButton = document.querySelector(`.tab-button[data-tab="${targetTab}"]`);
     if (targetButton) targetButton.classList.add('active');
+    
+    // 모바일 네비게이션 아이템도 동기화
+    mobileNavItems.forEach(item => {
+        if (item.getAttribute('data-tab') === targetTab) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
     
     // 모든 탭 콘텐츠 숨기기
     tabContents.forEach(content => {
@@ -73,6 +129,11 @@ export function switchToTab(targetTab) {
     if (targetContent) {
         targetContent.style.display = 'block';
         targetContent.classList.add('active');
+        
+        // 탭 전환 시 네비게이션 상태 초기화 (항상 표시)
+        if (window.resetNavigationVisibility) {
+            window.resetNavigationVisibility();
+        }
         
         // 프로필 탭이 활성화되면 프로필 정보 업데이트 (본인 프로필로 복귀)
         if (targetTab === 'profile') {

@@ -1,0 +1,761 @@
+/**
+ * @file profile-responsive.css
+ * @description 프로필 페이지 반응형 스타일
+ */
+
+/* ========== 태블릿 이하 (768px 미만) ========== */
+@media (max-width: 768px) {
+    /* 프로필 컨테이너 */
+    .profile-container {
+        max-width: 100%;
+        margin-left: 0;
+        padding: 0;
+    }
+    
+    /* 프로필 탭 - 텍스트 숨기기 */
+    .profile-tab span {
+        display: none;
+    }
+    
+    .profile-tab {
+        padding: 16px 20px;
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .profile-tab svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 로그아웃 탭 */
+    .profile-tab.logout-tab {
+        margin-left: 0;
+        flex: 0.8;
+    }
+    
+    /* 프로필 서브 탭 - 텍스트 숨기기 */
+    .profile-sub-tab span {
+        display: none;
+    }
+    
+    .profile-sub-tab {
+        padding: 8px 12px;
+        min-width: auto;
+    }
+    
+    .profile-sub-tab svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 프로필 탭 활성화 시 content-area */
+    .content-area:has(#profile-tab-content.active) {
+        padding: 0 !important;
+        margin-top: 48px;
+    }
+    
+    /* 프로필 콘텐츠 */
+    .profile-content {
+        padding: 16px;
+    }
+    
+    /* 프로필 게시물 그리드 */
+    #profile-posts-grid {
+        padding: 12px;
+    }
+    
+    /* 프로필 편집 모달 */
+    .edit-avatar-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .edit-avatar-preview {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .edit-avatar-preview svg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .edit-avatar-actions {
+        width: 100%;
+    }
+    
+    .avatar-change-btn,
+    .avatar-remove-btn {
+        width: 100%;
+    }
+    
+    /* 팔로우 모달 */
+    .follow-modal-content {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        height: 100vh;
+    }
+    
+    .follow-modal-content .modal-body {
+        max-height: calc(100vh - 120px);
+    }
+    
+    /* 닉네임 변경 제한 안내 */
+    .nickname-limit-notice,
+    .nickname-change-notice {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    
+    .nickname-limit-notice svg,
+    .nickname-change-notice svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* 프로필 헤더 요소 크기 조정 */
+    .profile-header {
+        gap: 30px;
+        padding: 20px 16px 16px 16px;
+    }
+    
+    .profile-avatar {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .profile-avatar svg {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .profile-username {
+        font-size: 20px;
+    }
+    
+    .profile-edit-btn,
+    .profile-follow-btn {
+        padding: 4px 12px;
+        font-size: 12px;
+    }
+    
+    .profile-upload-btn {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .profile-upload-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .profile-stats {
+        gap: 24px;
+        margin: 16px 0;
+    }
+    
+    .stat-number {
+        font-size: 16px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+    
+    .profile-bio {
+        font-size: 12px;
+    }
+    
+    .profile-status-badge {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .profile-status-badge .status-emoji {
+        font-size: 14px;
+    }
+    
+    .profile-status-add-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* ========== 모바일 (480px 미만) ========== */
+@media (max-width: 480px) {
+    /* 프로필 헤더 레이아웃 조정 - 인스타그램 스타일 */
+    .profile-header {
+        flex-direction: row;
+        gap: 12px;
+        padding: 16px;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .profile-avatar-container {
+        flex-shrink: 0;
+    }
+    
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border: 2.5px solid white;
+    }
+    
+    .profile-avatar svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .profile-info {
+        flex: 1;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .profile-username-row {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 6px;
+        align-items: center;
+    }
+    
+    .profile-username {
+        font-size: 15px;
+        width: 100%;
+        text-align: left;
+        word-break: break-word;
+        font-weight: 600;
+    }
+    
+    .profile-edit-btn,
+    .profile-follow-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+        border-radius: 6px;
+        flex-shrink: 0;
+        font-weight: 600;
+    }
+    
+    .profile-upload-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        flex-shrink: 0;
+    }
+    
+    .profile-upload-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* 통계를 가로로 배치 */
+    .profile-stats {
+        width: 100%;
+        gap: 12px;
+        margin: 0;
+        justify-content: flex-start;
+    }
+    
+    .stat-item {
+        flex-direction: row;
+        gap: 3px;
+        align-items: baseline;
+    }
+    
+    .stat-number {
+        font-size: 13px;
+        font-weight: 700;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--text-light);
+    }
+    
+    .profile-bio {
+        text-align: left;
+        font-size: 12px;
+        line-height: 1.4;
+        width: 100%;
+        margin-top: 2px;
+    }
+    
+    /* 프로필 상태 컨테이너 - 모바일 컴팩트 */
+    .profile-status-container {
+        justify-content: flex-start;
+        margin-top: 8px;
+        width: 100%;
+        padding: 0;
+    }
+    
+    .profile-status-list {
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+    }
+    
+    /* 상태 배지 - 컴팩트하게 조정 */
+    .profile-status-badge {
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 14px;
+        min-height: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(102, 126, 234, 0.08);
+        border: 1px solid rgba(102, 126, 234, 0.25);
+        transition: all 0.2s ease;
+        box-shadow: none;
+    }
+    
+    /* 다크모드 상태 배지 */
+    body.dark-mode .profile-status-badge {
+        background: rgba(102, 126, 234, 0.12);
+        border-color: rgba(102, 126, 234, 0.3);
+        box-shadow: none;
+    }
+    
+    .profile-status-badge .status-emoji {
+        font-size: 14px;
+        line-height: 1;
+        filter: none;
+    }
+    
+    .profile-status-badge .status-text {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+    }
+    
+    /* 삭제 버튼 - 컴팩트하게 */
+    .profile-status-badge .status-remove {
+        width: 16px;
+        height: 16px;
+        margin-left: 2px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    
+    body.dark-mode .profile-status-badge .status-remove {
+        background: transparent;
+    }
+    
+    .profile-status-badge .status-remove:active {
+        transform: scale(0.9);
+        background: rgba(239, 68, 68, 0.15);
+    }
+    
+    .profile-status-badge .status-remove svg {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* 상태 추가 버튼 - 컴팩트하게 */
+    .profile-status-add-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 14px;
+        min-height: 26px;
+        border: 1px dashed rgba(102, 126, 234, 0.35);
+        background: transparent;
+        color: rgba(102, 126, 234, 0.9);
+        font-weight: 600;
+        transition: all 0.2s ease;
+        box-shadow: none;
+    }
+    
+    body.dark-mode .profile-status-add-btn {
+        background: transparent;
+        border-color: rgba(102, 126, 234, 0.4);
+        box-shadow: none;
+    }
+    
+    .profile-status-add-btn:active {
+        transform: scale(0.95);
+        background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .profile-status-add-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    /* 프로필 탭 간격 조정 */
+    .profile-tab {
+        padding: 16px 12px;
+        flex: 1;
+    }
+    
+    .profile-tab svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* 프로필 서브 탭 */
+    .profile-sub-tabs {
+        padding: 12px;
+        justify-content: center;
+        gap: 6px;
+    }
+    
+    .profile-sub-tab {
+        padding: 10px;
+    }
+    
+    .profile-sub-tab svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* 프로필 컨테이너 */
+    .profile-container {
+        margin-left: 0;
+        padding: 0;
+    }
+    
+    /* 프로필 콘텐츠 */
+    .profile-content {
+        padding: 12px;
+    }
+    
+    /* 프로필 안내 문구 */
+    .profile-notice {
+        margin: 0 12px 12px 12px;
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    /* 팔로우 리스트 */
+    .follow-list-container {
+        padding: 12px;
+    }
+    
+    .follow-item {
+        padding: 10px 12px;
+    }
+    
+    .follow-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .follow-nickname {
+        font-size: 13px;
+    }
+    
+    .follow-bio {
+        font-size: 12px;
+    }
+    
+    .follow-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+    
+    /* 프로필 편집 모달 모바일 */
+    .edit-avatar-section {
+        padding: 16px;
+    }
+    
+    .edit-avatar-preview {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .edit-avatar-preview svg {
+        width: 32px;
+        height: 32px;
+    }
+    
+    /* 프로필 탭 콘텐츠 */
+    .profile-tab-content {
+        min-height: auto;
+    }
+    
+    /* 프로필 게시물 그리드 - 인스타그램 스타일 3x3 */
+    #profile-posts-grid {
+        padding: 0;
+    }
+    
+    /* 프로필 게시물 그리드가 artworks-grid 클래스를 사용하는 경우 */
+    #profile-posts-grid .artworks-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 2px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* 프로필 게시물 아이템 (갤러리 스타일) */
+    #profile-posts-grid .artwork-grid-item {
+        aspect-ratio: 1 / 1 !important;
+        width: 100% !important;
+    }
+    
+    #profile-posts-grid .artwork-grid-item img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    /* 팔로우 모달 전체 화면 */
+    .follow-modal-content {
+        max-width: 100%;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+    }
+    
+    .follow-modal-content .modal-header {
+        padding: 12px 16px;
+        border-radius: 0;
+    }
+    
+    .follow-modal-content .modal-body {
+        max-height: calc(100vh - 60px);
+        padding: 0;
+    }
+    
+    .follow-modal-content .modal-close {
+        width: 32px;
+        height: 32px;
+    }
+    
+    /* 프로필 상태 드롭다운 - 모바일 최적화 */
+    .profile-status-dropdown {
+        left: 0;
+        right: 0;
+        width: calc(100% - 24px);
+        margin: 0 12px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        border: 1.5px solid var(--border);
+        overflow: hidden;
+    }
+    
+    body.dark-mode .profile-status-dropdown {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .status-option {
+        padding: 14px 16px;
+        font-size: 14px;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s ease;
+    }
+    
+    .status-option:active {
+        transform: scale(0.98);
+        background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .status-option .status-emoji {
+        font-size: 20px;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+    
+    .status-option .status-text {
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+    
+    /* 커스텀 상태 모달 - 모바일 최적화 */
+    .emoji-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        padding: 4px;
+    }
+    
+    .emoji-option {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .emoji-option:active {
+        transform: scale(0.9);
+    }
+    
+    .emoji-option.selected {
+        border-color: rgba(102, 126, 234, 1);
+        background: rgba(102, 126, 234, 0.15);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    
+    body.dark-mode .emoji-option.selected {
+        background: rgba(102, 126, 234, 0.2);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+    
+    .custom-status-preview {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 12px;
+        background: rgba(102, 126, 234, 0.05);
+        border: 1.5px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    body.dark-mode .custom-status-preview {
+        background: rgba(102, 126, 234, 0.1);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .preview-badge {
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 20px;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--card-bg);
+        border: 1.5px solid rgba(102, 126, 234, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .preview-badge {
+        border-color: rgba(102, 126, 234, 0.4);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    
+    .preview-emoji {
+        font-size: 18px;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+    
+    .preview-text {
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+}
+
+/* ========== 태블릿 가로 모드 (768px ~ 1024px) ========== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* 프로필 컨테이너 */
+    .profile-container {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    
+    /* 프로필 헤더 */
+    .profile-header {
+        gap: 40px;
+        padding: 30px;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-avatar svg {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .profile-username {
+        font-size: 24px;
+    }
+    
+    .profile-stats {
+        gap: 40px;
+    }
+    
+    .stat-number {
+        font-size: 18px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+    
+    /* 프로필 탭 */
+    .profile-tab {
+        padding: 16px 24px;
+    }
+    
+    .profile-tab svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 프로필 서브 탭 */
+    .profile-sub-tabs {
+        padding: 14px 16px;
+    }
+    
+    .profile-sub-tab {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .profile-sub-tab svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 프로필 콘텐츠 */
+    .profile-content {
+        padding: 16px;
+    }
+    
+    /* 팔로우 리스트 */
+    .follow-item {
+        padding: 10px 14px;
+    }
+    
+    .follow-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .follow-nickname {
+        font-size: 14px;
+    }
+    
+    .follow-bio {
+        font-size: 13px;
+    }
+    
+    .follow-btn {
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+    
+    /* 프로필 편집 모달 */
+    .edit-avatar-preview {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .edit-avatar-preview svg {
+        width: 38px;
+        height: 38px;
+    }
+}

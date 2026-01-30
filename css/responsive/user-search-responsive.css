@@ -1,0 +1,121 @@
+/**
+ * @file user-search-responsive.css
+ * @description 사용자 검색 탭 반응형 스타일
+ */
+
+/* ========== 모바일 (480px 미만) ========== */
+@media (max-width: 480px) {
+    /* 검색 컨테이너 */
+    .user-search-container {
+        max-width: 100%;
+        padding: 12px;
+        margin: 0;
+    }
+    
+    /* 검색 입력 */
+    .user-search-input-wrapper {
+        margin-bottom: 24px;
+    }
+    
+    .user-search-input {
+        padding: 10px 44px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    
+    .user-search-icon {
+        left: 14px;
+        width: 18px;
+        height: 18px;
+    }
+    
+    .user-search-clear {
+        right: 10px;
+        width: 22px;
+        height: 22px;
+    }
+    
+    .user-search-clear svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 섹션 제목 */
+    .user-search-section-title {
+        font-size: 15px;
+        margin: 0 0 12px 0;
+    }
+    
+    /* 최근 검색 항목 */
+    .user-search-recent-section {
+        margin-bottom: 24px;
+    }
+    
+    .user-search-recent-item {
+        padding: 10px 14px;
+        border-radius: 8px;
+    }
+    
+    .user-search-recent-item-left {
+        gap: 10px;
+    }
+    
+    .user-search-recent-item-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .user-search-recent-item-text {
+        font-size: 13px;
+    }
+    
+    .user-search-recent-item-remove {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 검색 결과 */
+    .user-search-result-item {
+        padding: 10px 14px;
+    }
+    
+    .user-search-result-avatar {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .user-search-result-nickname {
+        font-size: 14px;
+    }
+    
+    .user-search-result-email {
+        font-size: 12px;
+    }
+    
+    .user-search-result-bio {
+        font-size: 12px;
+    }
+    
+    /* 빈 상태 */
+    .user-search-empty {
+        padding: 40px 16px;
+        font-size: 13px;
+    }
+    
+    .user-search-no-results {
+        padding: 40px 16px;
+        font-size: 13px;
+    }
+    
+    /* 로딩 */
+    .user-search-loading {
+        padding: 40px 16px;
+        font-size: 13px;
+    }
+    
+    .user-search-loading-spinner {
+        width: 20px;
+        height: 20px;
+        border-width: 2px;
+    }
+}

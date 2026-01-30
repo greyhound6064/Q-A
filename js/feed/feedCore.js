@@ -220,7 +220,24 @@ export async function renderFeedList() {
                     </div>
                 `;
             } else {
-                mediaHTML = `
+                // 모바일 스크롤 뷰 (768px 이하 - 레딧 스타일)
+                const scrollHTML = `
+                    <div class="feed-images-scroll" data-feed-scroll="${post.id}">
+                        <div class="feed-images-scroll-container" data-scroll-container="${post.id}">
+                            ${allFiles.map((file, idx) => `
+                                <div class="feed-scroll-image" data-scroll-index="${idx}">
+                                    <img src="${escapeHtml(file)}" alt="${escapeHtml(post.title)} ${idx + 1}" loading="lazy" draggable="false">
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${hasMultipleFiles ? `
+                            <div class="feed-scroll-page-indicator" data-page-indicator="${post.id}">1/${fileCount}</div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                // 데스크톱 캐러셀 뷰
+                const carouselHTML = `
                     <div class="feed-carousel-container" data-feed-carousel="${post.id}">
                         <img src="${escapeHtml(fileUrl)}" alt="${escapeHtml(post.title)}" loading="lazy" data-file-index="0">
                         ${hasMultipleFiles ? `
@@ -240,6 +257,8 @@ export async function renderFeedList() {
                         ` : ''}
                     </div>
                 `;
+                
+                mediaHTML = carouselHTML + scrollHTML;
             }
         }
         
@@ -358,6 +377,7 @@ export async function renderFeedList() {
     setTimeout(() => {
         checkFeedDescriptions();
         setupVideoIntersectionObserver();
+        setupScrollObservers();
     }, 100);
 }
 
@@ -506,6 +526,73 @@ function setupVideoIntersectionObserver() {
     });
     
     videos.forEach(video => observer.observe(video));
+}
+
+/**
+ * 스크롤 인디케이터 업데이트 (레딧 스타일)
+ */
+function setupScrollObservers() {
+    const scrollContainers = document.querySelectorAll('.feed-images-scroll-container');
+    
+    scrollContainers.forEach(container => {
+        const postId = container.dataset.scrollContainer;
+        const indicatorsContainer = document.querySelector(`[data-scroll-indicators="${postId}"]`);
+        
+        if (!indicatorsContainer) return;
+        
+        // 스크롤 이벤트로 인디케이터 업데이트
+        let scrollTimeout;
+        container.addEventListener('scroll', () => {
+            // 스크롤이 멈춘 후에만 업데이트 (성능 최적화)
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollLeft = container.scrollLeft;
+                const containerWidth = container.offsetWidth;
+                const currentIndex = Math.round(scrollLeft / containerWidth);
+                
+                // 모든 인디케이터 비활성화
+                const indicators = indicatorsContainer.querySelectorAll('.feed-scroll-indicator');
+                indicators.forEach((indicator, idx) => {
+                    if (idx === currentIndex) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }, 50);
+        });
+        
+        // 터치 스와이프 개선 (데스크톱 드래그)
+        let isDown = false;
+        let startX;
+        let scrollLeftStart;
+        
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - container.offsetLeft;
+            scrollLeftStart = container.scrollLeft;
+            container.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        });
+        
+        container.addEventListener('mouseup', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        });
+        
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeftStart - walk;
+        });
+    });
 }
 
 /**

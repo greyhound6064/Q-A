@@ -272,6 +272,22 @@
     
     .visibility-options,
     .post-type-options {
+        gap: 8px;
+    }
+    
+    .post-type-options .radio-option {
+        padding: 10px 8px;
+    }
+    
+    .post-type-options .radio-label {
         flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        text-align: center;
+    }
+    
+    .post-type-options .radio-label svg {
+        width: 20px;
+        height: 20px;
     }
 }

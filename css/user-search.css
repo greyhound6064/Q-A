@@ -296,24 +296,3 @@ body.dark-mode .user-search-input:focus {
     color: var(--text-light);
     font-size: 14px;
 }
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .user-search-container {
-        padding: 16px;
-    }
-
-    .user-search-title {
-        font-size: 20px;
-    }
-
-    .user-search-input {
-        padding: 10px 44px;
-        font-size: 15px;
-    }
-
-    .user-search-result-avatar {
-        width: 44px;
-        height: 44px;
-    }
-}

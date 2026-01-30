@@ -9,6 +9,21 @@
     margin: 0 auto;
     padding: 20px;
     margin-left: calc(50% - 300px - 35px);
+    transition: margin 0.3s ease;
+}
+
+/* 네비게이션 숨김 시 컨테이너 중앙 정렬 (모바일) */
+@media (max-width: 768px) {
+    .feed-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* 네비게이션 숨김 시에도 최대 너비 유지 */
+    .content-area.nav-hidden .feed-container {
+        max-width: 600px;
+        padding: 8px 4px;
+    }
 }
 
 /* ========== 피드 리스트 ========== */
@@ -95,10 +110,10 @@ body.dark-mode .feed-empty-btn {
 body.dark-mode .feed-empty-btn:hover {
     color: #1a1a1a;
 }
-
 /* ========== 반응형 디자인 ========== */
 @media (max-width: 768px) {
     .feed-container {
-        padding: 12px;
+        padding: 8px;
     }
 }
+

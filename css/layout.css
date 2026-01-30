@@ -26,6 +26,19 @@
     overflow: visible;
     z-index: 100;
     justify-content: flex-start;
+    transition: transform 0.3s ease;
+}
+
+/* 스크롤 시 사이드바 숨김 (모바일에서만 적용) */
+@media (max-width: 768px) {
+    .sidebar.hidden {
+        transform: translateY(-100%);
+    }
+}
+
+/* 모바일 힌트 텍스트 (데스크톱에서 숨김) */
+.mobile-hint-text {
+    display: none;
 }
 
 /* 사이드바 로고 - 항상 고정 */
@@ -527,84 +540,4 @@ body.dark-mode #auth-section-header button:hover {
     padding: 0;
 }
 
-/* ========== 반응형 디자인 ========== */
-@media (max-width: 768px) {
-    .main-layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        box-shadow: var(--shadow-lg);
-        border-bottom: 1px solid var(--border);
-        padding: 1rem;
-    }
-
-    .sidebar-logo img {
-        width: 40px;
-    }
-
-    .music-control {
-        margin-bottom: 0.5rem;
-    }
-
-    .music-toggle-btn {
-        width: 40px;
-        height: 40px;
-        padding: 0.5rem;
-    }
-
-    .music-icon {
-        width: 24px;
-        height: 24px;
-    }
-
-    .music-volume-control {
-        position: fixed;
-        left: 50%;
-        top: auto;
-        bottom: 80px;
-        transform: translateX(-50%) translateY(10px);
-        flex-direction: column;
-        padding: 1rem;
-    }
-
-    .music-control:hover .music-volume-control {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    .music-volume-slider {
-        width: 150px;
-    }
-
-    .tabs {
-        flex-direction: row;
-        justify-content: space-around;
-    }
-
-    .tab-button {
-        width: auto;
-        text-align: center;
-        padding: 0.5rem 0.75rem;
-        justify-content: center;
-    }
-
-    .tab-button span {
-        position: static;
-        opacity: 0;
-        visibility: hidden;
-        display: none;
-    }
-
-    .content-area {
-        max-width: 100%;
-        padding: 1rem;
-    }
-
-    #current-tab-title {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-    }
-}
+/* 모바일 반응형 스타일은 responsive.css에서 관리 */

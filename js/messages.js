@@ -25,6 +25,28 @@ export async function initMessages() {
     // 기존 구독/폴링 정리
     await cleanupMessageSystem();
 
+    // 모바일 환경에서 초기 상태 설정
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        const sidebar = document.querySelector('.messages-sidebar');
+        const chatContent = document.getElementById('messages-chat-content');
+        const chatEmpty = document.getElementById('messages-chat-empty');
+        const chatArea = document.querySelector('.messages-chat-area');
+        
+        if (sidebar) {
+            sidebar.classList.remove('mobile-hidden');
+        }
+        if (chatContent) {
+            chatContent.style.display = 'none';
+        }
+        if (chatEmpty) {
+            chatEmpty.style.display = 'flex';
+        }
+        if (chatArea) {
+            chatArea.classList.remove('active');
+        }
+    }
+
     await loadConversations();
     await updateUnreadCount();
     
@@ -409,8 +431,24 @@ async function selectConversation(userId, nickname, avatarUrl, eventElement) {
         eventElement.classList.add('active');
     }
 
-    document.getElementById('messages-chat-empty').style.display = 'none';
-    document.getElementById('messages-chat-content').style.display = 'flex';
+    const chatEmpty = document.getElementById('messages-chat-empty');
+    const chatContent = document.getElementById('messages-chat-content');
+    const chatArea = document.querySelector('.messages-chat-area');
+    
+    if (chatEmpty) chatEmpty.style.display = 'none';
+    if (chatContent) chatContent.style.display = 'flex';
+    
+    // 모바일 환경에서 채팅 영역 활성화 및 사이드바 숨기기
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        const sidebar = document.querySelector('.messages-sidebar');
+        if (sidebar) {
+            sidebar.classList.add('mobile-hidden');
+        }
+        if (chatArea) {
+            chatArea.classList.add('active');
+        }
+    }
 
     const chatAvatar = document.getElementById('messages-chat-avatar');
     const chatUsername = document.getElementById('messages-chat-username');
@@ -593,8 +631,24 @@ export function openMessageModal(userId, nickname) {
             window._messageState.currentConversationNickname = nickname;
             window._messageState.currentConversationAvatar = avatarUrl;
 
-            document.getElementById('messages-chat-empty').style.display = 'none';
-            document.getElementById('messages-chat-content').style.display = 'flex';
+            const chatEmpty = document.getElementById('messages-chat-empty');
+            const chatContent = document.getElementById('messages-chat-content');
+            const chatArea = document.querySelector('.messages-chat-area');
+            
+            if (chatEmpty) chatEmpty.style.display = 'none';
+            if (chatContent) chatContent.style.display = 'flex';
+
+            // 모바일 환경에서 채팅 영역 활성화 및 사이드바 숨기기
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                const sidebar = document.querySelector('.messages-sidebar');
+                if (sidebar) {
+                    sidebar.classList.add('mobile-hidden');
+                }
+                if (chatArea) {
+                    chatArea.classList.add('active');
+                }
+            }
 
             const chatAvatar = document.getElementById('messages-chat-avatar');
             const chatUsername = document.getElementById('messages-chat-username');
@@ -709,11 +763,86 @@ function setupChatInput() {
 
 document.addEventListener('DOMContentLoaded', () => {
     setupChatInput();
+    setupMobileBackButton();
 });
+
+// 모바일 뒤로가기 버튼 설정
+function setupMobileBackButton() {
+    const chatHeader = document.querySelector('.messages-chat-header');
+    if (!chatHeader) return;
+
+    chatHeader.addEventListener('click', (e) => {
+        // 뒤로가기 영역 클릭 감지 (::before 영역)
+        const rect = chatHeader.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        
+        // 왼쪽 50px 이내 클릭 시 뒤로가기
+        if (clickX < 50 && window.innerWidth <= 768) {
+            goBackToConversationList();
+        }
+    });
+}
+
+// 대화 목록으로 돌아가기
+function goBackToConversationList() {
+    const sidebar = document.querySelector('.messages-sidebar');
+    const chatContent = document.getElementById('messages-chat-content');
+    const chatEmpty = document.getElementById('messages-chat-empty');
+    const chatArea = document.querySelector('.messages-chat-area');
+    
+    if (sidebar) {
+        sidebar.classList.remove('mobile-hidden');
+    }
+    
+    if (chatContent) {
+        chatContent.style.display = 'none';
+    }
+    
+    if (chatEmpty) {
+        chatEmpty.style.display = 'flex';
+    }
+    
+    // 모바일에서 채팅 영역 비활성화
+    if (chatArea && window.innerWidth <= 768) {
+        chatArea.classList.remove('active');
+    }
+    
+    // 현재 대화 상태 초기화
+    window._messageState.currentConversationUserId = null;
+    window._messageState.currentConversationNickname = null;
+    window._messageState.currentConversationAvatar = null;
+}
+window.goBackToConversationList = goBackToConversationList;
 
 // 페이지 떠날 때 정리
 window.addEventListener('beforeunload', async () => {
     await cleanupMessageSystem();
+});
+
+// 화면 크기 변경 시 대응
+window.addEventListener('resize', () => {
+    const isMobile = window.innerWidth <= 768;
+    const sidebar = document.querySelector('.messages-sidebar');
+    const chatContent = document.getElementById('messages-chat-content');
+    const chatArea = document.querySelector('.messages-chat-area');
+    
+    if (!isMobile) {
+        // 데스크톱으로 전환 시
+        if (sidebar) {
+            sidebar.classList.remove('mobile-hidden');
+        }
+        if (chatArea) {
+            chatArea.classList.remove('active');
+        }
+    } else if (isMobile && chatContent && chatContent.style.display === 'flex') {
+        // 모바일에서 대화 중이면 사이드바 숨기고 채팅 영역 활성화
+        if (sidebar) {
+            sidebar.classList.add('mobile-hidden');
+        }
+        if (chatArea) {
+            chatArea.classList.add('active');
+        }
+    }
 });
 
 // 대화 숨기기 (본인 UI에서만 제거)

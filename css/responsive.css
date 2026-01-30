@@ -1,0 +1,35 @@
+/**
+ * @file responsive.css
+ * @description 반응형 디자인 통합 파일
+ * @version 10.8.1
+ * @updated 2026-01-30
+ * 
+ * 이 파일은 모든 반응형 스타일을 통합합니다.
+ * 각 컴포넌트별 반응형 스타일은 responsive/ 폴더에서 관리됩니다.
+ */
+
+/* ========== 컴포넌트별 반응형 스타일 Import ========== */
+
+/* 레이아웃 (사이드바, 헤더, 네비게이션) */
+@import url('responsive/layout-responsive.css');
+
+/* 프로필 */
+@import url('responsive/profile-responsive.css');
+
+/* 작품관 & 피드 공통 (카드 스타일) */
+@import url('responsive/shared-responsive.css');
+
+/* 작품관 전용 */
+@import url('responsive/gallery-responsive.css');
+
+/* 자유게시판(피드) 전용 (검색, 필터) */
+@import url('responsive/feed-responsive.css');
+
+/* 쪽지 시스템 */
+@import url('responsive/messages-responsive.css');
+
+/* 사용자 검색 */
+@import url('responsive/user-search-responsive.css');
+
+/* 업로드/수정 모달 */
+@import url('responsive/upload-responsive.css');

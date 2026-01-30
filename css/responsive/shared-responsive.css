@@ -1,0 +1,389 @@
+/**
+ * @file shared-responsive.css
+ * @description 작품관과 피드에서 공통으로 사용하는 반응형 스타일
+ * 
+ * 작품관(.gallery-*)과 피드(.feed-*)는 동일한 카드 구조를 사용하므로
+ * 중복 코드를 제거하고 공통 스타일로 관리합니다.
+ */
+
+/* ========== 태블릿 이하 (768px 미만) - 공통 카드 스타일 ========== */
+@media (max-width: 768px) {
+    /* 컨테이너 */
+    .gallery-container,
+    .feed-container {
+        padding: 12px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* 아이템 */
+    .gallery-item,
+    .feed-item {
+        border-radius: 12px;
+    }
+    
+    /* 이미지 */
+    .gallery-item-image,
+    .feed-item-image {
+        height: 400px;
+    }
+    
+    /* 오디오 */
+    .gallery-item-audio,
+    .feed-item-audio {
+        height: 250px !important;
+    }
+    
+    .gallery-audio-content,
+    .feed-audio-content {
+        padding: 20px;
+        gap: 20px;
+    }
+    
+    /* 헤더 */
+    .gallery-item-header,
+    .feed-item-header {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .gallery-author-avatar,
+    .feed-author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .gallery-author-name,
+    .feed-author-name {
+        font-size: 14px;
+    }
+    
+    .gallery-post-date,
+    .feed-post-date {
+        font-size: 12px;
+    }
+    
+    /* 액션 바 */
+    .gallery-item-actions,
+    .feed-item-actions {
+        padding: 10px 12px;
+        gap: 12px;
+    }
+    
+    .gallery-action-btn,
+    .feed-action-btn {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+    
+    .gallery-action-btn svg,
+    .feed-action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* 콘텐츠 */
+    .gallery-item-title-wrapper,
+    .feed-item-title-wrapper {
+        padding: 0 12px 10px 12px;
+    }
+    
+    .gallery-item-title,
+    .feed-item-title {
+        font-size: 18px;
+    }
+    
+    .gallery-item-content,
+    .feed-item-content {
+        padding: 0 12px 12px 12px;
+    }
+    
+    .gallery-item-description,
+    .feed-item-description {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    
+    /* 태그 */
+    .gallery-item-tags,
+    .feed-item-tags {
+        gap: 5px;
+    }
+    
+    .gallery-item-tag,
+    .feed-item-tag {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+    
+    /* 캐러셀 */
+    .gallery-carousel-nav,
+    .feed-carousel-nav {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .gallery-carousel-prev,
+    .feed-carousel-prev {
+        left: 8px;
+    }
+    
+    .gallery-carousel-next,
+    .feed-carousel-next {
+        right: 8px;
+    }
+    
+    .gallery-multiple-indicator,
+    .feed-multiple-indicator {
+        top: 10px;
+        right: 10px;
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+    
+    .gallery-multiple-indicator svg,
+    .feed-multiple-indicator svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* 스크롤 이미지 (레딧 스타일) */
+    .gallery-scroll-image,
+    .feed-scroll-image {
+        height: 350px;
+    }
+    
+    .gallery-scroll-counter,
+    .feed-scroll-counter {
+        top: 8px;
+        right: 8px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    .gallery-scroll-indicators,
+    .feed-scroll-indicators {
+        bottom: 8px;
+        gap: 4px;
+    }
+    
+    .gallery-scroll-indicator,
+    .feed-scroll-indicator {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .gallery-scroll-indicator.active,
+    .feed-scroll-indicator.active {
+        width: 16px;
+    }
+    
+    .gallery-scroll-page-indicator,
+    .feed-scroll-page-indicator {
+        bottom: 8px;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 14px;
+    }
+}
+
+/* ========== 모바일 (480px 미만) - 공통 카드 스타일 ========== */
+@media (max-width: 480px) {
+    /* 컨테이너 */
+    .gallery-container,
+    .feed-container {
+        padding: 8px;
+    }
+    
+    /* 리스트 */
+    .gallery-list {
+        gap: 16px;
+    }
+    
+    /* 아이템 */
+    .gallery-item {
+        border-radius: 10px;
+        max-height: 85vh;
+        overflow: hidden;
+    }
+    
+    .feed-item {
+        border-radius: 0;
+        margin-bottom: 8px;
+        max-height: 85vh;
+        overflow: hidden;
+    }
+    
+    .feed-list {
+        gap: 0;
+    }
+    
+    /* 이미지 */
+    .gallery-item-image,
+    .feed-item-image {
+        height: 350px;
+        max-height: 50vh;
+    }
+    
+    /* 오디오 */
+    .gallery-item-audio,
+    .feed-item-audio {
+        height: 220px !important;
+    }
+    
+    .gallery-audio-content,
+    .feed-audio-content {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .gallery-audio-icon,
+    .feed-audio-icon {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .gallery-audio-player,
+    .feed-audio-player {
+        height: 40px;
+    }
+    
+    /* 헤더 */
+    .gallery-item-header,
+    .feed-item-header {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .gallery-author-avatar,
+    .feed-author-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .gallery-author-name,
+    .feed-author-name {
+        font-size: 13px;
+    }
+    
+    .gallery-post-date,
+    .feed-post-date {
+        font-size: 11px;
+    }
+    
+    /* 액션 바 */
+    .gallery-item-actions,
+    .feed-item-actions {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+    
+    .gallery-action-btn,
+    .feed-action-btn {
+        font-size: 12px;
+        padding: 3px 5px;
+        gap: 4px;
+    }
+    
+    .gallery-action-btn svg,
+    .feed-action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 콘텐츠 */
+    .gallery-item-title-wrapper,
+    .feed-item-title-wrapper {
+        padding: 0 10px 8px 10px;
+    }
+    
+    .gallery-item-title,
+    .feed-item-title {
+        font-size: 16px;
+    }
+    
+    .gallery-item-content,
+    .feed-item-content {
+        padding: 0 10px 10px 10px;
+    }
+    
+    .gallery-item-description,
+    .feed-item-description {
+        font-size: 14px;
+        line-height: 1.4;
+        -webkit-line-clamp: 4;
+    }
+    
+    .gallery-read-more,
+    .feed-read-more {
+        font-size: 12px;
+    }
+    
+    /* 태그 */
+    .gallery-item-tags,
+    .feed-item-tags {
+        gap: 4px;
+    }
+    
+    .gallery-item-tag,
+    .feed-item-tag {
+        padding: 2px 7px;
+        font-size: 10px;
+        border-radius: 10px;
+    }
+    
+    /* 캐러셀 */
+    .gallery-carousel-nav,
+    .feed-carousel-nav {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .gallery-carousel-nav svg,
+    .feed-carousel-nav svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .gallery-carousel-prev,
+    .feed-carousel-prev {
+        left: 6px;
+    }
+    
+    .gallery-carousel-next,
+    .feed-carousel-next {
+        right: 6px;
+    }
+    
+    .gallery-carousel-indicators,
+    .feed-carousel-indicators {
+        bottom: 8px;
+        gap: 4px;
+    }
+    
+    .gallery-carousel-indicator,
+    .feed-carousel-indicator {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .gallery-carousel-indicator.active,
+    .feed-carousel-indicator.active {
+        width: 16px;
+    }
+    
+    .gallery-multiple-indicator,
+    .feed-multiple-indicator {
+        top: 8px;
+        right: 8px;
+        padding: 4px 7px;
+        font-size: 11px;
+        border-radius: 16px;
+    }
+    
+    .gallery-multiple-indicator svg,
+    .feed-multiple-indicator svg {
+        width: 12px;
+        height: 12px;
+    }
+}

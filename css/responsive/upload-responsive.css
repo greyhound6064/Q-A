@@ -1,0 +1,269 @@
+/**
+ * @file upload-responsive.css
+ * @description 업로드/수정 모달 반응형 스타일
+ * @version 1.0.0
+ * @updated 2026-01-30
+ */
+
+/* ========== 태블릿 (768px 이하) ========== */
+@media (max-width: 768px) {
+    /* 모달 너비 조정 */
+    .upload-modal-content {
+        max-width: 100%;
+        margin: 0 16px;
+    }
+    
+    /* 이미지 프리뷰 높이 축소 */
+    .upload-image-preview {
+        height: 240px;
+        margin-bottom: 12px;
+    }
+    
+    /* 캐러셀 네비게이션 버튼 크기 축소 */
+    .carousel-nav {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .carousel-nav svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .carousel-nav.prev {
+        left: 8px;
+    }
+    
+    .carousel-nav.next {
+        right: 8px;
+    }
+    
+    /* 캐러셀 인디케이터 크기 축소 */
+    .carousel-indicators {
+        bottom: 8px;
+        gap: 4px;
+    }
+    
+    .carousel-indicator {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .carousel-indicator.active {
+        width: 18px;
+    }
+    
+    /* 업로드 액션 버튼 */
+    .upload-image-actions {
+        gap: 8px;
+    }
+    
+    .upload-select-btn,
+    .upload-remove-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+        gap: 6px;
+    }
+    
+    .upload-select-btn svg,
+    .upload-remove-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 공개 설정 옵션 */
+    .visibility-options {
+        gap: 8px;
+    }
+    
+    .visibility-options .radio-option {
+        padding: 10px 12px;
+    }
+    
+    .visibility-options .radio-label {
+        font-size: 13px;
+        gap: 6px;
+    }
+    
+    .visibility-options .radio-label svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 게시 위치 선택 */
+    .post-type-options {
+        gap: 8px;
+    }
+    
+    .post-type-options .radio-option {
+        padding: 10px 8px;
+    }
+    
+    .post-type-options .radio-label {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        text-align: center;
+    }
+    
+    .post-type-options .radio-label svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* ========== 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    /* 모달 여백 축소 */
+    .upload-modal-content {
+        margin: 0 12px;
+    }
+    
+    /* 이미지 프리뷰 더 축소 */
+    .upload-image-preview {
+        height: 200px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+    
+    .upload-image-preview svg {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 8px;
+    }
+    
+    .upload-image-preview p {
+        font-size: 12px;
+    }
+    
+    /* 캐러셀 네비게이션 더 작게 */
+    .carousel-nav {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .carousel-nav svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .carousel-nav.prev {
+        left: 6px;
+    }
+    
+    .carousel-nav.next {
+        right: 6px;
+    }
+    
+    /* 캐러셀 인디케이터 더 작게 */
+    .carousel-indicators {
+        bottom: 6px;
+        gap: 3px;
+    }
+    
+    .carousel-indicator {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .carousel-indicator.active {
+        width: 15px;
+    }
+    
+    /* 업로드 액션 버튼 컴팩트하게 */
+    .upload-image-actions {
+        gap: 6px;
+    }
+    
+    .upload-select-btn,
+    .upload-remove-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+        gap: 4px;
+        border-radius: 6px;
+    }
+    
+    .upload-select-btn svg,
+    .upload-remove-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* 공개 설정 옵션 컴팩트하게 */
+    .visibility-options {
+        gap: 6px;
+    }
+    
+    .visibility-options .radio-option {
+        padding: 8px 10px;
+        border-radius: 6px;
+    }
+    
+    .visibility-options .radio-label {
+        font-size: 12px;
+        gap: 4px;
+    }
+    
+    .visibility-options .radio-label svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 게시 위치 선택 더 컴팩트하게 */
+    .post-type-options {
+        gap: 6px;
+    }
+    
+    .post-type-options .radio-option {
+        padding: 8px 6px;
+        border-radius: 6px;
+    }
+    
+    .post-type-options .radio-label {
+        font-size: 11px;
+        gap: 3px;
+    }
+    
+    .post-type-options .radio-label svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 플로팅 업로드 버튼 */
+    .floating-upload-btn {
+        width: 50px;
+        height: 50px;
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .floating-upload-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* ========== 작은 모바일 (360px 이하) ========== */
+@media (max-width: 360px) {
+    /* 이미지 프리뷰 최소 크기 */
+    .upload-image-preview {
+        height: 180px;
+    }
+    
+    /* 게시 위치 선택 텍스트 더 작게 */
+    .post-type-options .radio-label {
+        font-size: 10px;
+    }
+    
+    .post-type-options .radio-label svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 업로드 액션 버튼 최소 크기 */
+    .upload-select-btn,
+    .upload-remove-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+}

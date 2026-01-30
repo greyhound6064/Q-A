@@ -5,6 +5,7 @@
 
 import { setFeedPosts, renderFeedList } from './feedCore.js';
 import { sortPosts } from '../services/sortingService.js';
+import { keepSearchToggleVisible, hideSearchToggle } from '../scrollToggle.js';
 
 // ========== 전역 상태 ==========
 let currentSortMode = 'latest'; // latest, popular, trending
@@ -63,7 +64,7 @@ export function applySorting(posts) {
  */
 export function toggleFeedSearchPanel() {
     const panel = document.getElementById('feed-search-panel');
-    const toggleBtn = document.getElementById('feed-search-toggle-btn');
+    const toggleBtn = document.getElementById('feed-search-toggle');
     
     if (panel) {
         const isVisible = panel.style.display === 'block';
@@ -72,8 +73,10 @@ export function toggleFeedSearchPanel() {
         if (toggleBtn) {
             if (isVisible) {
                 toggleBtn.classList.remove('active');
+                hideSearchToggle('feed');
             } else {
                 toggleBtn.classList.add('active');
+                keepSearchToggleVisible('feed');
             }
         }
     }

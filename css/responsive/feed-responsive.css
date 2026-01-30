@@ -1,0 +1,225 @@
+/**
+ * @file feed-responsive.css
+ * @description 자유게시판(피드) 전용 반응형 스타일
+ * 
+ * 공통 카드 스타일은 shared-responsive.css에서 관리됩니다.
+ * 이 파일에는 피드만의 고유한 스타일(검색, 필터 등)만 포함됩니다.
+ */
+
+/* ========== 태블릿 이하 (768px 미만) ========== */
+@media (max-width: 768px) {
+    /* 플로팅 액션 버튼 숨김 애니메이션 */
+    .floating-action-btn,
+    .floating-search-btn,
+    .floating-add-btn {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .floating-action-btn.hidden,
+    .floating-search-btn.hidden,
+    .floating-add-btn.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(20px);
+    }
+    
+    /* 검색 패널 */
+    .search-toggle-wrapper {
+        padding: 10px;
+    }
+    
+    .search-toggle-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .search-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .search-panel {
+        padding: 16px;
+    }
+    
+    /* 검색 바 */
+    .feed-search-bar {
+        margin-bottom: 12px;
+    }
+    
+    .feed-search-input {
+        font-size: 14px;
+    }
+    
+    .feed-search-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    /* 필터 버튼 */
+    .feed-filter-buttons {
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .feed-filter-toggle-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .feed-filter-toggle-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 정렬 드롭다운 */
+    .feed-sort-option {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+    
+    .feed-sort-option svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 태그 필터 */
+    .feed-tag-input {
+        font-size: 14px;
+    }
+    
+    .feed-tag-add-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .feed-tag-suggestion-item {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    /* 선택된 태그 */
+    .feed-selected-tags {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+    
+    .feed-selected-tag {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
+
+/* ========== 모바일 (480px 미만) ========== */
+@media (max-width: 480px) {
+    /* 검색 패널 */
+    .search-panel {
+        padding: 12px;
+    }
+    
+    .search-toggle-wrapper {
+        padding: 8px;
+    }
+    
+    .search-toggle-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .search-toggle-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 검색 바 */
+    .feed-search-bar {
+        margin-bottom: 10px;
+    }
+    
+    .feed-search-input-wrapper {
+        padding: 8px 12px;
+    }
+    
+    .feed-search-input {
+        font-size: 13px;
+    }
+    
+    .feed-search-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    /* 필터 버튼 */
+    .feed-filter-buttons {
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    
+    .feed-filter-toggle-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .feed-filter-toggle-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 정렬 드롭다운 */
+    .feed-sort-dropdown {
+        padding: 8px;
+    }
+    
+    .feed-sort-option {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .feed-sort-option svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* 태그 필터 */
+    .feed-tag-dropdown {
+        padding: 10px;
+    }
+    
+    .feed-tag-input-wrapper {
+        padding: 8px 12px;
+    }
+    
+    .feed-tag-input {
+        font-size: 13px;
+    }
+    
+    .feed-tag-add-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .feed-tag-suggestions {
+        max-height: 180px;
+    }
+    
+    .feed-tag-suggestion-item {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    /* 선택된 태그 */
+    .feed-selected-tags {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+    
+    .feed-selected-tag {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    
+    .feed-selected-tag svg {
+        width: 12px;
+        height: 12px;
+    }
+}

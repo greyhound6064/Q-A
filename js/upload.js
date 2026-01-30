@@ -75,6 +75,12 @@ export function openUploadModal() {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
+    // 모달 스크롤 위치 초기화
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.scrollTop = 0;
+    }
+    
     document.addEventListener('keydown', handleUploadModalEscape);
 }
 

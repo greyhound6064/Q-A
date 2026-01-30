@@ -9,11 +9,11 @@ import { initializeTemplates } from './templates/templateLoader.js';
 // 웰컴 모달 import
 import { checkAndShowWelcomeModal } from './welcome.js';
 
-// 로고 토글 import
-import { initLogoToggle, toggleLogo, toggleWelcomeLogo } from './logoToggle.js';
-
 // 다크모드 import
 import { initDarkMode, toggleDarkMode } from './darkMode.js';
+
+// 스크롤 토글 import
+import { initScrollToggle, resetNavigationVisibility } from './scrollToggle.js';
 
 // 모든 모듈 import
 import { initAuth, signInWithGoogle, signOut, handleProfileLogout, updateAuthUI } from './auth.js';
@@ -272,9 +272,8 @@ window.checkNicknameAvailability = checkNicknameAvailability;
 window.initMessages = initMessages;
 window.updateUnreadCount = updateUnreadCount;
 window.handleSendMessageFromProfile = handleSendMessageFromProfile;
-window.toggleLogo = toggleLogo;
-window.toggleWelcomeLogo = toggleWelcomeLogo;
 window.toggleDarkMode = toggleDarkMode;
+window.resetNavigationVisibility = resetNavigationVisibility;
 window.recalculateAllTagCounts = recalculateAllTagCounts;
 window.debugTag = debugTag;
 window.checkAllTags = checkAllTags;
@@ -317,8 +316,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         bindLoginButton();
         initTabs();
-        initLogoToggle();
         initDarkMode();
+        initScrollToggle();
 
         if (isOAuthReturn()) {
             await new Promise(function (r) { setTimeout(r, 100); });
