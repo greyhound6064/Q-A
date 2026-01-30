@@ -56,7 +56,7 @@
     background: transparent;
     padding: 0.75rem 1rem 0.75rem 0;
     transition: opacity 0.3s ease, visibility 0.3s ease, color 0.3s ease;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 1000;
     color: var(--text);
     font-size: 0.95rem;
@@ -323,7 +323,7 @@ body.dark-mode .music-volume-control {
     background: transparent;
     padding: 0.75rem 1rem 0.75rem 0;
     transition: opacity 0.3s ease, visibility 0.3s ease, color 0.3s ease;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 1000;
 }
 
@@ -342,12 +342,14 @@ body.dark-mode .music-volume-control {
 }
 
 /* 사이드바 호버 시 모든 툴팁 표시 */
-.sidebar:hover .tab-button span {
+.sidebar:hover .tab-button span,
+.tab-button span:hover {
     opacity: 1;
     visibility: visible;
 }
 
-.sidebar:hover .sidebar-logo-tooltip {
+.sidebar:hover .sidebar-logo-tooltip,
+.sidebar-logo-tooltip:hover {
     opacity: 1;
     visibility: visible;
 }

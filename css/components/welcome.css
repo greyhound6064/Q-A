@@ -73,7 +73,7 @@ body.dark-mode .welcome-terminal-title {
 }
 
 .welcome-modal-content .modal-body {
-    padding: 37px 46px 46px;
+    padding: 32px 40px 32px;
     background: #ffffff;
     color: #333333;
     transition: all 0.3s ease;
@@ -89,7 +89,7 @@ body.dark-mode .welcome-modal-content .modal-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .welcome-logo img {
@@ -102,7 +102,7 @@ body.dark-mode .welcome-modal-content .modal-body {
     font-family: 'Courier New', 'Consolas', monospace;
     font-size: 16px;
     line-height: 1.6;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .terminal-line {
@@ -209,7 +209,7 @@ body.dark-mode .terminal-line.terminal-feature .feature-text {
 .welcome-actions {
     display: flex;
     gap: 14px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
 }
 
 .welcome-btn {
@@ -281,7 +281,7 @@ body.dark-mode .welcome-btn.login:hover {
 /* 푸터 */
 .welcome-footer {
     text-align: center;
-    padding-top: 23px;
+    padding-top: 16px;
     border-top: 1px solid #e0e0e0;
     transition: all 0.3s ease;
 }
@@ -299,7 +299,7 @@ body.dark-mode .welcome-footer {
     color: #999999;
     cursor: pointer;
     user-select: none;
-    padding: 14px 23px;
+    padding: 8px 16px;
     border-radius: 7px;
     transition: all 0.2s ease;
     position: relative;

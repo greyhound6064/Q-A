@@ -45,15 +45,15 @@ export function createWelcomeModal() {
                     <div class="welcome-features">
                         <div class="terminal-line terminal-feature">
                             <span class="feature-number">-</span>
-                            <span class="feature-text">'나'의 작품을 기록하세요.</span>
+                            <span class="feature-text">나의 작품을 기록하세요.</span>
                         </div>
                         <div class="terminal-line terminal-feature">
                             <span class="feature-number">-</span>
-                            <span class="feature-text">'남'의 작품을 구경하세요.</span>
+                            <span class="feature-text">남의 작품을 구경하세요.</span>
                         </div>
                         <div class="terminal-line terminal-feature">
                             <span class="feature-number">-</span>
-                            <span class="feature-text">'바이브'를 교류하고 영감을 빌드하세요.</span>
+                            <span class="feature-text">서로의 바이브를 나누고, 'Vibing'하세요.</span>
                         </div>
                     </div>
                     <div class="terminal-line terminal-blank"></div>
