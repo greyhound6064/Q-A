@@ -113,27 +113,8 @@ import {
     closeImageViewer,
     prevViewerImage,
     nextViewerImage
-} from './feed.js';
-import { 
-    initGallery,
-    changeGallerySortMode,
-    toggleGallerySortFilter,
-    toggleGallerySearchPanel,
-    performGallerySearch,
-    clearGallerySearch,
-    addGalleryTagFilter,
-    removeGalleryTagFilter,
-    searchGalleryTagSuggestions,
-    selectGalleryTagSuggestion,
-    toggleGalleryTagFilterDropdown,
-    toggleGalleryLike,
-    toggleGalleryDislike,
-    toggleGallerySave,
-    prevGalleryImage,
-    nextGalleryImage,
-    openGalleryImageViewer,
-    closeGalleryImageViewer
-} from './gallery.js';
+} from './post.js';
+import { initBoard } from './board.js';
 import { 
     initUserSearch, 
     handleUserSearch, 
@@ -255,24 +236,7 @@ window.openImageViewer = openImageViewer;
 window.closeImageViewer = closeImageViewer;
 window.prevViewerImage = prevViewerImage;
 window.nextViewerImage = nextViewerImage;
-window.initGallery = initGallery;
-window.changeGallerySortMode = changeGallerySortMode;
-window.toggleGallerySortFilter = toggleGallerySortFilter;
-window.toggleGallerySearchPanel = toggleGallerySearchPanel;
-window.performGallerySearch = performGallerySearch;
-window.clearGallerySearch = clearGallerySearch;
-window.addGalleryTagFilter = addGalleryTagFilter;
-window.removeGalleryTagFilter = removeGalleryTagFilter;
-window.searchGalleryTagSuggestions = searchGalleryTagSuggestions;
-window.selectGalleryTagSuggestion = selectGalleryTagSuggestion;
-window.toggleGalleryTagFilterDropdown = toggleGalleryTagFilterDropdown;
-window.toggleGalleryLike = toggleGalleryLike;
-window.toggleGalleryDislike = toggleGalleryDislike;
-window.toggleGallerySave = toggleGallerySave;
-window.prevGalleryImage = prevGalleryImage;
-window.nextGalleryImage = nextGalleryImage;
-window.openGalleryImageViewer = openGalleryImageViewer;
-window.closeGalleryImageViewer = closeGalleryImageViewer;
+window.initBoard = initBoard;
 window.switchToTab = switchToTab;
 window.switchToOtherProfile = switchToOtherProfile;
 window.initUserSearch = initUserSearch;
@@ -331,8 +295,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateAuthUI(session);
         await updateProfileInfo();
         
-        // 작품관이 첫 화면이므로 초기화
-        await initGallery();
+        // 게시판이 첫 화면이므로 초기화 (기본: 자유 게시판)
+        await initBoard();
         
         // 웰컴 모달 표시 (비로그인 사용자에게만)
         if (!session) {

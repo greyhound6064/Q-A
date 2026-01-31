@@ -1,34 +1,31 @@
-# 🏗️ 프로젝트 아키텍처
+# 프로젝트 아키텍처
 
-> **AI 에이전트용 핵심 참조 문서**
-
-**버전:** 10.9.0 | **업데이트:** 2026-01-31
+**버전:** 12.0.0 | **업데이트:** 2026-02-01
 
 ---
 
 ## 🤖 AI 코딩 규칙
 
-### CSS 작업 시
-1. **반응형 수정:** `css/responsive/` 폴더에서 컴포넌트별 파일 수정
-2. **작품관/피드 공통 스타일:** `shared-responsive.css` 수정 (중복 금지)
-3. **새 컴포넌트 반응형:** 새 파일 생성 후 `responsive.css`에 import 추가
+### CSS 작업
+- 반응형: `css/responsive/` 컴포넌트별 파일 수정
+- 공통 카드 스타일: `shared-responsive.css` (중복 금지)
+- 새 컴포넌트: 새 파일 생성 → `responsive.css`에 import
 
-### 템플릿/모달 작업 시
+### 템플릿/모달 작업
 1. `js/templates/shared/icons.js`, `components.js` 먼저 확인
 2. 기존 모달 템플릿 참고 (`js/templates/modals/*.js`)
-3. **중복 코드 절대 금지** - 항상 공통 컴포넌트 사용
-4. `templateLoader.js`에 등록 필수
+3. 중복 코드 금지 - 공통 컴포넌트 사용
+4. `templateLoader.js`에 등록
 
 ### 금지 사항
-- ❌ 불필요한 설명파일 생성
+- ❌ 설명파일 생성
 - ❌ index.html에 모달 HTML 직접 추가
 - ❌ SVG 코드 복사/붙여넣기
 - ❌ 헤더/푸터 중복 작성
-- ❌ 작품관/피드 카드 스타일 중복 작성 (shared-responsive.css 사용)
 
 ### 빠른 참조
 ```javascript
-// 모달 구조
+// 모달
 import { createModalHeader, createModalFooter } from '../shared/components.js';
 createModalHeader('제목', 'closeFunction()')
 createModalFooter('cancelFn()', 'saveFn()', '저장')
@@ -37,11 +34,10 @@ createModalFooter('cancelFn()', 'saveFn()', '저장')
 import { Icons } from '../shared/icons.js';
 Icons.close() / user() / search() / upload() / trash() / edit()
 
-// 폼 입력
+// 폼
 createTextInput('id', '라벨', 'placeholder', maxlen, '힌트')
 createTextarea('id', '라벨', 'placeholder', maxlen, rows, '힌트')
 createPostTypeSelector('name', 'onChangeFn()')
-createImageUploadSection('prefix', 'prev()', 'next()', 'change()', 'remove()')
 ```
 
 ---
@@ -49,223 +45,113 @@ createImageUploadSection('prefix', 'prev()', 'next()', 'change()', 'remove()')
 ## 📁 디렉토리 구조
 
 ```
-Q&A/
-├── index.html (793줄)
-├── supabase-config.js
-├── server.py
+├── css/ (27개)
+│   ├── base.css, layout.css, profile.css
+│   ├── post.css (게시물 공통), artworkBoard.css (작품 게시판)
+│   ├── board.css (통합 게시판) ⭐
+│   ├── messages.css, upload.css, user-search.css
+│   ├── components/ (6) - modal, button, form, state, welcome, loginRequired
+│   ├── post/ (6) - layout, item, filters, detail, comments, video
+│   ├── artwork/ (6) - gallery, info, actions, comments, modal, responsive
+│   └── responsive/ (9) ⭐
+│       ├── layout-responsive.css (234줄)
+│       ├── profile-responsive.css (681줄)
+│       ├── shared-responsive.css (382줄) - 공통 카드
+│       ├── artworkBoard-responsive.css, post-responsive.css
+│       ├── messages-responsive.css (656줄)
+│       ├── user-search-responsive.css, upload-responsive.css, welcome-responsive.css
 │
-├── css/ (25개)
-│   ├── base.css - CSS 변수, 다크모드, 기본 스타일
-│   ├── layout.css - 사이드바, 탭, 콘텐츠 영역
-│   ├── profile.css - 프로필 헤더, 탭, 통계
-│   ├── gallery.css - 작품관 카드 (인스타그램 스타일)
-│   ├── feed.css - 피드 통합 스타일
-│   ├── messages.css - 쪽지 시스템
-│   ├── upload.css - 업로드 모달
-│   ├── user-search.css - 사용자 검색
-│   ├── nickname-validation.css - 닉네임 검증
-│   │
-│   ├── components/ (6개)
-│   │   ├── modal.css - 모달 기본 구조
-│   │   ├── button.css - 버튼 스타일
-│   │   ├── form.css - 폼 입력 요소
-│   │   ├── state.css - 로딩, 빈 상태
-│   │   ├── welcome.css - 웰컴 화면
-│   │   └── loginRequired.css - 로그인 필요 모달
-│   │
-│   ├── feed/ (6개)
-│   │   ├── feedLayout.css - 피드 레이아웃
-│   │   ├── feedItem.css - 피드 아이템 카드
-│   │   ├── feedFilters.css - 검색, 필터, 정렬
-│   │   ├── feedDetail.css - 피드 상세 모달
-│   │   ├── feedComments.css - 댓글 시스템
-│   │   └── feedVideo.css - 비디오 플레이어
-│   │
-│   ├── artwork/ (6개)
-│   │   ├── gallery.css - 작품관 그리드
-│   │   ├── info.css - 작품 정보
-│   │   ├── actions.css - 좋아요, 저장 등
-│   │   ├── comments.css - 댓글
-│   │   ├── modal.css - 작품 상세 모달
-│   │   └── responsive.css - 작품관 반응형
-│   │
-│   ├── responsive/ (9개) ⭐
-│   │   ├── layout-responsive.css (238줄) - 사이드바, 헤더, 네비게이션
-│   │   ├── profile-responsive.css (681줄) - 프로필 헤더, 탭, 통계
-│   │   ├── shared-responsive.css (382줄) - 작품관 & 피드 공통 카드 스타일
-│   │   ├── gallery-responsive.css (8줄) - 작품관 전용 (현재 비어있음)
-│   │   ├── feed-responsive.css (218줄) - 피드 전용 (검색, 필터)
-│   │   ├── messages-responsive.css (656줄) - 쪽지 사이드바, 채팅
-│   │   ├── user-search-responsive.css (97줄) - 사용자 검색
-│   │   ├── upload-responsive.css (263줄) - 업로드/수정 모달
-│   │   └── welcome-responsive.css - 웰컴 모달
-│   │
-│   └── responsive.css - 통합 import 파일
+├── js/ (43개)
+│   ├── main.js, auth.js, tabs.js
+│   ├── board.js (통합 게시판) ⭐
+│   ├── darkMode.js, backgroundMusic.js
+│   ├── templates/ (15)
+│   │   ├── templateLoader.js (145줄)
+│   │   ├── shared/ - icons.js (17개), components.js (9개)
+│   │   └── modals/ (10) - upload, editArtwork, profileEdit, followers, customStatus, 
+│   │                       communityWrite, artworkDetail, communityDetail, welcome, loginRequired
+│   ├── services/ (7) ⭐
+│   │   ├── commentService.js, likeService.js, tagService.js
+│   │   ├── followService.js, saveService.js, sortingService.js
+│   │   └── profileService.js (프로필 캐싱) ⭐
+│   ├── utils/ (4) - errorHandler, uiHelpers, historyManager, typeUtils
+│   ├── post/ (8) - core, detail, comments, carousel, sort, search, video, likes
+│   ├── artwork/ (3) - grid, detail, comments
+│   ├── profile.js, nicknameValidator.js, carousel.js
+│   ├── artwork.js, upload.js, edit.js
+│   ├── post.js, artworkBoard.js, messages.js, userSearch.js, welcome.js, utils.js
 │
-├── js/ (41개)
-│   ├── main.js - 진입점, 초기화
-│   ├── auth.js - 인증 (Google OAuth)
-│   ├── tabs.js - 탭 전환 (History API 통합) ⭐
-│   ├── scrollToggle.js - 검색 버튼 스크롤 표시/숨김
-│   │
-│   ├── templates/ (15개) ⭐
-│   │   ├── templateLoader.js (145줄) - 템플릿 동적 로딩
-│   │   ├── shared/
-│   │   │   ├── icons.js (83줄, 17개 아이콘)
-│   │   │   └── components.js (182줄, 9개 컴포넌트)
-│   │   └── modals/ (10개)
-│   │       ├── upload.js - 업로드 모달
-│   │       ├── editArtwork.js - 작품 수정
-│   │       ├── profileEdit.js - 프로필 편집
-│   │       ├── followers.js - 팔로워/팔로잉 목록
-│   │       ├── customStatus.js - 커스텀 상태
-│   │       ├── communityWrite.js - 커뮤니티 작성
-│   │       ├── artworkDetail.js - 작품 상세
-│   │       ├── communityDetail.js - 커뮤니티 상세
-│   │       ├── welcome.js - 웰컴 화면
-│   │       └── loginRequired.js - 로그인 필요 모달 ⭐ NEW
-│   │
-│   ├── services/ (6개)
-│   │   ├── commentService.js - 댓글 CRUD
-│   │   ├── likeService.js - 좋아요/싫어요
-│   │   ├── tagService.js - 태그 관리
-│   │   ├── followService.js - 팔로우/언팔로우
-│   │   ├── saveService.js - 게시물 저장
-│   │   └── sortingService.js - 정렬 (최신/인기/떠오르는)
-│   │
-│   ├── utils/ (3개)
-│   │   ├── errorHandler.js - 에러 처리
-│   │   ├── uiHelpers.js - UI 유틸리티
-│   │   └── historyManager.js - 브라우저 히스토리 관리 ⭐ NEW
-│   │
-│   ├── feed/ (8개)
-│   │   ├── feedCore.js - 피드 핵심 로직
-│   │   ├── feedDetail.js - 피드 상세
-│   │   ├── feedComments.js - 댓글 시스템
-│   │   ├── feedCarousel.js - 이미지 캐러셀
-│   │   ├── feedSort.js - 정렬
-│   │   ├── feedSearch.js - 검색
-│   │   ├── feedVideo.js - 비디오 재생
-│   │   └── feedLikes.js - 좋아요/싫어요
-│   │
-│   ├── artwork/ (3개)
-│   │   ├── artworkGrid.js - 작품 그리드
-│   │   ├── artworkDetail.js - 작품 상세
-│   │   └── artworkComments.js - 댓글
-│   │
-│   ├── profile.js - 프로필 관리
-│   ├── nicknameValidator.js - 닉네임 검증
-│   ├── carousel.js - 캐러셀 공통
-│   ├── artwork.js - 작품 관리
-│   ├── upload.js - 업로드
-│   ├── edit.js - 수정
-│   ├── feed.js - 피드 통합
-│   ├── gallery.js - 작품관 통합
-│   ├── messages.js - 쪽지 시스템
-│   ├── userSearch.js - 사용자 검색
-│   └── welcome.js - 웰컴 화면
-│
-└── sql/ (25개) - 테이블 스키마 및 RLS 정책
+└── sql/ (26) - ADD_PERFORMANCE_INDEXES.sql ⭐
 ```
 
 ---
 
-## 🎯 핵심 기능 매핑
+## 🎯 핵심 기능
 
-### 템플릿 시스템 ⭐
-- **위치:** `js/templates/`
-- **컴포넌트:** `shared/components.js` (9개), `shared/icons.js` (17개)
-- **모달:** `modals/*.js` (9개)
-- **로더:** `templateLoader.js` - 동적 로딩, 캐싱
-- **원칙:** DRY, 컴포넌트 기반, 단일 진실 공급원
+### 통합 게시판 ⭐ (리팩토링 완료)
+**파일:** `js/board.js`, `css/board.css`
+- 메인 탭: "게시판" (단일)
+- 서브탭: "작품 게시판" / "자유 게시판"
+- DB 필터: `post_type` ('gallery' / 'feed')
+- 스타일: 인스타그램 카드 (600px)
+- 최적화: 배치 조회, 초기 30개, Intersection Observer
+- 함수: `initBoard()`, `switchBoardType()`, `loadBoardPosts()`, `renderBoardList()`
+- 공통 모듈: `js/post/*.js` (8개), `css/post/*.css` (6개)
 
-### 브라우저 히스토리 관리 ⭐ NEW
-- **파일:** `js/utils/historyManager.js`
-- **기능:** 뒤로 가기 버튼으로 사이트 이탈 방지
-- **지원 상태:**
-  - 탭 전환 (작품관, 자유게시판, 프로필, 쪽지, 사용자 검색)
-  - 프로필 내부 탭 (내 게시물, 저장된 게시물, 팔로워, 팔로잉)
-  - 모달 (업로드, 수정, 상세보기, 프로필 편집, 팔로워/팔로잉)
-- **주요 메서드:**
-  - `pushTabState()`, `pushModalState()`, `pushArtworkDetailState()`, `pushFeedDetailState()`
-  - `goBack()`, `isRestoringState()`
+### 프로필 서비스 ⭐
+**파일:** `js/services/profileService.js`
+- `getProfile(userId, useCache)`, `getBatchProfiles(userIds, useCache)`
+- `getAvatarHTML(profile)`, `updateProfile(userId, updates)`
+- `clearProfilesCache(userId)` - 메모리 캐싱
+
+### 히스토리 관리
+**파일:** `js/utils/historyManager.js`
+- 지원: 탭, 서브탭, 모달
+- 메서드: `pushTabState()`, `pushModalState()`, `goBack()`, `isRestoringState()`
+
+### 템플릿 시스템
+**위치:** `js/templates/`
+- 컴포넌트: `shared/components.js` (9개), `shared/icons.js` (17개)
+- 모달: `modals/*.js` (10개)
+- 로더: `templateLoader.js` (동적 로딩, 캐싱)
 
 ### 인증
-- **파일:** `js/auth.js`, `js/main.js`, `js/utils/errorHandler.js`
-- **함수:** `signInWithGoogle()`, `signOut()`, `updateAuthUI()`, `showLoginRequiredModal()`
-- **DB:** `profiles` 테이블 자동 생성
-- **로그인 필요 모달:** 로그인이 필요한 기능 접근 시 구글 로그인 버튼이 포함된 모달 표시
+**파일:** `js/auth.js`
+- `signInWithGoogle()`, `signOut()`, `updateAuthUI()`, `showLoginRequiredModal()`
 
 ### 프로필
-- **파일:** `js/profile.js`, `js/nicknameValidator.js`
-- **주요 함수:** 
-  - `updateProfileInfo()` - 프로필 정보 표시
-  - `saveProfileChanges()` - 프로필 저장
-  - `validateNickname()` - 닉네임 검증 (중복, 길이, 특수문자)
-  - `renderFollowersInline()` - 팔로워/팔로잉 인라인 표시
-  - `updateProfileStatuses()` - 다중 상태 배지
-- **본인 프로필:** 내 게시물(작품관/자유게시판/비공개), 저장된 게시물, 팔로워, 팔로잉, 로그아웃
-- **타인 프로필:** 'XX님의 작품' (작품관 공개만), 팔로우 버튼, 쪽지 버튼
+**파일:** `js/profile.js`, `js/nicknameValidator.js`
+- `updateProfileInfo()`, `saveProfileChanges()`, `validateNickname()`
+- `renderFollowersInline()`, `updateProfileStatuses()`
 
 ### 작품 관리
-- **파일:** `js/artwork.js`, `js/upload.js`, `js/edit.js`
-- **함수:** 
-  - `renderArtworksGrid()` - 작품 그리드 렌더링
-  - `openArtworkDetail()` - 작품 상세 모달
-  - `uploadPost()` - 작품 업로드
-  - `updateArtwork()` - 작품 수정
-- **미디어:** 이미지(10MB), 영상/음원(50MB), 최대 10개
-- **게시 설정:** 작품관/자유게시판/비공개
+**파일:** `js/artwork.js`, `js/upload.js`, `js/edit.js`
+- `renderArtworksGrid()`, `openArtworkDetail()`, `uploadPost()`, `updateArtwork()`
+- 미디어: 이미지(10MB), 영상/음원(50MB), 최대 10개
 
-### 작품관 (인스타그램 스타일)
-- **파일:** `js/gallery.js`, `css/gallery.css`, `css/artwork/`
-- **스타일:** 카드 디자인, 고정 높이(600px), 큰 프로필(40px), 최대 너비 500px
-- **레이아웃:** 사이드바 포함 중앙 정렬 (`margin-left: calc(50% - 250px - 35px)`)
-- **필터:** `post_type = 'gallery'` AND `is_public = true`
-- **상세 모달:** 좌우 레이아웃, 우측 500px, 통합 스크롤, 댓글 하단 sticky
-- **다중 파일:**
-  - 데스크톱: 캐러셀 방식 (좌우 화살표, 인디케이터)
-  - 모바일(768px 이하): 레딧 스타일 좌우 스크롤 (스와이프, snap 스크롤)
-  - 페이지 표시: 중앙 하단에 "현재/전체" 형식 (예: "1/5")
+### 작품 게시판
+**파일:** `js/artworkBoard.js` (독립), `js/board.js` (통합)
+- 필터: `post_type = 'gallery'` AND `is_public = true`
+- 스타일: 인스타그램 카드 (500px, 프로필 40px)
 
-### 자유게시판 (스레드 스타일)
-- **파일:** `js/feed.js`, `js/feed/*.js` (8개), `css/feed/*.css` (6개)
-- **스타일:** 플랫 디자인, 작은 프로필(36px), 최대 너비 600px, 구분선
-- **레이아웃:** 사이드바 포함 중앙 정렬 (`margin-left: calc(50% - 300px - 35px)`)
-- **필터:** `post_type = 'feed'` AND `is_public = true`
-- **상세 모달:** 작품관과 동일 구조
-- **댓글:** 동일 계층 답글 시스템, @멘션 지원
-- **다중 파일:**
-  - 데스크톱: 캐러셀 방식 (좌우 화살표, 인디케이터)
-  - 모바일(768px 이하): 레딧 스타일 좌우 스크롤 (스와이프, snap 스크롤)
-  - 페이지 표시: 중앙 하단에 "현재/전체" 형식 (예: "1/5")
+### 자유 게시판
+**파일:** `js/post.js` (공통), `js/post/*.js` (8개)
+- 필터: `post_type = 'feed'` AND `is_public = true`
+- 스타일: 플랫 디자인 (600px, 프로필 36px)
+- 댓글: 동일 계층 답글, @멘션
 
-### 검색 & 플로팅 액션 버튼
-- **파일:** `js/scrollToggle.js`, `css/feed/feedFilters.css`
-- **데스크톱:** 
-  - 검색 아이콘: 상단 중앙 sticky, 스크롤 방향에 따라 표시/숨김
-  - 검색 패널: 검색 아이콘 아래 sticky 고정
-- **모바일 (768px 이하):**
-  - 플로팅 버튼 그룹: 우측 하단 고정 (`bottom: 80px`)
-  - 게시물 추가 (+): 40px, `openUploadModal()` 호출
-  - 검색 (🔍): 40px, 클릭 시 상단에 검색 패널 표시
-- **검색 패널:** 검색창, 정렬(최신/인기/떠오르는), 태그 필터
-- **스크롤 UX:** 
-  - 아래로 스크롤: 상단/하단 네비게이션, 플로팅 버튼, 검색 아이콘 숨김
-  - 위로 스크롤: 모든 네비게이션 요소 표시
-- **함수:** `initScrollToggle()` - content-area 스크롤 방향 감지
+### 검색 & 플로팅 버튼
+**파일:** `js/board.js`, `css/board.css`
+- 데스크톱: 상단 우측 (`top: 24px, right: 240px`), 가로 배치
+- 모바일: 우측 하단 (`bottom: 80px, right: 16px`), 세로 배치 (48px)
+- 기능: 검색, 정렬, 태그 필터
+- 함수: `toggleBoardSearchPanel()`, `performBoardSearch()`, `changeBoardSortMode()`
 
-### 쪽지 시스템
-- **파일:** `js/messages.js`, `css/messages.css`
-- **함수:** 
-  - `initMessages()` - 초기화
-  - `loadConversations()` - 대화 목록 로드
-  - `selectConversation()` - 대화 선택
-  - `sendMessageFromChat()` - 메시지 전송
-- **UI:** 좌측 대화 목록 + 우측 채팅창
-- **Realtime:** INSERT 이벤트 구독, 실패 시 폴링(3초)
-- **데스크톱:** 모달 형태 (1050px × 75vh)
-- **모바일:** 전체 화면, 뒤로가기 버튼
+### 쪽지
+**파일:** `js/messages.js`, `css/messages.css`
+- `initMessages()`, `loadConversations()`, `selectConversation()`, `sendMessageFromChat()`
+- UI: 좌측 대화 목록 + 우측 채팅창
+- Realtime: INSERT 구독, 실패 시 폴링(3초)
 
 ---
 
@@ -280,38 +166,46 @@ bio TEXT
 avatar_url TEXT
 followers_count INT DEFAULT 0
 following_count INT DEFAULT 0
-status JSONB -- 다중 상태 배지
+status JSONB
 created_at TIMESTAMPTZ
 ```
 
-### artworks
+### artworks ⭐
 ```sql
 id UUID PRIMARY KEY
 user_id UUID REFERENCES profiles
 title TEXT
 description TEXT
 images TEXT[] -- 최대 10개
-image_url TEXT -- 호환성 (NULL 허용)
+image_url TEXT -- NULL 허용
 media_type TEXT -- 'image', 'video', 'audio'
 is_public BOOLEAN DEFAULT true
 post_type TEXT -- 'gallery', 'feed'
 vibe_link TEXT
 created_at TIMESTAMPTZ
 updated_at TIMESTAMPTZ
+
+-- 인덱스
+INDEX idx_artworks_post_type_public (post_type, is_public, created_at DESC)
+INDEX idx_artworks_user_id (user_id, created_at DESC)
+INDEX idx_artworks_created_at (created_at DESC)
 ```
 
-### artwork_comments
+### artwork_comments ⭐
 ```sql
 id UUID PRIMARY KEY
 artwork_id UUID REFERENCES artworks ON DELETE CASCADE
 user_id UUID REFERENCES profiles
 content TEXT
 parent_comment_id UUID REFERENCES artwork_comments ON DELETE CASCADE
-mentioned_nickname TEXT -- @멘션
+mentioned_nickname TEXT
 created_at TIMESTAMPTZ
+
+INDEX idx_artwork_comments_artwork_id (artwork_id, created_at ASC)
+INDEX idx_artwork_comments_parent_id (parent_comment_id)
 ```
 
-### artwork_likes
+### artwork_likes ⭐
 ```sql
 id UUID PRIMARY KEY
 artwork_id UUID REFERENCES artworks ON DELETE CASCADE
@@ -319,6 +213,9 @@ user_id UUID REFERENCES profiles
 like_type TEXT -- 'like', 'dislike'
 created_at TIMESTAMPTZ
 UNIQUE(artwork_id, user_id)
+
+INDEX idx_artwork_likes_artwork_id (artwork_id, like_type)
+INDEX idx_artwork_likes_user_artwork (user_id, artwork_id)
 ```
 
 ### follows
@@ -328,7 +225,6 @@ follower_id UUID REFERENCES profiles
 following_id UUID REFERENCES profiles
 created_at TIMESTAMPTZ
 UNIQUE(follower_id, following_id)
--- 트리거: 팔로우 수 자동 업데이트
 ```
 
 ### messages
@@ -343,27 +239,36 @@ hidden_by_receiver BOOLEAN DEFAULT false
 created_at TIMESTAMPTZ
 ```
 
-### saved_artworks
+### saved_artworks ⭐
 ```sql
 id UUID PRIMARY KEY
 user_id UUID REFERENCES profiles
 artwork_id UUID REFERENCES artworks ON DELETE CASCADE
 created_at TIMESTAMPTZ
 UNIQUE(user_id, artwork_id)
+
+INDEX idx_saved_artworks_user_id (user_id, created_at DESC)
+INDEX idx_saved_artworks_artwork_id (artwork_id)
 ```
 
-### tags
+### tags ⭐
 ```sql
 id UUID PRIMARY KEY
 name TEXT UNIQUE
 usage_count INT DEFAULT 0
+
+INDEX idx_tags_name (name)
+INDEX idx_tags_usage_count (usage_count DESC)
 ```
 
-### artwork_tags
+### artwork_tags ⭐
 ```sql
 artwork_id UUID REFERENCES artworks ON DELETE CASCADE
 tag_id UUID REFERENCES tags ON DELETE CASCADE
 PRIMARY KEY(artwork_id, tag_id)
+
+INDEX idx_artwork_tags_artwork_id (artwork_id)
+INDEX idx_artwork_tags_tag_id (tag_id)
 ```
 
 ---
@@ -372,59 +277,37 @@ PRIMARY KEY(artwork_id, tag_id)
 
 ```
 main.js
-│
-├─→ templates/templateLoader.js
-│   └─→ modals/*.js
-│       └─→ shared/icons.js, shared/components.js
-│
-├─→ services/ (6개)
-│   ├─→ commentService.js
-│   ├─→ likeService.js
-│   ├─→ tagService.js
-│   ├─→ followService.js
-│   ├─→ saveService.js
-│   └─→ sortingService.js
-│
-├─→ utils/ (2개)
-│   ├─→ errorHandler.js
-│   └─→ uiHelpers.js
-│
-├─→ feed/ (8개) → services
-├─→ artwork/ (3개) → services
-├─→ auth.js
-├─→ profile.js
-├─→ gallery.js
-├─→ messages.js
-├─→ userSearch.js
-├─→ scrollToggle.js
-└─→ tabs.js
+├─→ templates/templateLoader.js → modals/*.js → shared/icons.js, components.js
+├─→ services/ (7) - comment, like, tag, follow, save, sorting, profile ⭐
+├─→ utils/ (4) - errorHandler, uiHelpers, historyManager, typeUtils
+├─→ board.js ⭐ → services, post/postLikes
+├─→ post.js → post/ (8) → services
+├─→ artworkBoard.js → services, post/postLikes
+├─→ artwork/ (3) → services
+├─→ auth.js, profile.js, messages.js, userSearch.js, tabs.js
 ```
 
 ---
 
-## 🎨 반응형 CSS 구조
+## 🎨 반응형 CSS
 
-### 파일 구조
+### 구조
 ```
 css/responsive/
-├── layout-responsive.css       - 사이드바, 헤더, 네비게이션, 하단 네비
-├── profile-responsive.css      - 프로필 헤더, 탭, 통계, 인스타그램 스타일
-├── shared-responsive.css       - 작품관 & 피드 공통 카드 스타일 ⭐
-├── gallery-responsive.css      - 작품관 전용 (현재 비어있음)
-├── feed-responsive.css         - 피드 전용 (검색, 필터, 정렬)
-├── messages-responsive.css     - 쪽지 사이드바, 채팅, 뒤로가기
-├── user-search-responsive.css  - 사용자 검색
-├── upload-responsive.css       - 업로드/수정 모달 (컴팩트 디자인)
-└── welcome-responsive.css      - 웰컴 모달
+├── layout-responsive.css - 사이드바, 헤더, 네비게이션
+├── profile-responsive.css - 프로필 헤더, 탭, 통계
+├── shared-responsive.css - 공통 카드 ⭐
+├── artworkBoard-responsive.css, post-responsive.css
+├── messages-responsive.css, user-search-responsive.css
+├── upload-responsive.css, welcome-responsive.css
 ```
 
-### 중요 원칙
-1. **작품관/피드 공통 스타일:** `shared-responsive.css`에만 작성
-2. **컴포넌트별 수정:** 해당 파일만 열어서 수정
-3. **새 컴포넌트:** 새 파일 생성 후 `responsive.css`에 import 추가
-4. **중복 금지:** 동일한 스타일을 여러 파일에 작성하지 않음
+### 원칙
+1. 공통 스타일: `shared-responsive.css`만 수정
+2. 컴포넌트별 파일 분리
+3. 중복 금지
 
-### 미디어 쿼리 브레이크포인트
+### 브레이크포인트
 - `max-width: 768px` - 태블릿 이하
 - `max-width: 480px` - 모바일
 - `min-width: 769px and max-width: 1024px` - 태블릿 가로
@@ -434,26 +317,18 @@ css/responsive/
 
 ## 📱 반응형 UX
 
-### 데스크톱 (1024px 이상)
-- 사이드바: 좌측 고정 (70px)
-- 작품관: 중앙 정렬 (500px)
-- 피드: 중앙 정렬 (600px)
-- 검색: 상단 sticky, 스크롤 시 2초간 표시
+### 데스크톱 (1024px+)
+- 사이드바: 70px 좌측 고정
+- 작품 게시판: 500px, 자유 게시판: 600px
+- 검색: 상단 sticky
 
-### 태블릿 (768px ~ 1024px)
-- 사이드바: 상단 헤더로 전환 (48px)
-- 하단 네비게이션: 표시 (65px)
-- 콘텐츠: 전체 너비 사용
+### 태블릿 (768px~1024px)
+- 사이드바 → 상단 헤더 (48px)
+- 하단 네비게이션 (65px)
 - 검색: 플로팅 버튼
 
-### 모바일 (480px 이하)
-- 프로필: 인스타그램 스타일 (가로 레이아웃)
+### 모바일 (480px-)
+- 프로필: 인스타그램 스타일
 - 게시물 그리드: 3x3
-- 게시물 카드: 최대 높이 85vh (화면 넘침 방지), 이미지 최대 50vh, 콘텐츠 최대 20vh 스크롤
-- 쪽지: 전체 화면, 뒤로가기 버튼
-- 플로팅 액션 버튼: 우측 하단 (게시물 추가, 검색)
-- 자유게시판 이미지: 그리드 레이아웃 (1개: 250px, 2개: 2열 160px, 3개: 첫째 전체너비+둘째셋째 2열, 4개: 2x2 그리드)
-
----
-
-**이 문서를 항상 최신 상태로 유지하세요!**
+- 카드: 최대 85vh
+- 플로팅 버튼: 우측 하단

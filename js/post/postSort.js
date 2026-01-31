@@ -3,7 +3,7 @@
  * @description 피드 정렬 로직 - sortingService 사용
  */
 
-import { setFeedPosts, renderFeedList } from './feedCore.js';
+import { setFeedPosts, renderFeedList } from './postCore.js';
 import { sortPosts } from '../services/sortingService.js';
 
 // ========== 전역 상태 ==========

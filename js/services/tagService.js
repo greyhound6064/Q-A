@@ -204,26 +204,51 @@ export async function updateArtworkTags(artworkId, tagNames) {
 }
 
 /**
- * 여러 작품의 태그를 한 번에 조회
+ * 여러 작품의 태그를 한 번에 조회 (최적화된 단일 쿼리)
  * @param {Array<string>} artworkIds - 작품 ID 배열
  * @returns {Promise<Map>} artworkId -> 태그 배열 맵
  */
 export async function getBatchArtworkTags(artworkIds) {
     const tagsMap = new Map();
     
+    if (!artworkIds || artworkIds.length === 0) {
+        return tagsMap;
+    }
+    
     try {
-        // 병렬로 모든 태그 조회
-        const results = await Promise.all(
-            artworkIds.map(id => getArtworkTags(id))
-        );
+        // 모든 작품의 태그를 한 번에 조회
+        const { data: artworkTags, error } = await window._supabase
+            .from('artwork_tags')
+            .select('artwork_id, tag_id, tags(name)')
+            .in('artwork_id', artworkIds);
         
-        artworkIds.forEach((id, index) => {
-            tagsMap.set(id, results[index]);
+        if (error) throw error;
+        
+        // 작품별로 태그 그룹화
+        artworkIds.forEach(id => {
+            tagsMap.set(id, []);
+        });
+        
+        artworkTags?.forEach(at => {
+            const tags = tagsMap.get(at.artwork_id) || [];
+            if (at.tags?.name) {
+                tags.push(at.tags.name);
+            }
+            tagsMap.set(at.artwork_id, tags);
+        });
+        
+        // 캐시 저장
+        tagsMap.forEach((tags, artworkId) => {
+            artworkTagsCache.set(artworkId, tags);
         });
         
         return tagsMap;
     } catch (err) {
         console.error('배치 태그 조회 에러:', err);
+        // 에러 발생 시 기본값 반환
+        artworkIds.forEach(id => {
+            tagsMap.set(id, []);
+        });
         return tagsMap;
     }
 }

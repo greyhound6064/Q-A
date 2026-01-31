@@ -47,7 +47,7 @@ export async function renderArtworksGrid(targetUserId = null, filter = 'all') {
             .select('*')
             .eq('user_id', userId);
         
-        // 타인 프로필인 경우 작품관 공개 게시물만 표시
+        // 타인 프로필인 경우 자유 게시판 공개 게시물만 표시
         if (!isOwnProfile) {
             query = query.eq('is_public', true).eq('post_type', 'gallery');
         } else {
@@ -92,9 +92,9 @@ export async function renderArtworksGrid(targetUserId = null, filter = 'all') {
             } else {
                 // 본인 프로필
                 if (filter === 'gallery') {
-                    emptyMessage = '작품관에 게시된 작품이 없습니다';
+                    emptyMessage = '자유 게시판에 게시된 작품이 없습니다';
                 } else if (filter === 'feed') {
-                    emptyMessage = '자유게시판에 게시된 글이 없습니다';
+                    emptyMessage = '자유 게시판에 게시된 글이 없습니다';
                 } else if (filter === 'private') {
                     emptyMessage = '비공개 게시물이 없습니다';
                 } else {

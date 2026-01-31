@@ -16,14 +16,14 @@
 /* 프로필 */
 @import url('responsive/profile-responsive.css');
 
-/* 작품관 & 피드 공통 (카드 스타일) */
+/* 자유 게시판 & 피드 공통 (카드 스타일) */
 @import url('responsive/shared-responsive.css');
 
-/* 작품관 전용 */
-@import url('responsive/gallery-responsive.css');
+/* 작품 게시판 전용 */
+@import url('responsive/artworkBoard-responsive.css');
 
-/* 자유게시판(피드) 전용 (검색, 필터) */
-@import url('responsive/feed-responsive.css');
+/* 게시물(포스트) 전용 (검색, 필터) */
+@import url('responsive/post-responsive.css');
 
 /* 쪽지 시스템 */
 @import url('responsive/messages-responsive.css');

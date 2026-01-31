@@ -1,0 +1,20 @@
+/**
+ * @file post.css
+ * @description 게시물 통합 스타일 - 리팩토링 완료
+ * 
+ * 구조:
+ * - post/postLayout.css: 레이아웃 및 컨테이너
+ * - post/postItem.css: 게시물 아이템 (카드, 헤더, 이미지, 액션, 콘텐츠)
+ * - post/postFilters.css: 검색, 필터, 정렬, 태그
+ * - post/postVideo.css: 비디오 컨트롤
+ * - post/postComments.css: 댓글
+ * - post/postDetail.css: 상세보기 모달 (스레드 스타일)
+ */
+
+/* ========== 하위 모듈 import ========== */
+@import url('./post/postLayout.css');
+@import url('./post/postItem.css');
+@import url('./post/postFilters.css');
+@import url('./post/postVideo.css');
+@import url('./post/postComments.css');
+@import url('./post/postDetail.css');

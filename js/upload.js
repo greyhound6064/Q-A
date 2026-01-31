@@ -78,9 +78,9 @@ export async function openUploadModal() {
     if (vibeLinkInput) vibeLinkInput.value = '';
     if (tagsInput) tagsInput.value = '';
     
-    // 게시 위치 초기화 (작품관 기본 선택)
-    const galleryRadio = document.querySelector('input[name="upload-post-type"][value="gallery"]');
-    if (galleryRadio) galleryRadio.checked = true;
+        // 게시 위치 초기화 (작품 게시판 기본 선택)
+        const galleryRadio = document.querySelector('input[name="upload-post-type"][value="gallery"]');
+        if (galleryRadio) galleryRadio.checked = true;
     
     // 파일 초기화
     selectedUploadFiles = [];
@@ -436,9 +436,9 @@ export async function uploadPost() {
         if (postTypeValue === 'private') {
             // 비공개 선택 시
             isPublic = false;
-            postType = 'gallery'; // 비공개는 기본적으로 작품관으로 저장
+            postType = 'gallery'; // 비공개는 기본적으로 작품 게시판으로 저장
         } else {
-            // 작품관 또는 자유게시판 선택 시
+            // 작품 게시판 또는 자유 게시판 선택 시
             isPublic = true;
             postType = postTypeValue;
         }

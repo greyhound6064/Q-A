@@ -149,7 +149,7 @@
     z-index: 49;
     animation: slideDown 0.3s ease;
     margin-bottom: 20px;
-    background: var(--bg);
+    background: transparent;
     padding-top: 0;
 }
 
@@ -268,7 +268,7 @@
 .feed-filter-toggle-btn:hover {
     border-color: var(--primary);
     color: var(--primary);
-    background: rgba(44, 44, 44, 0.05);
+    background: var(--card-bg);
 }
 
 .feed-filter-toggle-btn.active {
@@ -642,7 +642,7 @@ body.dark-mode .feed-selected-tag {
     /* 모바일: 세로 배치, 하단 우측 */
     .floating-action-buttons {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         bottom: 80px;
         right: 16px;
         top: auto;
@@ -654,26 +654,18 @@ body.dark-mode .feed-selected-tag {
         position: static;
     }
     
-    .floating-add-btn {
-        width: 48px;
-        height: 48px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .floating-add-btn svg {
-        width: 20px;
-        height: 20px;
-    }
-    
+    /* 검색 버튼과 추가 버튼 크기 동일하게 설정 */
+    .floating-add-btn,
     .floating-action-buttons .search-toggle-btn {
-        width: 48px;
-        height: 48px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        width: 52px;
+        height: 52px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
     }
     
+    .floating-add-btn svg,
     .floating-action-buttons .search-toggle-btn svg {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
     
     /* 모바일에서 검색 패널은 상단 고정 */
@@ -685,8 +677,8 @@ body.dark-mode .feed-selected-tag {
         z-index: 99;
         margin-bottom: 0;
         padding: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-bottom: 1px solid var(--border);
+        box-shadow: none;
+        border-bottom: none;
     }
 
     .feed-search-bar {
@@ -740,5 +732,29 @@ body.dark-mode .feed-selected-tag {
     .feed-selected-tag {
         padding: 5px 8px;
         font-size: 12px;
+    }
+}
+
+/* ========== 작은 모바일 (480px 미만) ========== */
+@media (max-width: 480px) {
+    /* 플로팅 버튼 위치 조정 */
+    .floating-action-buttons {
+        gap: 10px;
+        bottom: 70px;
+        right: 12px;
+    }
+    
+    /* 검색 버튼과 추가 버튼 크기 동일하게 설정 (작은 화면) */
+    .floating-add-btn,
+    .floating-action-buttons .search-toggle-btn {
+        width: 48px;
+        height: 48px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .floating-add-btn svg,
+    .floating-action-buttons .search-toggle-btn svg {
+        width: 20px;
+        height: 20px;
     }
 }

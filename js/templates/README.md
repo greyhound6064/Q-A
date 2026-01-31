@@ -61,7 +61,7 @@ Icons.search()
 - `upload(width, height)` - 업로드
 - `trash(width, height)` - 삭제
 - `edit(width, height)` - 편집
-- `gallery(width, height)` - 작품관 (그리드)
+- `gallery(width, height)` - 자유 게시판 (그리드)
 - `message(width, height)` - 메시지
 - `lock(width, height)` - 잠금 (비공개)
 - `link(width, height)` - 링크

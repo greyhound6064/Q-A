@@ -3,8 +3,8 @@
  * @description 피드 검색 및 태그 필터 로직
  */
 
-import { setFeedPosts, renderFeedList } from './feedCore.js';
-import { applySorting } from './feedSort.js';
+import { setFeedPosts, renderFeedList } from './postCore.js';
+import { applySorting } from './postSort.js';
 import { searchTags } from '../services/tagService.js';
 import { escapeHtml } from '../utils.js';
 

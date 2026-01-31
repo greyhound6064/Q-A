@@ -288,7 +288,7 @@ After:  작은 모듈들 (30-340줄)
 ### 3. 공유 로직
 ```
 services/
-├── sortingService.js  ⭐ 작품관/피드 공유
+├── sortingService.js  ⭐ 자유 게시판/피드 공유
 ├── commentService.js  ✅ 이미 공유
 ├── likeService.js     ✅ 이미 공유
 └── saveService.js     ✅ 이미 공유
@@ -420,7 +420,7 @@ function deleteComment(postId, commentId) {
 
 ### ❌ 분리된 것 (UI/UX)
 ```
-✘ 리스트 렌더링 (작품관: 그리드, 피드: 세로)
+✘ 리스트 렌더링 (자유 게시판: 그리드, 피드: 세로)
 ✘ CSS 스타일 (artwork/, feed/)
 ✘ 비디오 컨트롤 (각 섹션별 최적화)
 ✘ 상세모달 (데이터 흐름 다름)
@@ -523,7 +523,7 @@ After:  sortingService 공유
 - 검색: js/feed/feedSearch.js
 ```
 
-#### 작품관 관련
+#### 자유 게시판 관련
 ```
 - 메인: js/gallery.js
 - 상세: js/artwork/artworkDetail.js

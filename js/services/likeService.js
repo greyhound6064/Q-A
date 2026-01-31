@@ -187,7 +187,7 @@ export async function toggleDislike(artworkId) {
 }
 
 /**
- * 여러 작품의 좋아요 데이터를 한 번에 조회
+ * 여러 작품의 좋아요 데이터를 한 번에 조회 (최적화된 단일 쿼리)
  * @param {Array<string>} artworkIds - 작품 ID 배열
  * @param {string|null} userId - 사용자 ID
  * @returns {Promise<Map>} artworkId -> 좋아요 데이터 맵
@@ -195,19 +195,77 @@ export async function toggleDislike(artworkId) {
 export async function getBatchLikesData(artworkIds, userId = null) {
     const likesMap = new Map();
     
+    if (!artworkIds || artworkIds.length === 0) {
+        return likesMap;
+    }
+    
     try {
-        // 병렬로 모든 좋아요 데이터 조회
-        const results = await Promise.all(
-            artworkIds.map(id => getLikesData(id, userId))
-        );
+        // 1. 모든 작품의 좋아요/싫어요 수를 한 번에 조회
+        const { data: allLikes, error: likesError } = await window._supabase
+            .from('artwork_likes')
+            .select('artwork_id, like_type')
+            .in('artwork_id', artworkIds);
         
-        artworkIds.forEach((id, index) => {
-            likesMap.set(id, results[index]);
+        if (likesError) throw likesError;
+        
+        // 2. 작품별로 좋아요/싫어요 집계
+        const countsMap = new Map();
+        artworkIds.forEach(id => {
+            countsMap.set(id, { likes: 0, dislikes: 0 });
+        });
+        
+        allLikes?.forEach(like => {
+            const counts = countsMap.get(like.artwork_id);
+            if (counts) {
+                if (like.like_type === 'like') {
+                    counts.likes++;
+                } else if (like.like_type === 'dislike') {
+                    counts.dislikes++;
+                }
+            }
+        });
+        
+        // 3. 사용자 반응 조회 (로그인한 경우)
+        let userReactionsMap = new Map();
+        if (userId) {
+            const { data: userReactions, error: reactionsError } = await window._supabase
+                .from('artwork_likes')
+                .select('artwork_id, like_type')
+                .in('artwork_id', artworkIds)
+                .eq('user_id', userId);
+            
+            if (!reactionsError && userReactions) {
+                userReactions.forEach(reaction => {
+                    userReactionsMap.set(reaction.artwork_id, reaction.like_type);
+                });
+            }
+        }
+        
+        // 4. 최종 데이터 구성
+        artworkIds.forEach(id => {
+            const counts = countsMap.get(id) || { likes: 0, dislikes: 0 };
+            const userReaction = userReactionsMap.get(id) || null;
+            
+            const data = {
+                likes: counts.likes,
+                dislikes: counts.dislikes,
+                userReaction: userReaction
+            };
+            
+            likesMap.set(id, data);
+            
+            // 캐시 저장
+            const cacheKey = `${id}_${userId || 'anonymous'}`;
+            likesCache.set(cacheKey, data);
         });
         
         return likesMap;
     } catch (err) {
         console.error('배치 좋아요 데이터 조회 에러:', err);
+        // 에러 발생 시 기본값 반환
+        artworkIds.forEach(id => {
+            likesMap.set(id, { likes: 0, dislikes: 0, userReaction: null });
+        });
         return likesMap;
     }
 }

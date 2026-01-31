@@ -4,7 +4,7 @@
  */
 
 import { toggleLike as serviceLike, toggleDislike as serviceDislike } from '../services/likeService.js';
-import { updateLikesUI } from './feedCore.js';
+import { updateLikesUI } from './postCore.js';
 import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 /**

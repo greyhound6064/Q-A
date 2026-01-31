@@ -1,6 +1,6 @@
 /**
  * @file sortingService.js
- * @description 게시물 정렬 공통 서비스 (작품관 + 자유게시판)
+ * @description 게시물 정렬 공통 서비스 (자유 게시판 + 자유 게시판)
  */
 
 import { calculateWilsonScore } from './likeService.js';

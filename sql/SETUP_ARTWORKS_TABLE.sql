@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS artworks (
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     description TEXT,
-    image_url TEXT, -- NULL 허용 (자유게시판 텍스트 전용 게시물 지원)
+    image_url TEXT, -- NULL 허용 (자유 게시판 텍스트 전용 게시물 지원)
     author_nickname TEXT,
     author_email TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),

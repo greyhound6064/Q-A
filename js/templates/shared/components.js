@@ -36,7 +36,7 @@ export function createModalFooter(cancelFunction, saveFunction, saveLabel = '저
 }
 
 /**
- * 게시 위치 선택 라디오 버튼 (작품관/자유게시판/비공개)
+ * 게시 위치 선택 라디오 버튼 (작품 게시판/자유 게시판/비공개)
  * @param {string} name - input name 속성
  * @param {string} changeFunction - onchange 함수명
  */
@@ -49,14 +49,14 @@ export function createPostTypeSelector(name, changeFunction) {
                     <input type="radio" name="${name}" value="gallery" checked onchange="${changeFunction}">
                     <span class="radio-label">
                         ${Icons.gallery()}
-                        작품관
+                        작품 게시판
                     </span>
                 </label>
                 <label class="radio-option">
                     <input type="radio" name="${name}" value="feed" onchange="${changeFunction}">
                     <span class="radio-label">
                         ${Icons.message()}
-                        자유게시판
+                        자유 게시판
                     </span>
                 </label>
                 <label class="radio-option">
@@ -67,7 +67,7 @@ export function createPostTypeSelector(name, changeFunction) {
                     </span>
                 </label>
             </div>
-            <small class="form-hint">'작품관'은 바이브코딩 결과물을 게시하는 공간입니다.</small>
+            <small class="form-hint">'작품 게시판'은 바이브코딩 결과물을 게시하는 공간입니다.</small>
         </div>
     `;
 }

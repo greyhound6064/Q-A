@@ -1,14 +1,14 @@
 /**
  * @file feedDetail.js
- * @description 피드 상세보기 모달 (작품관 스타일)
+ * @description 피드 상세보기 모달 (자유 게시판 스타일)
  */
 
 import { escapeHtml, formatDate, linkifyText } from '../utils.js';
 import { getLikesData } from '../services/likeService.js';
 import { getArtworkTags } from '../services/tagService.js';
 import { isSaved } from '../services/saveService.js';
-import { setFeedDetailFiles } from './feedCarousel.js';
-import { loadFeedDetailComments } from './feedComments.js';
+import { setFeedDetailFiles } from './postCarousel.js';
+import { loadFeedDetailComments } from './postComments.js';
 import { showLoginRequiredModal } from '../utils/errorHandler.js';
 import { historyManager } from '../utils/historyManager.js';
 
@@ -192,7 +192,7 @@ export async function openFeedDetail(postId, showComments = false, feedPosts = [
         `;
     }
     
-    // 모달 HTML 생성 (작품관 스타일 - 좌우 레이아웃)
+    // 모달 HTML 생성 (자유 게시판 스타일 - 좌우 레이아웃)
     const modalHTML = `
         <div id="feed-detail-modal" class="feed-detail-modal">
             <div class="feed-detail-content ${!hasMedia ? 'no-media' : ''}">

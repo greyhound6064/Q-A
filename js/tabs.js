@@ -142,11 +142,15 @@ export function switchToTab(targetTab) {
         if (targetTab === 'profile') {
             if (window.updateProfileInfo) window.updateProfileInfo();
         }
-        // 작품관 탭이 활성화되면 피드 초기화
+        // 게시판 탭이 활성화되면 초기화
+        else if (targetTab === 'board') {
+            if (window.initBoard) window.initBoard();
+        }
+        // 자유 게시판 탭이 활성화되면 피드 초기화 (하위 호환성)
         else if (targetTab === 'gallery') {
             if (window.initGallery) window.initGallery();
         }
-        // 자유게시판 탭이 활성화되면 피드 초기화
+        // 자유 게시판 탭이 활성화되면 피드 초기화 (하위 호환성)
         else if (targetTab === 'feed') {
             if (window.initFeed) window.initFeed();
         }

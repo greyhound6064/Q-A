@@ -1,16 +1,17 @@
 /**
  * @file gallery.js
- * @description 작품관 통합 모듈 - 독립적인 구현
+ * @description 자유 게시판 통합 모듈 - 독립적인 구현
  */
 
 // ========== 하위 모듈 import ==========
 import { escapeHtml, formatDate } from './utils.js';
-import { getLikesData } from './services/likeService.js';
-import { getArtworkTags } from './services/tagService.js';
-import { getCommentCount } from './services/commentService.js';
+import { getLikesData, getBatchLikesData } from './services/likeService.js';
+import { getArtworkTags, getBatchArtworkTags } from './services/tagService.js';
+import { getCommentCount, getBatchCommentCounts } from './services/commentService.js';
 import { getBatchSavedStatus } from './services/saveService.js';
+import { getBatchProfiles, getAvatarHTML } from './services/profileService.js';
 import { sortPosts } from './services/sortingService.js';
-import * as FeedLikes from './feed/feedLikes.js';
+import * as PostLikes from './post/postLikes.js';
 
 // ========== 전역 상태 관리 ==========
 window._galleryState = {
@@ -19,7 +20,7 @@ window._galleryState = {
     currentSortMode: 'latest'
 };
 
-// ========== 작품관 초기화 ==========
+// ========== 자유 게시판 초기화 ==========
 export async function initGallery() {
     const posts = await loadGalleryPosts();
     if (posts) {
@@ -42,16 +43,22 @@ export async function loadGalleryPosts() {
     `;
     
     try {
-        // 작품관 게시물만 가져오기 (post_type이 'gallery'이고 공개 게시물만)
+        // 현재 사용자 확인
+        const { data: { session } } = await window._supabase.auth.getSession();
+        const userId = session?.user?.id || null;
+        
+        // 자유 게시판 게시물만 가져오기 (post_type이 'gallery'이고 공개 게시물만)
+        // 초기 로딩 개수를 30개로 제한하여 성능 향상
         const { data: artworks, error } = await window._supabase
             .from('artworks')
             .select('*')
             .eq('post_type', 'gallery')
             .eq('is_public', true)
-            .limit(100);
+            .order('created_at', { ascending: false })
+            .limit(30);
         
         if (error) {
-            console.error('작품관 로드 에러:', error);
+            console.error('자유 게시판 로드 에러:', error);
             feedList.innerHTML = `
                 <div class="feed-empty">
                     <div class="feed-empty-icon">
@@ -61,7 +68,7 @@ export async function loadGalleryPosts() {
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                     </div>
-                    <h3>작품관을 불러올 수 없습니다</h3>
+                    <h3>자유 게시판을 불러올 수 없습니다</h3>
                     <p>${escapeHtml(error.message)}</p>
                 </div>
             `;
@@ -87,28 +94,44 @@ export async function loadGalleryPosts() {
             return;
         }
         
-        // 각 게시물의 좋아요/싫어요 및 태그 데이터 가져오기
-        const artworksWithData = await Promise.all(
-            artworks.map(async (artwork) => {
-                const [likesData, tagsData] = await Promise.all([
-                    getLikesData(artwork.id, null),
-                    getArtworkTags(artwork.id)
-                ]);
-                
-                return {
-                    ...artwork,
-                    likes_count: likesData.likes,
-                    dislikes_count: likesData.dislikes,
-                    engagement_score: likesData.likes - likesData.dislikes,
-                    tags: tagsData
-                };
-            })
-        );
+        // 모든 필요한 데이터를 한 번에 병렬로 가져오기 (최적화)
+        const artworkIds = artworks.map(a => a.id);
+        const uniqueUserIds = [...new Set(artworks.map(a => a.user_id))];
+        
+        const [likesMap, tagsMap, commentCountsMap, savedStatus, profilesMap] = await Promise.all([
+            getBatchLikesData(artworkIds, userId),
+            getBatchArtworkTags(artworkIds),
+            getBatchCommentCounts(artworkIds),
+            userId ? getBatchSavedStatus(artworkIds, userId) : Promise.resolve(new Map()),
+            getBatchProfiles(uniqueUserIds)
+        ]);
+        
+        // 데이터 병합 (렌더링에 필요한 모든 정보 포함)
+        const artworksWithData = artworks.map(artwork => {
+            const likesData = likesMap.get(artwork.id) || { likes: 0, dislikes: 0, userReaction: null };
+            const tags = tagsMap.get(artwork.id) || [];
+            const commentCount = commentCountsMap.get(artwork.id) || 0;
+            const postIdStr = String(artwork.id);
+            const isSaved = userId ? (savedStatus.get(artwork.id) || savedStatus.get(postIdStr) || false) : false;
+            const profile = profilesMap.get(artwork.user_id);
+            
+            return {
+                ...artwork,
+                likes_count: likesData.likes,
+                dislikes_count: likesData.dislikes,
+                engagement_score: likesData.likes - likesData.dislikes,
+                userReaction: likesData.userReaction,
+                tags: tags,
+                comment_count: commentCount,
+                is_saved: isSaved,
+                author_profile: profile
+            };
+        });
         
         return artworksWithData;
         
     } catch (err) {
-        console.error('작품관 로드 예외:', err);
+        console.error('자유 게시판 로드 예외:', err);
         feedList.innerHTML = `
             <div class="feed-empty">
                 <div class="feed-empty-icon">
@@ -151,14 +174,25 @@ export async function renderGalleryList() {
         return;
     }
     
-    // 각 게시물의 댓글 수, 좋아요/싫어요 정보, 저장 상태 가져오기
-    const [commentCounts, likesData, savedStatus] = await Promise.all([
-        Promise.all(posts.map(post => getCommentCount(post.id))),
-        Promise.all(posts.map(post => getLikesData(post.id, userId))),
-        userId ? getBatchSavedStatus(posts.map(p => p.id), userId) : Promise.resolve(new Map())
-    ]);
+    // 이미 데이터가 포함된 경우 추가 조회 생략
+    const needsDataFetch = posts.length > 0 && !posts[0].hasOwnProperty('comment_count');
     
-    const feedHTML = await Promise.all(posts.map(async (post, index) => {
+    let commentCountsMap, likesDataMap, savedStatus, profilesMap;
+    
+    if (needsDataFetch) {
+        // 데이터가 없는 경우에만 조회 (필터링/정렬 후 재렌더링 시)
+        const artworkIds = posts.map(p => p.id);
+        const uniqueUserIds = [...new Set(posts.map(p => p.user_id))];
+        
+        [commentCountsMap, likesDataMap, savedStatus, profilesMap] = await Promise.all([
+            getBatchCommentCounts(artworkIds),
+            getBatchLikesData(artworkIds, userId),
+            userId ? getBatchSavedStatus(artworkIds, userId) : Promise.resolve(new Map()),
+            getBatchProfiles(uniqueUserIds)
+        ]);
+    }
+    
+    const feedHTML = posts.map((post) => {
         // 파일이 실제로 존재하는지 확인
         const hasFiles = (post.images && post.images.length > 0 && post.images.some(img => img)) || (post.image_url && post.image_url.trim());
         const allFiles = hasFiles 
@@ -166,33 +200,20 @@ export async function renderGalleryList() {
             : [];
         const hasMultipleFiles = allFiles.length > 1;
         const fileCount = allFiles.length;
-        const commentCount = commentCounts[index] || 0;
-        const likes = likesData[index] || { likes: 0, dislikes: 0, userReaction: null };
+        
+        // 이미 로드된 데이터 사용 또는 새로 조회한 데이터 사용
+        const commentCount = post.comment_count ?? (commentCountsMap?.get(post.id) || 0);
+        const likes = needsDataFetch 
+            ? (likesDataMap?.get(post.id) || { likes: 0, dislikes: 0, userReaction: null })
+            : { likes: post.likes_count || 0, dislikes: post.dislikes_count || 0, userReaction: post.userReaction || null };
+        
         const postIdStr = String(post.id);
-        const isSavedValue = userId ? (savedStatus.get(post.id) || savedStatus.get(postIdStr) || false) : false;
+        const isSavedValue = post.is_saved ?? (userId ? (savedStatus?.get(post.id) || savedStatus?.get(postIdStr) || false) : false);
         const mediaType = post.media_type || 'image';
         
-        // 작성자 프로필 이미지 가져오기
-        let avatarHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-        `;
-        
-        try {
-            const { data: profile } = await window._supabase
-                .from('profiles')
-                .select('avatar_url')
-                .eq('user_id', post.user_id)
-                .single();
-            
-            if (profile?.avatar_url) {
-                avatarHTML = `<img src="${escapeHtml(profile.avatar_url)}" alt="프로필" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-            }
-        } catch (err) {
-            console.log('프로필 이미지 로드 실패:', err);
-        }
+        // 작성자 프로필 가져오기 (이미 로드된 데이터 또는 캐시된 데이터 사용)
+        const profile = post.author_profile ?? profilesMap?.get(post.user_id);
+        const avatarHTML = getAvatarHTML(profile);
         
         // 미디어 타입에 따른 렌더링
         const fileUrl = allFiles.length > 0 ? allFiles[0] : null;
@@ -356,16 +377,16 @@ export async function renderGalleryList() {
                 </div>
             </div>
         `;
-    }));
+    });
     
     feedList.innerHTML = feedHTML.join('');
     
     // 더보기 버튼 표시 여부 확인 (렌더링 후)
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         checkGalleryDescriptions();
         setupVideoIntersectionObserver();
         setupGalleryScrollObservers();
-    }, 100);
+    });
 }
 
 /**
@@ -455,7 +476,7 @@ function checkGalleryDescriptions() {
 }
 
 /**
- * 작품관 설명 더보기/접기 토글
+ * 자유 게시판 설명 더보기/접기 토글
  */
 export function toggleGalleryDescription(postId) {
     const descEl = document.getElementById(`gallery-description-${postId}`);
@@ -830,13 +851,13 @@ export function toggleGalleryTagFilterDropdown() {
     }
 }
 
-// ========== 기타 함수들 (자유게시판 함수 재사용) ==========
+// ========== 기타 함수들 (자유 게시판 함수 재사용) ==========
 // 좋아요/싫어요는 FeedLikes 사용
-export const toggleGalleryLike = FeedLikes.toggleLike;
-export const toggleGalleryDislike = FeedLikes.toggleDislike;
+export const toggleGalleryLike = PostLikes.toggleLike;
+export const toggleGalleryDislike = PostLikes.toggleDislike;
 
-// 저장, 이미지 네비게이션 등은 자유게시판 함수를 직접 호출
-// (작품관과 자유게시판이 같은 데이터를 공유하므로 함수 재사용 가능)
+// 저장, 이미지 네비게이션 등은 자유 게시판 함수를 직접 호출
+// (자유 게시판과 자유 게시판이 같은 데이터를 공유하므로 함수 재사용 가능)
 export function toggleGallerySave(artworkId) {
     if (window.toggleSave) {
         return window.toggleSave(artworkId);

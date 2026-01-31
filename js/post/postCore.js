@@ -4,10 +4,11 @@
  */
 
 import { escapeHtml, formatDate } from '../utils.js';
-import { getLikesData } from '../services/likeService.js';
-import { getArtworkTags } from '../services/tagService.js';
-import { getCommentCount } from '../services/commentService.js';
+import { getLikesData, getBatchLikesData } from '../services/likeService.js';
+import { getArtworkTags, getBatchArtworkTags } from '../services/tagService.js';
+import { getCommentCount, getBatchCommentCounts } from '../services/commentService.js';
 import { toggleSave as toggleSaveService, getBatchSavedStatus } from '../services/saveService.js';
+import { getBatchProfiles, getAvatarHTML } from '../services/profileService.js';
 import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 // ========== 전역 상태 ==========
@@ -44,7 +45,7 @@ export async function initFeed() {
 }
 
 /**
- * 피드 게시물 로드
+ * 피드 게시물 로드 (최적화: 한 번에 모든 데이터 조회)
  */
 export async function loadFeedPosts() {
     const feedList = document.getElementById('feed-list');
@@ -58,13 +59,19 @@ export async function loadFeedPosts() {
     `;
     
     try {
-        // 자유게시판 게시물만 가져오기 (post_type이 'feed'이고 공개 게시물만)
+        // 현재 사용자 확인
+        const { data: { session } } = await window._supabase.auth.getSession();
+        const userId = session?.user?.id || null;
+        
+        // 자유 게시판 게시물만 가져오기 (post_type이 'feed'이고 공개 게시물만)
+        // 초기 로딩 개수를 30개로 제한하여 성능 향상
         const { data: artworks, error } = await window._supabase
             .from('artworks')
             .select('*')
             .eq('post_type', 'feed')
             .eq('is_public', true)
-            .limit(100);
+            .order('created_at', { ascending: false })
+            .limit(30);
         
         if (error) {
             console.error('피드 로드 에러:', error);
@@ -103,23 +110,39 @@ export async function loadFeedPosts() {
             return;
         }
         
-        // 각 게시물의 좋아요/싫어요 및 태그 데이터 가져오기
-        const artworksWithData = await Promise.all(
-            artworks.map(async (artwork) => {
-                const [likesData, tagsData] = await Promise.all([
-                    getLikesData(artwork.id, null),
-                    getArtworkTags(artwork.id)
-                ]);
-                
-                return {
-                    ...artwork,
-                    likes_count: likesData.likes,
-                    dislikes_count: likesData.dislikes,
-                    engagement_score: likesData.likes - likesData.dislikes,
-                    tags: tagsData
-                };
-            })
-        );
+        // 모든 필요한 데이터를 한 번에 병렬로 가져오기 (최적화)
+        const artworkIds = artworks.map(a => a.id);
+        const uniqueUserIds = [...new Set(artworks.map(a => a.user_id))];
+        
+        const [likesMap, tagsMap, commentCountsMap, savedStatus, profilesMap] = await Promise.all([
+            getBatchLikesData(artworkIds, userId),
+            getBatchArtworkTags(artworkIds),
+            getBatchCommentCounts(artworkIds),
+            userId ? getBatchSavedStatus(artworkIds, userId) : Promise.resolve(new Map()),
+            getBatchProfiles(uniqueUserIds)
+        ]);
+        
+        // 데이터 병합 (렌더링에 필요한 모든 정보 포함)
+        const artworksWithData = artworks.map(artwork => {
+            const likesData = likesMap.get(artwork.id) || { likes: 0, dislikes: 0, userReaction: null };
+            const tags = tagsMap.get(artwork.id) || [];
+            const commentCount = commentCountsMap.get(artwork.id) || 0;
+            const postIdStr = String(artwork.id);
+            const isSaved = userId ? (savedStatus.get(artwork.id) || savedStatus.get(postIdStr) || false) : false;
+            const profile = profilesMap.get(artwork.user_id);
+            
+            return {
+                ...artwork,
+                likes_count: likesData.likes,
+                dislikes_count: likesData.dislikes,
+                engagement_score: likesData.likes - likesData.dislikes,
+                userReaction: likesData.userReaction,
+                tags: tags,
+                comment_count: commentCount,
+                is_saved: isSaved,
+                author_profile: profile
+            };
+        });
         
         // 전체 게시물 저장
         allFeedPosts = artworksWithData;
@@ -145,7 +168,7 @@ export async function loadFeedPosts() {
 }
 
 /**
- * 피드 리스트 렌더링
+ * 피드 리스트 렌더링 (최적화: 이미 로드된 데이터 활용)
  */
 export async function renderFeedList() {
     const feedList = document.getElementById('feed-list');
@@ -155,14 +178,25 @@ export async function renderFeedList() {
     const { data: { session } } = await window._supabase.auth.getSession();
     const userId = session?.user?.id || null;
     
-    // 각 게시물의 댓글 수, 좋아요/싫어요 정보, 저장 상태 가져오기
-    const [commentCounts, likesData, savedStatus] = await Promise.all([
-        Promise.all(feedPosts.map(post => getCommentCount(post.id))),
-        Promise.all(feedPosts.map(post => getLikesData(post.id, userId))),
-        userId ? getBatchSavedStatus(feedPosts.map(p => p.id), userId) : Promise.resolve(new Map())
-    ]);
+    // 이미 데이터가 포함된 경우 추가 조회 생략
+    const needsDataFetch = feedPosts.length > 0 && !feedPosts[0].hasOwnProperty('comment_count');
     
-    const feedHTML = await Promise.all(feedPosts.map(async (post, index) => {
+    let commentCountsMap, likesDataMap, savedStatus, profilesMap;
+    
+    if (needsDataFetch) {
+        // 데이터가 없는 경우에만 조회 (필터링/정렬 후 재렌더링 시)
+        const artworkIds = feedPosts.map(p => p.id);
+        const uniqueUserIds = [...new Set(feedPosts.map(p => p.user_id))];
+        
+        [commentCountsMap, likesDataMap, savedStatus, profilesMap] = await Promise.all([
+            getBatchCommentCounts(artworkIds),
+            getBatchLikesData(artworkIds, userId),
+            userId ? getBatchSavedStatus(artworkIds, userId) : Promise.resolve(new Map()),
+            getBatchProfiles(uniqueUserIds)
+        ]);
+    }
+    
+    const feedHTML = feedPosts.map((post) => {
         // 파일이 실제로 존재하는지 확인
         const hasFiles = (post.images && post.images.length > 0 && post.images.some(img => img)) || (post.image_url && post.image_url.trim());
         const allFiles = hasFiles 
@@ -170,11 +204,16 @@ export async function renderFeedList() {
             : [];
         const hasMultipleFiles = allFiles.length > 1;
         const fileCount = allFiles.length;
-        const commentCount = commentCounts[index] || 0;
-        const likes = likesData[index] || { likes: 0, dislikes: 0, userReaction: null };
+        
+        // 이미 로드된 데이터 사용 또는 새로 조회한 데이터 사용
+        const commentCount = post.comment_count ?? (commentCountsMap?.get(post.id) || 0);
+        const likes = needsDataFetch 
+            ? (likesDataMap?.get(post.id) || { likes: 0, dislikes: 0, userReaction: null })
+            : { likes: post.likes_count || 0, dislikes: post.dislikes_count || 0, userReaction: post.userReaction || null };
+        
         // 저장 상태 확인 (숫자와 문자열 모두 확인)
         const postIdStr = String(post.id);
-        const isSavedValue = userId ? (savedStatus.get(post.id) || savedStatus.get(postIdStr) || false) : false;
+        const isSavedValue = post.is_saved ?? (userId ? (savedStatus?.get(post.id) || savedStatus?.get(postIdStr) || false) : false);
         const isOwnPost = userId && post.user_id === userId;
         const mediaType = post.media_type || 'image';
         
@@ -263,27 +302,9 @@ export async function renderFeedList() {
             }
         }
         
-        // 작성자 프로필 이미지 가져오기
-        let avatarHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-        `;
-        
-        try {
-            const { data: profile } = await window._supabase
-                .from('profiles')
-                .select('avatar_url')
-                .eq('user_id', post.user_id)
-                .single();
-            
-            if (profile?.avatar_url) {
-                avatarHTML = `<img src="${escapeHtml(profile.avatar_url)}" alt="프로필" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-            }
-        } catch (err) {
-            console.log('프로필 이미지 로드 실패:', err);
-        }
+        // 작성자 프로필 가져오기 (이미 로드된 데이터 또는 캐시된 데이터 사용)
+        const profile = post.author_profile ?? profilesMap?.get(post.user_id);
+        const avatarHTML = getAvatarHTML(profile);
         
         return `
             <div class="feed-item" data-post-id="${post.id}" onclick="openFeedDetail('${post.id}', false, window._feedState?.feedPosts || [])">
@@ -370,16 +391,16 @@ export async function renderFeedList() {
                 </div>
             </div>
         `;
-    }));
+    });
     
     feedList.innerHTML = feedHTML.join('');
     
     // 더보기 버튼 표시 여부 확인 (렌더링 후)
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         checkFeedDescriptions();
         setupVideoIntersectionObserver();
         setupScrollObservers();
-    }, 100);
+    });
 }
 
 /**

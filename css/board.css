@@ -1,0 +1,810 @@
+/**
+ * @file board.css
+ * @description 통합 게시판 스타일 (작품 게시판 스타일 기반)
+ * - 작품 게시판과 자유 게시판을 하나로 통합
+ * - 인스타그램 스타일 카드 디자인
+ */
+
+/* ========== 게시판 컨테이너 ========== */
+.board-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: calc(50% - 300px - 35px);
+}
+
+/* ========== 게시판 타입 전환 버튼 (서브탭) ========== */
+.board-type-switcher {
+    display: flex;
+    gap: 8px;
+    padding: 16px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.board-type-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.board-type-btn:hover {
+    background: var(--bg);
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.board-type-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.board-type-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ========== 플로팅 액션 버튼 그룹 ========== */
+.board-container .floating-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: fixed;
+    z-index: 100;
+}
+
+/* 데스크톱: 상단 우측에 일직선 배치 */
+@media (min-width: 769px) {
+    .board-container .floating-action-buttons {
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 12px;
+        position: fixed;
+        top: 24px;
+        right: 240px;
+        bottom: auto;
+        left: auto;
+    }
+}
+
+.board-container .floating-add-btn,
+.board-container .search-toggle-btn {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.board-container .floating-add-btn.hidden,
+.board-container .search-toggle-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+}
+
+/* 검색 패널이 열려있을 때는 버튼 항상 표시 */
+#board-tab-content .search-panel[style*="display: block"] ~ .board-list + .floating-action-buttons .floating-add-btn,
+#board-tab-content .search-panel[style*="display: block"] ~ .board-list + .floating-action-buttons .search-toggle-btn,
+.board-container:has(.search-panel[style*="display: block"]) .floating-action-buttons .floating-add-btn,
+.board-container:has(.search-panel[style*="display: block"]) .floating-action-buttons .search-toggle-btn {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+}
+
+.board-container .floating-action-buttons .search-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.board-container .floating-add-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--text);
+}
+
+.board-container .floating-add-btn:hover,
+.board-container .floating-action-buttons .search-toggle-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(44, 44, 44, 0.2);
+}
+
+.board-container .floating-add-btn:hover svg,
+.board-container .floating-action-buttons .search-toggle-btn:hover svg {
+    color: white;
+}
+
+.board-container .floating-add-btn svg,
+.board-container .floating-action-buttons .search-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+    transition: color 0.3s ease;
+}
+
+.board-container .floating-action-buttons .search-toggle-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.board-container .floating-action-buttons .search-toggle-btn.active svg {
+    color: white;
+}
+
+/* ========== 게시판 리스트 ========== */
+.board-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ========== 게시판 아이템 (자유 게시판 스타일) ========== */
+.board-item {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.board-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== 헤더 ========== */
+.board-item-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+    position: relative;
+}
+
+.board-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.board-author-avatar:hover {
+    transform: scale(1.05);
+}
+
+.board-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.board-author-avatar svg {
+    color: var(--text-light);
+}
+
+.board-author-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.board-author-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    display: inline-block;
+    margin-bottom: 2px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.board-author-name:hover {
+    color: var(--primary);
+}
+
+.board-post-date {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+/* ========== 이미지/미디어 ========== */
+.board-item-image {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: var(--bg);
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.board-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.board-item-image:hover img {
+    transform: scale(1.05);
+}
+
+/* 오디오 */
+.board-item-audio {
+    height: 300px !important;
+}
+
+.board-audio-container {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.board-audio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.board-audio-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.board-audio-player {
+    width: 100%;
+    max-width: 500px;
+    height: 48px;
+}
+
+/* 다중 이미지 인디케이터 */
+.board-multiple-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 2;
+}
+
+.board-multiple-indicator svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========== 캐러셀 (데스크톱) ========== */
+.board-carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.board-carousel-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.board-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 3;
+    color: white;
+}
+
+.board-carousel-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.board-carousel-prev {
+    left: 12px;
+}
+
+.board-carousel-next {
+    right: 12px;
+}
+
+.board-carousel-indicators {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.board-carousel-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.board-carousel-indicator.active {
+    background: white;
+    width: 20px;
+    border-radius: 3px;
+}
+
+/* ========== 스크롤 뷰 (모바일) ========== */
+.board-images-scroll {
+    display: none;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.board-images-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 0;
+}
+
+.board-images-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.board-scroll-image {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 400px;
+    scroll-snap-align: start;
+    position: relative;
+    background: var(--bg);
+}
+
+.board-scroll-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.board-scroll-page-indicator {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 16px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 4;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+}
+
+/* ========== 액션 버튼 ========== */
+.board-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    position: relative;
+    z-index: 2;
+}
+
+.board-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.board-action-btn:hover {
+    background: var(--bg);
+}
+
+.board-action-btn svg {
+    width: 22px;
+    height: 22px;
+    transition: all 0.2s ease;
+}
+
+.board-action-btn.liked {
+    color: #ef4444;
+}
+
+.board-action-btn.liked svg {
+    fill: #ef4444;
+    stroke: #ef4444;
+}
+
+.board-action-btn.disliked {
+    color: #6366f1;
+}
+
+.board-action-btn.disliked svg {
+    fill: #6366f1;
+    stroke: #6366f1;
+}
+
+.board-action-btn.saved svg {
+    fill: var(--primary);
+    stroke: var(--primary);
+}
+
+/* ========== 콘텐츠 ========== */
+.board-item-title-wrapper {
+    padding: 0 16px 12px 16px;
+}
+
+.board-item-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.board-item-content {
+    padding: 0 16px 12px 16px;
+}
+
+.board-item-description {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+.board-item-description.has-read-more {
+    text-overflow: clip;
+}
+
+.board-item-description.expanded {
+    -webkit-line-clamp: unset;
+    display: block !important;
+    white-space: pre-line;
+}
+
+.board-read-more {
+    color: var(--text-light);
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.board-read-more:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* 태그 */
+.board-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+}
+
+.board-item-tag {
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.board-item-tag:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* ========== 태그 필터 UI ========== */
+.board-selected-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--primary);
+    color: white;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.board-tag-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    color: white;
+    transition: opacity 0.2s ease;
+}
+
+.board-tag-remove:hover {
+    opacity: 0.7;
+}
+
+.board-tag-remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ========== 반응형 디자인 ========== */
+@media (max-width: 768px) {
+    .board-container {
+        padding: 12px;
+        margin-left: 0;
+    }
+    
+    .board-type-switcher {
+        padding: 12px 0;
+        margin-bottom: 16px;
+    }
+    
+    .board-type-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    /* 모바일: 세로 배치, 하단 우측 */
+    .board-container .floating-action-buttons {
+        flex-direction: column;
+        gap: 10px;
+        bottom: 80px;
+        right: 16px;
+        top: auto;
+        left: auto;
+    }
+    
+    .board-container .search-toggle-btn,
+    .board-container .floating-add-btn {
+        position: static;
+        width: 48px;
+        height: 48px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .board-container .floating-add-btn svg,
+    .board-container .floating-action-buttons .search-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .board-item-header {
+        padding: 12px;
+    }
+
+    .board-author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .board-author-name {
+        font-size: 14px;
+    }
+
+    .board-post-date {
+        font-size: 12px;
+    }
+
+    .board-item-actions {
+        padding: 10px 12px;
+        gap: 12px;
+    }
+
+    .board-action-btn {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+
+    .board-action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .board-item-title-wrapper {
+        padding: 0 12px 12px 12px;
+    }
+
+    .board-item-title {
+        font-size: 18px;
+    }
+
+    .board-item-content {
+        padding: 0 12px 12px 12px;
+    }
+
+    .board-item-description {
+        font-size: 15px;
+    }
+
+    .board-item-tags {
+        gap: 5px;
+    }
+
+    .board-item-tag {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+
+    .board-carousel-nav {
+        width: 32px;
+        height: 32px;
+    }
+
+    .board-carousel-prev {
+        left: 8px;
+    }
+
+    .board-carousel-next {
+        right: 8px;
+    }
+
+    /* 모바일: 캐러셀 숨기고 스크롤 표시 */
+    .board-carousel-container {
+        display: none !important;
+    }
+
+    .board-images-scroll {
+        display: block !important;
+    }
+
+    .board-multiple-indicator {
+        display: none !important;
+    }
+
+    .board-item-image {
+        height: auto;
+        border-radius: 8px;
+        background: transparent;
+    }
+}
+
+/* ========== 모바일 전용 (480px 이하) ========== */
+@media (max-width: 480px) {
+    .board-scroll-image {
+        height: 350px;
+    }
+
+    .board-scroll-page-indicator {
+        bottom: 8px;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 14px;
+    }
+}
+
+/* ========== 다크모드 대응 ========== */
+body.dark-mode .board-item-tag:hover {
+    background: var(--primary);
+    color: #1a1a1a;
+}
+
+body.dark-mode .board-container .floating-add-btn:hover,
+body.dark-mode .board-container .floating-action-buttons .search-toggle-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+body.dark-mode .board-container .floating-add-btn:hover svg,
+body.dark-mode .board-container .floating-action-buttons .search-toggle-btn:hover svg {
+    color: #1a1a1a;
+}
+
+body.dark-mode .board-container .floating-action-buttons .search-toggle-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+body.dark-mode .board-container .floating-action-buttons .search-toggle-btn.active svg {
+    color: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+    .board-item {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .board-item:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+}

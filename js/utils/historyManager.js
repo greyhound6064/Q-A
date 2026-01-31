@@ -6,7 +6,7 @@
  * - 탭 전환 시 히스토리 추가
  * - 모달 열기/닫기 시 히스토리 추가
  * - 뒤로 가기 시 이전 상태로 복원
- * - 최초 상태(작품관)에서만 사이트 이탈 허용
+ * - 최초 상태(자유 게시판)에서만 사이트 이탈 허용
  */
 
 class HistoryManager {
@@ -23,7 +23,7 @@ class HistoryManager {
             if (event.state) {
                 this.handleState(event.state);
             } else {
-                // 초기 상태 (작품관)
+                // 초기 상태 (자유 게시판)
                 this.handleState({ type: 'tab', tab: 'gallery' });
             }
             

@@ -33,8 +33,9 @@
     <link rel="stylesheet" href="css/profile.css">
     <link rel="stylesheet" href="css/artwork.css">
     <link rel="stylesheet" href="css/upload.css">
-    <link rel="stylesheet" href="css/feed.css">
-    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/post.css">
+    <link rel="stylesheet" href="css/artworkBoard.css">
+    <link rel="stylesheet" href="css/board.css">
     <link rel="stylesheet" href="css/messages.css">
     <link rel="stylesheet" href="css/user-search.css">
     <link rel="stylesheet" href="css/nickname-validation.css">
@@ -112,20 +113,14 @@
                     </svg>
                     <span>프로필</span>
                 </button>
-                <button class="tab-button active" data-tab="gallery">
+                <button class="tab-button active" data-tab="board">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
                         <rect x="14" y="14" width="7" height="7"></rect>
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
-                    <span>작품관</span>
-                </button>
-                <button class="tab-button" data-tab="feed">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span>자유게시판</span>
+                    <span>게시판</span>
                 </button>
                 <button class="tab-button" data-tab="messages">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -274,13 +269,13 @@
                                         <rect x="14" y="14" width="7" height="7"></rect>
                                         <rect x="3" y="14" width="7" height="7"></rect>
                                     </svg>
-                                    <span>작품관</span>
+                                    <span>작품 게시판</span>
                                 </button>
                                 <button class="profile-sub-tab" data-post-filter="feed" onclick="filterProfilePosts('feed')">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                                     </svg>
-                                    <span>자유게시판</span>
+                                    <span>자유 게시판</span>
                                 </button>
                                 <button class="profile-sub-tab" data-post-filter="private" onclick="filterProfilePosts('private')">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -298,7 +293,7 @@
                                     <line x1="12" y1="16" x2="12" y2="12"></line>
                                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                                 </svg>
-                                <span>다른 사람은 '작품관'의 게시물만 볼 수 있습니다.</span>
+                                <span>다른 사람은 '작품 게시판'과 '자유 게시판'의 게시물만 볼 수 있습니다.</span>
                             </div>
                             
                             <!-- 게시물 그리드 -->
@@ -388,7 +383,162 @@
                 </div>
             </div>
 
-            <div id="gallery-tab-content" class="tab-content active" style="display:block;">
+            <div id="board-tab-content" class="tab-content active" style="display:block;">
+                <div class="board-container">
+                    <!-- 게시판 타입 전환 버튼 (서브탭) -->
+                    <div class="board-type-switcher">
+                        <button class="board-type-btn active" data-board-type="gallery" onclick="switchBoardType('gallery')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                            작품 게시판
+                        </button>
+                        <button class="board-type-btn" data-board-type="feed" onclick="switchBoardType('feed')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            자유 게시판
+                        </button>
+                    </div>
+
+                    <!-- 검색 토글 버튼 (데스크톱) -->
+                    <div class="search-toggle-wrapper">
+                        <button class="search-toggle-btn" id="board-search-toggle" onclick="toggleBoardSearchPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 플로팅 액션 버튼 그룹 (모바일) -->
+                    <div class="floating-action-buttons">
+                        <button class="floating-add-btn" onclick="openUploadModal()" title="게시물 추가">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <button class="search-toggle-btn" id="board-search-toggle-mobile" onclick="toggleBoardSearchPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 검색 패널 (숨김) -->
+                    <div class="search-panel" id="board-search-panel" style="display:none;">
+                        <!-- 검색 바 -->
+                        <div class="feed-search-bar">
+                            <div class="feed-search-input-wrapper">
+                                <svg class="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="board-search-input" 
+                                    class="feed-search-input" 
+                                    placeholder="제목 또는 내용 검색..."
+                                    onkeypress="if(event.key==='Enter') performBoardSearch()"
+                                >
+                                <button class="feed-search-btn" onclick="performBoardSearch()">
+                                    검색
+                                </button>
+                                <button class="feed-search-clear" id="board-search-clear" onclick="clearBoardSearch()" style="display:none;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 필터 버튼 -->
+                        <div class="feed-filter-buttons">
+                            <button class="feed-filter-toggle-btn" id="board-sort-filter-btn" onclick="toggleBoardSortFilter()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="6" x2="16" y2="6"></line>
+                                    <line x1="8" y1="12" x2="20" y2="12"></line>
+                                    <line x1="4" y1="18" x2="12" y2="18"></line>
+                                </svg>
+                                정렬
+                            </button>
+                            <button class="feed-filter-toggle-btn" id="board-tag-filter-btn" onclick="toggleBoardTagFilterDropdown()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                </svg>
+                                태그
+                            </button>
+                        </div>
+
+                        <!-- 정렬 필터 (숨김) -->
+                        <div class="feed-sort-dropdown" id="board-sort-dropdown" style="display:none;">
+                            <button class="feed-sort-option active" data-sort="latest" onclick="changeBoardSortMode('latest')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                                최신순
+                            </button>
+                            <button class="feed-sort-option" data-sort="popular" onclick="changeBoardSortMode('popular')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                </svg>
+                                인기순
+                            </button>
+                            <button class="feed-sort-option" data-sort="trending" onclick="changeBoardSortMode('trending')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                                떠오르는순
+                            </button>
+                        </div>
+
+                        <!-- 태그 필터 (숨김) -->
+                        <div class="feed-tag-dropdown" id="board-tag-dropdown" style="display:none;">
+                            <div class="feed-tag-input-wrapper">
+                                <svg class="feed-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="board-tag-input" 
+                                    class="feed-tag-input" 
+                                    placeholder="태그 검색..."
+                                    oninput="searchBoardTagSuggestions()"
+                                    onkeypress="if(event.key==='Enter') addBoardTagFilter()"
+                                    onfocus="searchBoardTagSuggestions()"
+                                >
+                                <button class="feed-tag-add-btn" onclick="addBoardTagFilter()">
+                                    추가
+                                </button>
+                            </div>
+                            <!-- 태그 자동완성 -->
+                            <div class="feed-tag-suggestions" id="board-tag-suggestions" style="display:none;"></div>
+                        </div>
+
+                        <!-- 선택된 태그 -->
+                        <div class="feed-selected-tags" id="board-selected-tags" style="display:none;"></div>
+                    </div>
+                    
+                    <!-- 게시판 리스트 -->
+                    <div class="board-list" id="board-list">
+                        <div class="feed-loading">
+                            <div class="feed-loading-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gallery-tab-content" class="tab-content" style="display:none;">
                 <div class="gallery-container">
                     <!-- 검색 토글 버튼 (데스크톱) -->
                     <div class="search-toggle-wrapper">
@@ -515,7 +665,7 @@
                         <div class="feed-selected-tags" id="gallery-selected-tags" style="display:none;"></div>
                     </div>
                     
-                    <!-- 작품관 리스트 -->
+                    <!-- 작품 게시판 리스트 -->
                     <div class="gallery-list" id="gallery-list">
                         <div class="feed-loading">
                             <div class="feed-loading-spinner"></div>
@@ -736,18 +886,12 @@
                 </svg>
                 <span>프로필</span>
             </button>
-            <button class="mobile-nav-item active" data-tab="gallery">
+            <button class="mobile-nav-item active" data-tab="board">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="7" height="7"></rect>
                     <rect x="14" y="3" width="7" height="7"></rect>
                     <rect x="14" y="14" width="7" height="7"></rect>
                     <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-                <span>작품관</span>
-            </button>
-            <button class="mobile-nav-item" data-tab="feed">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
                 <span>게시판</span>
             </button>

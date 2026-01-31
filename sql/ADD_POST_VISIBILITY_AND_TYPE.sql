@@ -18,7 +18,7 @@
 ALTER TABLE artworks 
 ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT true;
 
--- post_type: 'gallery'(작품관) / 'feed'(자유게시판)
+-- post_type: 'gallery'(자유 게시판) / 'feed'(자유 게시판)
 ALTER TABLE artworks 
 ADD COLUMN IF NOT EXISTS post_type TEXT DEFAULT 'gallery' CHECK (post_type IN ('gallery', 'feed'));
 
@@ -58,7 +58,7 @@ ORDER BY ordinal_position;
 -- 
 -- 📊 추가된 컬럼:
 -- - is_public: 공개(true) / 비공개(false)
--- - post_type: 'gallery'(작품관) / 'feed'(자유게시판)
+-- - post_type: 'gallery'(자유 게시판) / 'feed'(자유 게시판)
 --
 -- 🔒 보안 정책 (RLS) 업데이트됨
 -- ⚡ 인덱스 추가됨 (성능 최적화)

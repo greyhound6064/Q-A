@@ -193,26 +193,43 @@ export async function deleteComment(commentId, artworkId) {
 }
 
 /**
- * 여러 작품의 댓글 수를 한 번에 조회
+ * 여러 작품의 댓글 수를 한 번에 조회 (최적화된 단일 쿼리)
  * @param {Array<string>} artworkIds - 작품 ID 배열
  * @returns {Promise<Map>} artworkId -> 댓글 수 맵
  */
 export async function getBatchCommentCounts(artworkIds) {
     const counts = new Map();
     
+    if (!artworkIds || artworkIds.length === 0) {
+        return counts;
+    }
+    
     try {
-        // 병렬로 모든 댓글 수 조회
-        const results = await Promise.all(
-            artworkIds.map(id => getCommentCount(id))
-        );
+        // 모든 작품의 댓글을 한 번에 조회
+        const { data: allComments, error } = await window._supabase
+            .from('artwork_comments')
+            .select('artwork_id')
+            .in('artwork_id', artworkIds);
         
-        artworkIds.forEach((id, index) => {
-            counts.set(id, results[index]);
+        if (error) throw error;
+        
+        // 작품별로 댓글 수 집계
+        artworkIds.forEach(id => {
+            counts.set(id, 0);
+        });
+        
+        allComments?.forEach(comment => {
+            const currentCount = counts.get(comment.artwork_id) || 0;
+            counts.set(comment.artwork_id, currentCount + 1);
         });
         
         return counts;
     } catch (err) {
         console.error('배치 댓글 수 조회 에러:', err);
+        // 에러 발생 시 기본값 반환
+        artworkIds.forEach(id => {
+            counts.set(id, 0);
+        });
         return counts;
     }
 }
