@@ -12,9 +12,6 @@ import { checkAndShowWelcomeModal } from './welcome.js';
 // 다크모드 import
 import { initDarkMode, toggleDarkMode } from './darkMode.js';
 
-// 스크롤 토글 import
-import { initScrollToggle, resetNavigationVisibility } from './scrollToggle.js';
-
 // 히스토리 매니저 import (자동 초기화됨)
 import { historyManager } from './utils/historyManager.js';
 
@@ -291,7 +288,6 @@ window.initMessages = initMessages;
 window.updateUnreadCount = updateUnreadCount;
 window.handleSendMessageFromProfile = handleSendMessageFromProfile;
 window.toggleDarkMode = toggleDarkMode;
-window.resetNavigationVisibility = resetNavigationVisibility;
 window.recalculateAllTagCounts = recalculateAllTagCounts;
 window.debugTag = debugTag;
 window.checkAllTags = checkAllTags;
@@ -326,7 +322,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         initTabs();
         initDarkMode();
-        initScrollToggle();
 
         if (isOAuthReturn()) {
             await new Promise(function (r) { setTimeout(r, 100); });

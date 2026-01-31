@@ -29,13 +29,6 @@
     transition: transform 0.3s ease;
 }
 
-/* 스크롤 시 사이드바 숨김 (모바일에서만 적용) */
-@media (max-width: 768px) {
-    .sidebar.hidden {
-        transform: translateY(-100%);
-    }
-}
-
 /* 모바일 힌트 텍스트 (데스크톱에서 숨김) */
 .mobile-hint-text {
     display: none;

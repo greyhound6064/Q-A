@@ -138,11 +138,6 @@ export function switchToTab(targetTab) {
         targetContent.style.display = 'block';
         targetContent.classList.add('active');
         
-        // 탭 전환 시 네비게이션 상태 초기화 (항상 표시)
-        if (window.resetNavigationVisibility) {
-            window.resetNavigationVisibility();
-        }
-        
         // 프로필 탭이 활성화되면 프로필 정보 업데이트 (본인 프로필로 복귀)
         if (targetTab === 'profile') {
             if (window.updateProfileInfo) window.updateProfileInfo();

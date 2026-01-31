@@ -5,7 +5,6 @@
 
 import { setFeedPosts, renderFeedList } from './feedCore.js';
 import { sortPosts } from '../services/sortingService.js';
-import { keepSearchToggleVisible, hideSearchToggle } from '../scrollToggle.js';
 
 // ========== 전역 상태 ==========
 let currentSortMode = 'latest'; // latest, popular, trending
@@ -73,10 +72,8 @@ export function toggleFeedSearchPanel() {
         if (toggleBtn) {
             if (isVisible) {
                 toggleBtn.classList.remove('active');
-                hideSearchToggle('feed');
             } else {
                 toggleBtn.classList.add('active');
-                keepSearchToggleVisible('feed');
             }
         }
     }

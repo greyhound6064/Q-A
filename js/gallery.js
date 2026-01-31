@@ -11,7 +11,6 @@ import { getCommentCount } from './services/commentService.js';
 import { getBatchSavedStatus } from './services/saveService.js';
 import { sortPosts } from './services/sortingService.js';
 import * as FeedLikes from './feed/feedLikes.js';
-import { keepSearchToggleVisible, hideSearchToggle } from './scrollToggle.js';
 
 // ========== 전역 상태 관리 ==========
 window._galleryState = {
@@ -685,10 +684,8 @@ export function toggleGallerySearchPanel() {
         if (toggleBtn) {
             if (isVisible) {
                 toggleBtn.classList.remove('active');
-                hideSearchToggle('gallery');
             } else {
                 toggleBtn.classList.add('active');
-                keepSearchToggleVisible('gallery');
             }
         }
     }

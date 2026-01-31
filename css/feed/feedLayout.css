@@ -12,15 +12,11 @@
     transition: margin 0.3s ease;
 }
 
-/* 네비게이션 숨김 시 컨테이너 중앙 정렬 (모바일) */
+/* 모바일에서 컨테이너 중앙 정렬 */
 @media (max-width: 768px) {
     .feed-container {
         margin-left: auto;
         margin-right: auto;
-    }
-    
-    /* 네비게이션 숨김 시에도 최대 너비 유지 */
-    .content-area.nav-hidden .feed-container {
         max-width: 600px;
         padding: 8px 4px;
     }
