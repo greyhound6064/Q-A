@@ -225,17 +225,30 @@
         max-width: 100%;
         padding: 1rem;
         margin-top: 56px; /* 상단 헤더 높이만큼 */
-        height: calc(100vh - 121px); /* 상단 헤더(56px) + 하단 네비(65px) = 121px */
-        overflow-y: auto;
+        min-height: calc(100vh - 121px); /* 상단 헤더(56px) + 하단 네비(65px) = 121px */
+        height: auto; /* 고정 높이 대신 자동 높이 사용 */
+        overflow-y: visible; /* 스크롤을 body로 위임 */
         padding-bottom: 1rem; /* 하단 여백 추가 */
-        transition: margin-top 0.3s ease, height 0.3s ease, padding-bottom 0.3s ease;
+        transition: margin-top 0.3s ease, min-height 0.3s ease, padding-bottom 0.3s ease;
     }
     
     /* 네비게이션 숨김 시 콘텐츠 영역 확장 */
     .content-area.nav-hidden {
         margin-top: 0;
-        height: 100vh;
+        min-height: 100vh;
         padding-bottom: 0.5rem;
+    }
+    
+    /* 모바일에서 body 스크롤 활성화 */
+    body {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 메인 레이아웃도 높이 자동 조정 */
+    .main-layout {
+        min-height: 100vh;
+        height: auto;
     }
     
 }

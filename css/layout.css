@@ -97,8 +97,8 @@
     width: 50px;
     padding: 0.75rem;
     border: none;
-    background: transparent;
-    color: var(--text-light);
+    background: none;
+    color: rgba(0, 0, 0, 0.6);
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -107,19 +107,19 @@
 }
 
 .music-toggle-btn:hover {
-    background: var(--primary-hover);
-    color: white;
+    background: none;
+    color: rgba(0, 0, 0, 0.85);
     transform: scale(1.05);
 }
 
 .music-toggle-btn.playing {
     color: var(--primary);
-    background: rgba(var(--primary-rgb, 99, 102, 241), 0.1);
+    background: none;
 }
 
 .music-toggle-btn.playing:hover {
-    color: white;
-    background: var(--primary-hover);
+    color: var(--primary-hover);
+    background: none;
 }
 
 /* 재생 중 사운드 웨이브 애니메이션 */
@@ -231,21 +231,21 @@
 
 /* 다크모드 음악 컨트롤 */
 body.dark-mode .music-toggle-btn {
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 body.dark-mode .music-toggle-btn:hover {
-    background: var(--primary-hover);
-    color: #1a1a1a;
+    background: none;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 body.dark-mode .music-toggle-btn.playing {
     color: var(--primary);
-    background: rgba(var(--primary-rgb, 99, 102, 241), 0.15);
+    background: none;
 }
 
 body.dark-mode .music-toggle-btn.playing:hover {
-    color: #1a1a1a;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 body.dark-mode .music-volume-control {
@@ -464,6 +464,8 @@ body.dark-mode .tab-button.active:hover span {
     height: 100vh;
     overflow-x: hidden;
     position: relative;
+    /* 모바일 브라우저 주소창 숨김을 위한 설정 */
+    -webkit-overflow-scrolling: touch;
 }
 
 

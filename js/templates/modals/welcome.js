@@ -64,7 +64,7 @@ export function createWelcomeModal() {
                     </div>
                     <div class="terminal-line terminal-feature">
                         <span class="feature-number">-</span>
-                        <span class="feature-text">시작 옵션을 선택하세요:</span>
+                        <span class="feature-text">시작 옵션:</span>
                     </div>
                 </div>
 
