@@ -5,9 +5,20 @@
 
 /* ========== 태블릿 이하 (768px 미만) ========== */
 @media (max-width: 768px) {
+    /* 모바일에서 body 스크롤 활성화 */
+    body {
+        display: block !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        height: auto;
+    }
+    
     /* 메인 레이아웃 재구성 */
     .main-layout {
-        flex-direction: column;
+        display: block;
+        width: 100%;
+        min-height: 100vh;
+        height: auto;
         padding-bottom: 65px; /* 하단 네비게이션 공간 확보 */
         padding-top: 0; /* content-area의 margin-top으로 처리 */
         transition: padding-bottom 0.3s ease;
@@ -223,12 +234,14 @@
     /* 콘텐츠 영역 조정 */
     .content-area {
         max-width: 100%;
+        width: 100%;
         padding: 1rem;
         margin-top: 56px; /* 상단 헤더 높이만큼 */
         min-height: calc(100vh - 121px); /* 상단 헤더(56px) + 하단 네비(65px) = 121px */
-        height: auto; /* 고정 높이 대신 자동 높이 사용 */
-        overflow-y: visible; /* 스크롤을 body로 위임 */
-        padding-bottom: 1rem; /* 하단 여백 추가 */
+        height: auto !important; /* 고정 높이 제거 */
+        overflow-y: visible !important; /* 스크롤을 body로 위임 */
+        overflow-x: hidden;
+        padding-bottom: 2rem; /* 하단 여백 추가 */
         transition: margin-top 0.3s ease, min-height 0.3s ease, padding-bottom 0.3s ease;
     }
     
@@ -237,18 +250,6 @@
         margin-top: 0;
         min-height: 100vh;
         padding-bottom: 0.5rem;
-    }
-    
-    /* 모바일에서 body 스크롤 활성화 */
-    body {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* 메인 레이아웃도 높이 자동 조정 */
-    .main-layout {
-        min-height: 100vh;
-        height: auto;
     }
     
 }
