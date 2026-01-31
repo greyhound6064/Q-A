@@ -66,10 +66,9 @@ window.handleWelcomeDontShow = function(checked) {
 window.handleWelcomeLogin = async function() {
     closeWelcomeModal();
     
-    // 로그인 버튼 클릭 (기존 로그인 로직 재사용)
-    const loginBtn = document.getElementById('btn-login');
-    if (loginBtn) {
-        loginBtn.click();
+    // signInWithGoogle 함수 직접 호출
+    if (window.signInWithGoogle) {
+        window.signInWithGoogle();
     }
 };
 

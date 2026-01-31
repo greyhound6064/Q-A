@@ -7,6 +7,7 @@ import { escapeHtml, formatDate, linkifyText } from '../utils.js';
 import { renderArtworksGrid } from './artworkGrid.js';
 import { isSaved, toggleSave as toggleSaveService } from '../services/saveService.js';
 import { decrementArtworkTags } from '../services/tagService.js';
+import { historyManager } from '../utils/historyManager.js';
 
 // ========== 전역 상태 ==========
 let currentArtworkId = null;
@@ -266,6 +267,11 @@ export async function openArtworkDetail(artworkId, showComments = false) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
+        // 히스토리 추가
+        if (!historyManager.isRestoringState()) {
+            historyManager.pushArtworkDetailState(artworkId);
+        }
+        
         // ESC 키로 모달 닫기
         document.addEventListener('keydown', handleArtworkModalEscape);
         
@@ -308,6 +314,11 @@ export function closeArtworkDetail() {
     currentArtworkId = null;
     currentArtworkImages = [];
     currentArtworkImageIndex = 0;
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 /**

@@ -23,45 +23,18 @@ function clearOAuthHash() {
     } catch (e) {}
 }
 
-// 로그인 버튼 바인딩
-function bindLoginButton() {
-    var btn = document.getElementById('btn-login');
-    if (!btn) return;
-    btn.removeAttribute('onclick');
-    btn.addEventListener('click', function () {
-        if (typeof signInWithGoogle === 'function') signInWithGoogle();
-    });
-}
-
 // 인증 UI 업데이트
 export function updateAuthUI(session) {
-    var loginBtn = document.getElementById('btn-login');
-    var userInfo = document.getElementById('user-info');
-    var userEmail = document.getElementById('user-email');
     if (session && session.user) {
-        if (loginBtn) { loginBtn.style.display = 'none'; loginBtn.disabled = false; }
-        if (userInfo) userInfo.style.display = 'flex';
-        if (userEmail) userEmail.textContent = session.user.email || '이메일 없음';
-        
         // 읽지 않은 쪽지 개수 업데이트
         if (window.updateUnreadCount) {
             window.updateUnreadCount();
         }
-    } else {
-        if (loginBtn) { 
-            loginBtn.style.display = 'inline-flex'; 
-            loginBtn.disabled = false;
-            // 버튼 내용 복원 (아이콘 + 텍스트)
-            var span = loginBtn.querySelector('span');
-            if (span) span.textContent = '구글 로그인';
-        }
-        if (userInfo) userInfo.style.display = 'none';
     }
 }
 
 // 구글 로그인
 export async function signInWithGoogle() {
-    var btn = document.getElementById('btn-login');
     try {
         console.log('구글 로그인 시작...');
 
@@ -75,12 +48,6 @@ export async function signInWithGoogle() {
         if (!scheme.startsWith('http')) {
             alert('OAuth는 http(s) 환경에서만 동작합니다. 로컬 서버(localhost)로 실행해 주세요.');
             return;
-        }
-
-        if (btn) { 
-            btn.disabled = true;
-            var span = btn.querySelector('span');
-            if (span) span.textContent = '이동 중...';
         }
 
         var base = window.location.origin;
@@ -118,12 +85,6 @@ export async function signInWithGoogle() {
     } catch (err) {
         console.error('구글 로그인 예외:', err);
         alert('구글 로그인 중 오류: ' + (err.message || String(err)));
-    } finally {
-        if (btn) { 
-            btn.disabled = false;
-            var span = btn.querySelector('span');
-            if (span) span.textContent = '구글 로그인';
-        }
     }
 }
 
@@ -180,8 +141,6 @@ export async function handleProfileLogout() {
 
 // 인증 초기화
 export function initAuth() {
-    bindLoginButton();
-    
     if (isOAuthReturn()) {
         setTimeout(() => {}, 100);
     }

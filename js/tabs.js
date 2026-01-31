@@ -3,6 +3,9 @@
  * @description 탭 전환 기능 (메인 탭, 프로필 내부 탭)
  */
 
+import { showLoginRequiredModal } from './utils/errorHandler.js';
+import { historyManager } from './utils/historyManager.js';
+
 // ========== 메인 탭 전환 ==========
 export function initTabs() {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -16,7 +19,7 @@ export function initTabs() {
             if (targetTab === 'profile' || targetTab === 'messages') {
                 const { data: { session } } = await window._supabase.auth.getSession();
                 if (!session) {
-                    alert('로그인 후 이용 가능합니다.');
+                    showLoginRequiredModal();
                     return;
                 }
             }
@@ -61,7 +64,7 @@ function initMobileNav() {
             if (targetTab === 'profile' || targetTab === 'messages') {
                 const { data: { session } } = await window._supabase.auth.getSession();
                 if (!session) {
-                    alert('로그인 후 이용 가능합니다.');
+                    showLoginRequiredModal();
                     return;
                 }
             }
@@ -102,6 +105,11 @@ export function switchToTab(targetTab) {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
     const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    
+    // 히스토리 추가 (복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.pushTabState(targetTab);
+    }
     
     // 모든 탭 버튼의 active 클래스 제거
     tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -168,6 +176,11 @@ export function initProfileTabs() {
             
             // 로그아웃 탭이 아닌 경우에만 탭 전환
             if (!targetTab) return;
+            
+            // 히스토리 추가 (복원 중이 아닐 때만)
+            if (!historyManager.isRestoringState()) {
+                historyManager.pushProfileTabState(targetTab);
+            }
             
             // 모든 프로필 탭 버튼의 active 클래스 제거
             profileTabs.forEach(btn => btn.classList.remove('active'));

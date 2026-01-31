@@ -9,6 +9,8 @@ import { getArtworkTags } from '../services/tagService.js';
 import { isSaved } from '../services/saveService.js';
 import { setFeedDetailFiles } from './feedCarousel.js';
 import { loadFeedDetailComments } from './feedComments.js';
+import { showLoginRequiredModal } from '../utils/errorHandler.js';
+import { historyManager } from '../utils/historyManager.js';
 
 /**
  * 피드 상세보기 열기 (스레드 스타일 모달)
@@ -333,6 +335,11 @@ export async function openFeedDetail(postId, showComments = false, feedPosts = [
     // body 스크롤 방지
     document.body.style.overflow = 'hidden';
     
+    // 히스토리 추가
+    if (!historyManager.isRestoringState()) {
+        historyManager.pushFeedDetailState(postId, showComments);
+    }
+    
     // 댓글 로드
     await loadFeedDetailComments(postId);
     
@@ -361,6 +368,11 @@ export function closeFeedDetail() {
     document.body.style.overflow = 'auto';
     document.removeEventListener('keydown', handleFeedDetailEscape);
     window._currentFeedDetailPostId = null;
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 /**
@@ -379,7 +391,7 @@ export async function toggleFeedDetailLike(postId) {
     try {
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -421,7 +433,7 @@ export async function toggleFeedDetailDislike(postId) {
     try {
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -461,7 +473,7 @@ export async function toggleFeedDetailSave(postId) {
     try {
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

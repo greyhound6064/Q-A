@@ -4,6 +4,7 @@
  */
 
 import { escapeHtml, formatDate } from '../utils.js';
+import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 // ========== 전역 상태 ==========
 let feedDetailReplyTarget = null; // 답글 대상 {id, nickname, rootId}
@@ -198,7 +199,7 @@ export async function submitFeedDetailComment(postId) {
     try {
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

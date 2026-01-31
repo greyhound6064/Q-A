@@ -103,7 +103,8 @@ export async function initializeTemplates() {
         import('./modals/editArtwork.js'),
         import('./modals/followers.js'),
         import('./modals/customStatus.js'),
-        import('./modals/welcome.js')
+        import('./modals/welcome.js'),
+        import('./modals/loginRequired.js')
     ]);
 
     // 모달 템플릿 등록
@@ -115,6 +116,7 @@ export async function initializeTemplates() {
     templateLoader.register('following', modalModules[4].createFollowingModal);
     templateLoader.register('custom-status', modalModules[5].createCustomStatusModal);
     templateLoader.register('welcome', modalModules[6].createWelcomeModal);
+    templateLoader.register('login-required', modalModules[7].createLoginRequiredModal);
 
     // 모든 모달 미리 로드
     templateLoader.preload([
@@ -125,7 +127,8 @@ export async function initializeTemplates() {
         'followers',
         'following',
         'custom-status',
-        'welcome'
+        'welcome',
+        'login-required'
     ]);
 
     console.log('✅ All templates initialized');

@@ -22,7 +22,7 @@ export function createEditArtworkModal() {
                 )}
                 ${createTextInput('edit-artwork-title', '제목', '작품 제목을 입력하세요', 100, '최대 100자까지 입력 가능합니다.')}
                 ${createTextarea('edit-artwork-content', '설명', '작품에 대한 설명을 작성하세요', 1000, 5, '최대 1000자까지 입력 가능합니다.')}
-                ${createUrlInput('edit-vibe-link', '작품 링크', 'https://vibe.dev/...', 500, '바이브코딩 결과물 링크를 입력하세요.')}
+                ${createUrlInput('edit-vibe-link', '작품 링크(선택사항)', 'https://vibe.dev/...', 500, '바이브코딩 결과물 링크를 입력하세요.')}
                 ${createTagInput('edit-tags')}
             </div>
             ${createModalFooter('closeEditArtworkModal()', 'updateArtwork()', '수정 완료')}

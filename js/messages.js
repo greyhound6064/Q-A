@@ -1,5 +1,5 @@
 import { escapeHtml, formatDate } from './utils.js';
-import { showError } from './utils/errorHandler.js';
+import { showError, showLoginRequiredModal } from './utils/errorHandler.js';
 
 // 쪽지 상태 관리
 window._messageState = {
@@ -18,7 +18,7 @@ window._messageState = {
 export async function initMessages() {
     const user = window._supabase.auth.getUser ? (await window._supabase.auth.getUser()).data.user : null;
     if (!user) {
-        showError('로그인이 필요합니다.');
+        showLoginRequiredModal();
         return;
     }
 
@@ -539,7 +539,7 @@ async function loadChatMessages(otherUserId) {
 async function sendMessageFromChat() {
     const user = window._supabase.auth.getUser ? (await window._supabase.auth.getUser()).data.user : null;
     if (!user) {
-        showError('로그인이 필요합니다.');
+        showLoginRequiredModal();
         return;
     }
 

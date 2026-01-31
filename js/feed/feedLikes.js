@@ -5,6 +5,7 @@
 
 import { toggleLike as serviceLike, toggleDislike as serviceDislike } from '../services/likeService.js';
 import { updateLikesUI } from './feedCore.js';
+import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 /**
  * 좋아요 토글
@@ -14,7 +15,7 @@ export async function toggleLike(postId) {
         // 로그인 확인
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -38,7 +39,7 @@ export async function toggleDislike(postId) {
         // 로그인 확인
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

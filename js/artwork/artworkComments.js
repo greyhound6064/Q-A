@@ -5,6 +5,7 @@
 
 import { escapeHtml, formatDate } from '../utils.js';
 import { getCurrentArtworkId } from './artworkDetail.js';
+import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 // ========== 전역 상태 ==========
 let replyTarget = null; // 답글 대상 정보 {id, nickname, rootId}
@@ -244,7 +245,7 @@ export async function submitArtworkComment(artworkId) {
         // 로그인 확인
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

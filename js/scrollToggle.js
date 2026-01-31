@@ -62,15 +62,29 @@ function updateNavigationVisibility(hide) {
     const galleryWrapper = document.querySelector('#gallery-tab-content .search-toggle-wrapper');
     const feedWrapper = document.querySelector('#feed-tab-content .search-toggle-wrapper');
     
+    // 검색 패널이 열려있는지 확인
+    const gallerySearchPanel = document.getElementById('gallery-search-panel');
+    const feedSearchPanel = document.getElementById('feed-search-panel');
+    const isGallerySearchOpen = gallerySearchPanel && gallerySearchPanel.style.display === 'block';
+    const isFeedSearchOpen = feedSearchPanel && feedSearchPanel.style.display === 'block';
+    
     if (hide) {
         // 아래로 스크롤: 모든 네비게이션 숨김
         if (sidebar) sidebar.classList.add('hidden');
         if (bottomNav) bottomNav.classList.add('hidden');
         if (contentArea) contentArea.classList.add('nav-hidden');
+        
+        // 플로팅 버튼은 검색 패널이 열려있지 않을 때만 숨김
         floatingButtonGroups.forEach(group => {
             const buttons = group.querySelectorAll('.floating-add-btn, .search-toggle-btn');
-            buttons.forEach(btn => btn.classList.add('hidden'));
+            buttons.forEach(btn => {
+                // 검색 패널이 열려있으면 버튼을 숨기지 않음
+                if (!isGallerySearchOpen && !isFeedSearchOpen) {
+                    btn.classList.add('hidden');
+                }
+            });
         });
+        
         if (galleryWrapper) galleryWrapper.classList.add('hidden');
         if (feedWrapper) feedWrapper.classList.add('hidden');
     } else {
@@ -126,14 +140,28 @@ export function keepSearchToggleVisible(tabName) {
             clearTimeout(scrollTimeout);
         }
     }
+    
+    // 플로팅 액션 버튼들도 계속 표시
+    const floatingButtons = document.querySelector(`#${tabName}-tab-content .floating-action-buttons`);
+    if (floatingButtons) {
+        const buttons = floatingButtons.querySelectorAll('.floating-add-btn, .search-toggle-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('hidden');
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        });
+    }
 }
 
 /**
- * 검색 패널이 닫힐 때 버튼 숨김
+ * 검색 패널이 닫힐 때 버튼 숨김 (스크롤 상태에 따라)
  */
 export function hideSearchToggle(tabName) {
     const wrapper = document.querySelector(`#${tabName}-tab-content .search-toggle-wrapper`);
     if (wrapper) {
         wrapper.classList.remove('visible');
     }
+    
+    // 검색 패널이 닫힐 때는 스크롤 상태를 확인하지 않고 버튼을 표시
+    // (스크롤 이벤트가 자동으로 처리함)
 }

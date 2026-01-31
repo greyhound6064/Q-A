@@ -1,0 +1,85 @@
+/**
+ * @file loginRequired.css
+ * @description 로그인 필요 모달 스타일
+ */
+
+/* ========== 로그인 필요 모달 ========== */
+.login-required-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.login-required-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: var(--text-light);
+}
+
+.login-required-message {
+    font-size: 15px;
+    color: var(--text);
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+}
+
+/* 구글 로그인 버튼 */
+.google-login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.google-login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.google-login-btn svg {
+    flex-shrink: 0;
+}
+
+.google-login-btn span {
+    white-space: nowrap;
+}
+
+/* 다크모드 대응 */
+body.dark-mode .google-login-btn {
+    background: white;
+    color: #333;
+    border-color: #ddd;
+}
+
+body.dark-mode .google-login-btn:hover {
+    background: #f8f9fa;
+}

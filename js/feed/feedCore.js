@@ -8,6 +8,7 @@ import { getLikesData } from '../services/likeService.js';
 import { getArtworkTags } from '../services/tagService.js';
 import { getCommentCount } from '../services/commentService.js';
 import { toggleSave as toggleSaveService, getBatchSavedStatus } from '../services/saveService.js';
+import { showLoginRequiredModal } from '../utils/errorHandler.js';
 
 // ========== 전역 상태 ==========
 export let feedPosts = [];
@@ -602,7 +603,7 @@ export async function toggleSave(postId) {
     try {
         const { data: { session } } = await window._supabase.auth.getSession();
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

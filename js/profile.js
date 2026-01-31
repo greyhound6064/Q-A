@@ -10,6 +10,8 @@ import { validateNickname, updateNicknameValidationUI, debounce } from './nickna
 import { getFollowStats, getFollowers, getFollowing, toggleFollow, isFollowing } from './services/followService.js';
 import { getSavedArtworks } from './services/saveService.js';
 import { renderArtworksGrid } from './artwork/artworkGrid.js';
+import { showLoginRequiredModal } from './utils/errorHandler.js';
+import { historyManager } from './utils/historyManager.js';
 
 let selectedAvatarFile = null;
 let currentAvatarUrl = null;
@@ -127,6 +129,11 @@ export function openProfileEditModal() {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
+    // 히스토리 추가
+    if (!historyManager.isRestoringState()) {
+        historyManager.pushModalState('profile-edit-modal');
+    }
+    
     // ESC 키로 모달 닫기
     document.addEventListener('keydown', handleModalEscape);
 }
@@ -146,6 +153,11 @@ export function closeProfileEditModal() {
     selectedAvatarFile = null;
     const fileInput = document.getElementById('avatar-upload');
     if (fileInput) fileInput.value = '';
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 // ESC 키 처리
@@ -161,7 +173,7 @@ async function loadCurrentProfileData() {
         const { data: { session } } = await _supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             closeProfileEditModal();
             return;
         }
@@ -392,7 +404,7 @@ export async function saveProfileChanges() {
         const { data: { session } } = await _supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -641,7 +653,7 @@ export async function openFollowersModal() {
         const { data: { session } } = await _supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -650,6 +662,11 @@ export async function openFollowersModal() {
         
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        
+        // 히스토리 추가
+        if (!historyManager.isRestoringState()) {
+            historyManager.pushModalState('followers-modal');
+        }
         
         const listEl = document.getElementById('followers-list');
         if (listEl) listEl.innerHTML = '<div class="follow-empty">로딩 중...</div>';
@@ -708,7 +725,7 @@ export async function openFollowingModal() {
         const { data: { session } } = await _supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         
@@ -717,6 +734,11 @@ export async function openFollowingModal() {
         
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        
+        // 히스토리 추가
+        if (!historyManager.isRestoringState()) {
+            historyManager.pushModalState('following-modal');
+        }
         
         const listEl = document.getElementById('following-list');
         if (listEl) listEl.innerHTML = '<div class="follow-empty">로딩 중...</div>';
@@ -776,6 +798,11 @@ export function closeFollowersModal() {
     
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 // 팔로잉 모달 닫기
@@ -785,6 +812,11 @@ export function closeFollowingModal() {
     
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 // 팔로우 토글 핸들러
@@ -793,7 +825,7 @@ export async function handleFollowToggle(targetUserId, targetNickname, buttonEl)
         const { data: { session } } = await _supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

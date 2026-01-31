@@ -15,6 +15,9 @@ import { initDarkMode, toggleDarkMode } from './darkMode.js';
 // 스크롤 토글 import
 import { initScrollToggle, resetNavigationVisibility } from './scrollToggle.js';
 
+// 히스토리 매니저 import (자동 초기화됨)
+import { historyManager } from './utils/historyManager.js';
+
 // 모든 모듈 import
 import { initAuth, signInWithGoogle, signOut, handleProfileLogout, updateAuthUI } from './auth.js';
 import { 
@@ -149,6 +152,21 @@ import {
     handleSendMessageFromProfile
 } from './messages.js';
 import { recalculateAllTagCounts, debugTag, checkAllTags } from './services/tagService.js';
+
+// ========== 로그인 모달 함수 ==========
+window.closeLoginRequiredModal = function() {
+    const modal = document.getElementById('login-required-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+window.handleLoginFromModal = async function() {
+    // 모달 닫기
+    window.closeLoginRequiredModal();
+    // 로그인 실행
+    await signInWithGoogle();
+};
 
 // ========== 전역 함수 등록 (HTML onclick 속성에서 사용) ==========
 window.signInWithGoogle = signInWithGoogle;
@@ -295,14 +313,6 @@ function clearOAuthHash() {
     } catch (e) {}
 }
 
-function bindLoginButton() {
-    var btn = document.getElementById('btn-login');
-    if (!btn) return;
-    btn.removeAttribute('onclick');
-    btn.addEventListener('click', function () {
-        signInWithGoogle();
-    });
-}
 
 // ========== 앱 초기화 ==========
 document.addEventListener('DOMContentLoaded', async () => {
@@ -314,7 +324,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 템플릿 시스템 초기화 (모달들을 동적으로 로드)
         await initializeTemplates();
 
-        bindLoginButton();
         initTabs();
         initDarkMode();
         initScrollToggle();

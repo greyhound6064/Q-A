@@ -1,0 +1,369 @@
+/**
+ * @file welcome-responsive.css
+ * @description 웰컴 모달 반응형 스타일
+ * @version 1.0.0
+ * @updated 2026-01-31
+ */
+
+/* ========== 태블릿 (768px 이하) ========== */
+@media (max-width: 768px) {
+    .welcome-modal-content {
+        max-width: 90%;
+        max-height: 90vh;
+        margin: 10px auto;
+        border-radius: 12px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .welcome-terminal-header {
+        padding: 12px 16px;
+        flex-shrink: 0;
+    }
+
+    .welcome-terminal-buttons {
+        gap: 8px;
+    }
+
+    .terminal-btn {
+        width: 12px;
+        height: 12px;
+    }
+
+    .welcome-terminal-title {
+        font-size: 14px;
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 24px 20px;
+        overflow-y: visible;
+    }
+
+    .welcome-logo {
+        margin-bottom: 16px;
+    }
+
+    .welcome-logo img {
+        width: 90px;
+    }
+
+    .welcome-terminal-output {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+    }
+
+    .terminal-line {
+        margin-bottom: 7px;
+    }
+
+    .terminal-line.terminal-blank {
+        height: 7px;
+    }
+
+    .terminal-prompt {
+        margin-right: 7px;
+    }
+
+    .terminal-line.terminal-output {
+        padding-left: 14px;
+    }
+
+    .welcome-features {
+        gap: 5px;
+        margin-top: 7px;
+    }
+
+    .terminal-line.terminal-feature {
+        padding-left: 14px;
+        gap: 7px;
+    }
+
+    .terminal-line.terminal-feature .feature-number {
+        min-width: 18px;
+    }
+
+    .welcome-actions {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .welcome-btn {
+        width: 100%;
+        min-width: auto;
+        padding: 13px 18px;
+        font-size: 14px;
+        border-radius: 6px;
+        gap: 7px;
+    }
+
+    .welcome-footer {
+        padding-top: 12px;
+        flex-shrink: 0;
+    }
+
+    .welcome-checkbox {
+        font-size: 14px;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 5px;
+    }
+
+    .welcome-checkbox .checkbox-text::before {
+        margin-right: 7px;
+    }
+}
+
+/* ========== 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    .welcome-modal-content {
+        max-width: 95%;
+        max-height: 95vh;
+        margin: 5px auto;
+        border-radius: 10px;
+    }
+
+    .welcome-terminal-header {
+        padding: 10px 14px;
+    }
+
+    .welcome-terminal-buttons {
+        gap: 7px;
+    }
+
+    .terminal-btn {
+        width: 11px;
+        height: 11px;
+    }
+
+    .welcome-terminal-title {
+        font-size: 13px;
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 20px 16px;
+    }
+
+    .welcome-logo {
+        margin-bottom: 14px;
+    }
+
+    .welcome-logo img {
+        width: 75px;
+    }
+
+    .welcome-terminal-output {
+        font-size: 13px;
+        line-height: 1.4;
+        margin-bottom: 14px;
+    }
+
+    .terminal-line {
+        margin-bottom: 6px;
+    }
+
+    .terminal-line.terminal-blank {
+        height: 6px;
+    }
+
+    .terminal-prompt {
+        margin-right: 6px;
+    }
+
+    .terminal-line.terminal-output {
+        padding-left: 12px;
+    }
+
+    .welcome-features {
+        gap: 4px;
+        margin-top: 6px;
+    }
+
+    .terminal-line.terminal-feature {
+        padding-left: 12px;
+        gap: 6px;
+    }
+
+    .terminal-line.terminal-feature .feature-number {
+        min-width: 16px;
+    }
+
+    .welcome-actions {
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .welcome-btn {
+        width: 100%;
+        min-width: auto;
+        padding: 12px 16px;
+        font-size: 13px;
+        border-radius: 6px;
+        gap: 6px;
+    }
+
+    .welcome-footer {
+        padding-top: 10px;
+    }
+
+    .welcome-checkbox {
+        font-size: 13px;
+        gap: 7px;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .welcome-checkbox .checkbox-text::before {
+        margin-right: 6px;
+    }
+}
+
+/* ========== 작은 모바일 (360px 이하) ========== */
+@media (max-width: 360px) {
+    .welcome-modal-content {
+        max-width: 98%;
+        max-height: 96vh;
+        margin: 3px auto;
+    }
+
+    .welcome-terminal-header {
+        padding: 8px 12px;
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 16px 14px;
+    }
+
+    .welcome-logo {
+        margin-bottom: 12px;
+    }
+
+    .welcome-logo img {
+        width: 65px;
+    }
+
+    .welcome-terminal-output {
+        font-size: 12px;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+
+    .terminal-line {
+        margin-bottom: 5px;
+    }
+
+    .terminal-line.terminal-blank {
+        height: 5px;
+    }
+
+    .welcome-features {
+        gap: 3px;
+        margin-top: 5px;
+    }
+
+    .terminal-line.terminal-feature {
+        padding-left: 10px;
+        gap: 5px;
+    }
+
+    .welcome-actions {
+        gap: 7px;
+        margin-bottom: 12px;
+    }
+
+    .welcome-btn {
+        padding: 11px 14px;
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .welcome-footer {
+        padding-top: 8px;
+    }
+
+    .welcome-checkbox {
+        font-size: 12px;
+        gap: 6px;
+        padding: 4px 8px;
+    }
+}
+
+/* ========== 가로 모드 (모바일) ========== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .welcome-modal-content {
+        max-height: 95vh;
+        max-width: 85%;
+        margin: 3px auto;
+        overflow-y: auto;
+    }
+
+    .welcome-terminal-header {
+        padding: 8px 14px;
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 16px 20px;
+    }
+
+    .welcome-logo {
+        margin-bottom: 10px;
+    }
+
+    .welcome-logo img {
+        width: 55px;
+    }
+
+    .welcome-terminal-output {
+        font-size: 11px;
+        line-height: 1.3;
+        margin-bottom: 10px;
+    }
+
+    .terminal-line {
+        margin-bottom: 4px;
+    }
+
+    .terminal-line.terminal-blank {
+        height: 4px;
+    }
+
+    .terminal-line.terminal-output {
+        padding-left: 10px;
+    }
+
+    .welcome-features {
+        gap: 3px;
+        margin-top: 4px;
+    }
+
+    .terminal-line.terminal-feature {
+        padding-left: 10px;
+        gap: 5px;
+    }
+
+    .welcome-actions {
+        flex-direction: row;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .welcome-btn {
+        min-width: auto;
+        padding: 8px 14px;
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .welcome-footer {
+        padding-top: 8px;
+    }
+
+    .welcome-checkbox {
+        font-size: 11px;
+        padding: 4px 8px;
+        gap: 5px;
+    }
+}

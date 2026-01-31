@@ -5,6 +5,7 @@
  */
 
 import { getFollowStats, isFollowing, toggleFollow } from './services/followService.js';
+import { showLoginRequiredModal } from './utils/errorHandler.js';
 
 // Supabase 클라이언트 (전역 변수 사용)
 const supabase = window._supabase;
@@ -338,7 +339,7 @@ window.handleProfileFollowToggle = async function() {
         const { data: { session } } = await supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

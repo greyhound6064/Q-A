@@ -4,6 +4,8 @@
  */
 
 import { addTagsToArtwork, parseTagsString } from './services/tagService.js';
+import { showLoginRequiredModal } from './utils/errorHandler.js';
+import { historyManager } from './utils/historyManager.js';
 
 // ========== 전역 변수 ==========
 let selectedUploadFiles = []; // 이미지, 영상, 음원 파일
@@ -49,7 +51,20 @@ async function saveTags(artworkId, tagsString) {
 }
 
 // ========== 업로드 모달 ==========
-export function openUploadModal() {
+export async function openUploadModal() {
+    // 로그인 확인
+    try {
+        const { data: { session } } = await window._supabase.auth.getSession();
+        if (!session) {
+            showLoginRequiredModal();
+            return;
+        }
+    } catch (error) {
+        console.error('세션 확인 오류:', error);
+        showLoginRequiredModal();
+        return;
+    }
+    
     const modal = document.getElementById('upload-modal');
     if (!modal) return;
     
@@ -75,6 +90,11 @@ export function openUploadModal() {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
+    // 히스토리 추가
+    if (!historyManager.isRestoringState()) {
+        historyManager.pushModalState('upload-modal');
+    }
+    
     // 모달 스크롤 위치 초기화
     const modalContent = modal.querySelector('.modal-content');
     if (modalContent) {
@@ -98,6 +118,11 @@ export function closeUploadModal() {
     const fileInput = document.getElementById('upload-image-input');
     if (fileInput) fileInput.value = '';
     resetUploadFilePreview();
+    
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+    }
 }
 
 function handleUploadModalEscape(e) {
@@ -381,7 +406,7 @@ export async function uploadPost() {
         const { data: { session } } = await window._supabase.auth.getSession();
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

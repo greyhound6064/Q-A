@@ -33,3 +33,6 @@
 
 /* 업로드/수정 모달 */
 @import url('responsive/upload-responsive.css');
+
+/* 웰컴 모달 */
+@import url('responsive/welcome-responsive.css');

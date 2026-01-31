@@ -2,7 +2,7 @@
 
 > **AI 에이전트용 핵심 참조 문서**
 
-**버전:** 10.8.7 | **업데이트:** 2026-01-30
+**버전:** 10.9.0 | **업데이트:** 2026-01-31
 
 ---
 
@@ -20,6 +20,7 @@
 4. `templateLoader.js`에 등록 필수
 
 ### 금지 사항
+- ❌ 불필요한 설명파일 생성
 - ❌ index.html에 모달 HTML 직접 추가
 - ❌ SVG 코드 복사/붙여넣기
 - ❌ 헤더/푸터 중복 작성
@@ -53,7 +54,7 @@ Q&A/
 ├── supabase-config.js
 ├── server.py
 │
-├── css/ (24개)
+├── css/ (25개)
 │   ├── base.css - CSS 변수, 다크모드, 기본 스타일
 │   ├── layout.css - 사이드바, 탭, 콘텐츠 영역
 │   ├── profile.css - 프로필 헤더, 탭, 통계
@@ -64,12 +65,13 @@ Q&A/
 │   ├── user-search.css - 사용자 검색
 │   ├── nickname-validation.css - 닉네임 검증
 │   │
-│   ├── components/ (5개)
+│   ├── components/ (6개)
 │   │   ├── modal.css - 모달 기본 구조
 │   │   ├── button.css - 버튼 스타일
 │   │   ├── form.css - 폼 입력 요소
 │   │   ├── state.css - 로딩, 빈 상태
-│   │   └── welcome.css - 웰컴 화면
+│   │   ├── welcome.css - 웰컴 화면
+│   │   └── loginRequired.css - 로그인 필요 모달
 │   │
 │   ├── feed/ (6개)
 │   │   ├── feedLayout.css - 피드 레이아웃
@@ -87,7 +89,7 @@ Q&A/
 │   │   ├── modal.css - 작품 상세 모달
 │   │   └── responsive.css - 작품관 반응형
 │   │
-│   ├── responsive/ (8개) ⭐
+│   ├── responsive/ (9개) ⭐
 │   │   ├── layout-responsive.css (238줄) - 사이드바, 헤더, 네비게이션
 │   │   ├── profile-responsive.css (681줄) - 프로필 헤더, 탭, 통계
 │   │   ├── shared-responsive.css (382줄) - 작품관 & 피드 공통 카드 스타일
@@ -95,22 +97,23 @@ Q&A/
 │   │   ├── feed-responsive.css (218줄) - 피드 전용 (검색, 필터)
 │   │   ├── messages-responsive.css (656줄) - 쪽지 사이드바, 채팅
 │   │   ├── user-search-responsive.css (97줄) - 사용자 검색
-│   │   └── upload-responsive.css (263줄) - 업로드/수정 모달
+│   │   ├── upload-responsive.css (263줄) - 업로드/수정 모달
+│   │   └── welcome-responsive.css - 웰컴 모달
 │   │
 │   └── responsive.css - 통합 import 파일
 │
-├── js/ (40개)
+├── js/ (41개)
 │   ├── main.js - 진입점, 초기화
 │   ├── auth.js - 인증 (Google OAuth)
-│   ├── tabs.js - 탭 전환
+│   ├── tabs.js - 탭 전환 (History API 통합) ⭐
 │   ├── scrollToggle.js - 검색 버튼 스크롤 표시/숨김
 │   │
-│   ├── templates/ (14개) ⭐
-│   │   ├── templateLoader.js (137줄) - 템플릿 동적 로딩
+│   ├── templates/ (15개) ⭐
+│   │   ├── templateLoader.js (145줄) - 템플릿 동적 로딩
 │   │   ├── shared/
 │   │   │   ├── icons.js (83줄, 17개 아이콘)
 │   │   │   └── components.js (182줄, 9개 컴포넌트)
-│   │   └── modals/ (9개)
+│   │   └── modals/ (10개)
 │   │       ├── upload.js - 업로드 모달
 │   │       ├── editArtwork.js - 작품 수정
 │   │       ├── profileEdit.js - 프로필 편집
@@ -119,7 +122,8 @@ Q&A/
 │   │       ├── communityWrite.js - 커뮤니티 작성
 │   │       ├── artworkDetail.js - 작품 상세
 │   │       ├── communityDetail.js - 커뮤니티 상세
-│   │       └── welcome.js - 웰컴 화면
+│   │       ├── welcome.js - 웰컴 화면
+│   │       └── loginRequired.js - 로그인 필요 모달 ⭐ NEW
 │   │
 │   ├── services/ (6개)
 │   │   ├── commentService.js - 댓글 CRUD
@@ -129,9 +133,10 @@ Q&A/
 │   │   ├── saveService.js - 게시물 저장
 │   │   └── sortingService.js - 정렬 (최신/인기/떠오르는)
 │   │
-│   ├── utils/ (2개)
+│   ├── utils/ (3개)
 │   │   ├── errorHandler.js - 에러 처리
-│   │   └── uiHelpers.js - UI 유틸리티
+│   │   ├── uiHelpers.js - UI 유틸리티
+│   │   └── historyManager.js - 브라우저 히스토리 관리 ⭐ NEW
 │   │
 │   ├── feed/ (8개)
 │   │   ├── feedCore.js - 피드 핵심 로직
@@ -174,10 +179,22 @@ Q&A/
 - **로더:** `templateLoader.js` - 동적 로딩, 캐싱
 - **원칙:** DRY, 컴포넌트 기반, 단일 진실 공급원
 
+### 브라우저 히스토리 관리 ⭐ NEW
+- **파일:** `js/utils/historyManager.js`
+- **기능:** 뒤로 가기 버튼으로 사이트 이탈 방지
+- **지원 상태:**
+  - 탭 전환 (작품관, 자유게시판, 프로필, 쪽지, 사용자 검색)
+  - 프로필 내부 탭 (내 게시물, 저장된 게시물, 팔로워, 팔로잉)
+  - 모달 (업로드, 수정, 상세보기, 프로필 편집, 팔로워/팔로잉)
+- **주요 메서드:**
+  - `pushTabState()`, `pushModalState()`, `pushArtworkDetailState()`, `pushFeedDetailState()`
+  - `goBack()`, `isRestoringState()`
+
 ### 인증
-- **파일:** `js/auth.js`, `js/main.js`
-- **함수:** `signInWithGoogle()`, `signOut()`, `updateAuthUI()`
+- **파일:** `js/auth.js`, `js/main.js`, `js/utils/errorHandler.js`
+- **함수:** `signInWithGoogle()`, `signOut()`, `updateAuthUI()`, `showLoginRequiredModal()`
 - **DB:** `profiles` 테이블 자동 생성
+- **로그인 필요 모달:** 로그인이 필요한 기능 접근 시 구글 로그인 버튼이 포함된 모달 표시
 
 ### 프로필
 - **파일:** `js/profile.js`, `js/nicknameValidator.js`
@@ -397,7 +414,8 @@ css/responsive/
 ├── feed-responsive.css         - 피드 전용 (검색, 필터, 정렬)
 ├── messages-responsive.css     - 쪽지 사이드바, 채팅, 뒤로가기
 ├── user-search-responsive.css  - 사용자 검색
-└── upload-responsive.css       - 업로드/수정 모달 (컴팩트 디자인)
+├── upload-responsive.css       - 업로드/수정 모달 (컴팩트 디자인)
+└── welcome-responsive.css      - 웰컴 모달
 ```
 
 ### 중요 원칙

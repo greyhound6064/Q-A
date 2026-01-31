@@ -5,6 +5,8 @@
 
 import { getCurrentArtworkData } from './artwork.js';
 import { updateArtworkTags } from './services/tagService.js';
+import { showLoginRequiredModal } from './utils/errorHandler.js';
+import { historyManager } from './utils/historyManager.js';
 
 // ========== 전역 변수 ==========
 let editArtworkImages = [];
@@ -171,6 +173,11 @@ export function openEditArtworkModalWithData(artworkData, sourceModalId = null) 
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
+    // 히스토리 추가
+    if (!historyManager.isRestoringState()) {
+        historyManager.pushModalState('edit-artwork-modal', artworkData);
+    }
+    
     document.addEventListener('keydown', handleEditModalEscape);
 }
 
@@ -183,7 +190,13 @@ export function closeEditArtworkModal(returnToDetail = true) {
     
     modal.style.display = 'none';
     
-    // 상세보기 모달로 돌아가기
+    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    if (!historyManager.isRestoringState()) {
+        historyManager.goBack();
+        return; // 히스토리로 처리하므로 아래 코드 실행 안 함
+    }
+    
+    // 상세보기 모달로 돌아가기 (히스토리 복원 중일 때만)
     if (returnToDetail) {
         // 피드 상세보기 모달 확인
         const feedDetailModal = document.getElementById('feed-detail-modal');
@@ -506,7 +519,7 @@ export async function updateArtwork() {
         console.log('세션 확인:', session);
         
         if (!session || !session.user) {
-            alert('로그인이 필요합니다.');
+            showLoginRequiredModal();
             return;
         }
         

@@ -37,8 +37,18 @@ export function confirm(message) {
  * @returns {boolean} false
  */
 export function handleAuthRequired() {
-    showError('로그인이 필요합니다.');
+    showLoginRequiredModal();
     return false;
+}
+
+/**
+ * 로그인 필요 모달 표시
+ */
+export function showLoginRequiredModal() {
+    const modal = document.getElementById('login-required-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 /**
