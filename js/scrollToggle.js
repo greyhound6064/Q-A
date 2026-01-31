@@ -24,8 +24,9 @@ function handleScroll(event) {
         return;
     }
     
-    const scrollElement = event.target;
-    const currentScrollY = scrollElement.scrollTop || 0;
+    // 모바일에서는 window.scrollY, 데스크톱에서는 content-area의 scrollTop 사용
+    const isMobile = window.innerWidth <= 768;
+    const currentScrollY = isMobile ? window.scrollY : (event.target.scrollTop || 0);
     
     // 스크롤 방향 감지 (최소 10px 이상 이동)
     if (Math.abs(currentScrollY - lastScrollY) > 10) {
@@ -105,17 +106,43 @@ function updateNavigationVisibility(hide) {
  * 스크롤 토글 초기화
  */
 export function initScrollToggle() {
-    // content-area에 스크롤 이벤트 리스너 추가
-    const contentArea = document.querySelector('.content-area');
-    if (contentArea) {
-        contentArea.addEventListener('scroll', handleScroll);
-        console.log('스크롤 방향 감지 초기화 완료 - 작품관/자유게시판에서만 네비게이션 숨김');
-        
-        // 초기 상태: 모든 네비게이션 표시
-        updateNavigationVisibility(false);
+    // 모바일 여부 확인
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        // 모바일: window에 스크롤 이벤트 리스너 추가
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        console.log('스크롤 방향 감지 초기화 완료 (모바일) - window 스크롤 감지');
     } else {
-        console.warn('content-area를 찾을 수 없습니다');
+        // 데스크톱: content-area에 스크롤 이벤트 리스너 추가
+        const contentArea = document.querySelector('.content-area');
+        if (contentArea) {
+            contentArea.addEventListener('scroll', handleScroll);
+            console.log('스크롤 방향 감지 초기화 완료 (데스크톱) - content-area 스크롤 감지');
+        } else {
+            console.warn('content-area를 찾을 수 없습니다');
+        }
     }
+    
+    // 초기 상태: 모든 네비게이션 표시
+    updateNavigationVisibility(false);
+    
+    // 화면 크기 변경 시 이벤트 리스너 재설정
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // 기존 리스너 제거 후 재설정
+            const contentArea = document.querySelector('.content-area');
+            window.removeEventListener('scroll', handleScroll);
+            if (contentArea) {
+                contentArea.removeEventListener('scroll', handleScroll);
+            }
+            
+            // 다시 초기화
+            initScrollToggle();
+        }, 250);
+    });
 }
 
 /**
