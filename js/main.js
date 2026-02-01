@@ -292,16 +292,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         const { data: { session } } = await window._supabase.auth.getSession();
+        
+        // 웰컴 모달을 가장 먼저 표시 (비로그인 사용자에게만)
+        if (!session) {
+            checkAndShowWelcomeModal();
+        }
+        
+        // 웰컴 모달 표시 후 나머지 초기화 진행
         updateAuthUI(session);
         await updateProfileInfo();
         
         // 게시판이 첫 화면이므로 초기화 (기본: 자유 게시판)
         await initBoard();
-        
-        // 웰컴 모달 표시 (비로그인 사용자에게만)
-        if (!session) {
-            checkAndShowWelcomeModal();
-        }
         
         clearOAuthHash();
     } catch (err) {
