@@ -28,6 +28,7 @@ export function showWelcomeModal() {
     if (modal) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
     }
 }
 
@@ -38,7 +39,8 @@ export function closeWelcomeModal() {
     const modal = document.getElementById('welcome-modal');
     if (modal) {
         modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
     }
 
     // 다시 보지 않기가 체크되지 않았다면 localStorage에 저장

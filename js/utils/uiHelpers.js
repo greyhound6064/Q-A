@@ -86,6 +86,22 @@ export function createErrorHTML(message) {
 }
 
 /**
+ * body 스크롤 잠금 (모달 열 때)
+ */
+export function lockBodyScroll() {
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+}
+
+/**
+ * body 스크롤 해제 (모달 닫을 때)
+ */
+export function unlockBodyScroll() {
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+}
+
+/**
  * 모달 열기
  * @param {string} modalId - 모달 ID
  */
@@ -94,7 +110,7 @@ export function openModal(modalId) {
     if (!modal) return;
     
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
 }
 
 /**
@@ -106,7 +122,7 @@ export function closeModal(modalId) {
     if (!modal) return;
     
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    unlockBodyScroll();
 }
 
 /**

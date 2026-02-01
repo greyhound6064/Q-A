@@ -172,6 +172,7 @@ export function openEditArtworkModalWithData(artworkData, sourceModalId = null) 
     // 모달 표시
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
     
     // 히스토리 추가
     if (!historyManager.isRestoringState()) {
@@ -203,18 +204,22 @@ export function closeEditArtworkModal(returnToDetail = true) {
         if (feedDetailModal) {
             feedDetailModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
         } else {
             // 작품 상세보기 모달 확인
             const artworkDetailModal = document.getElementById('artwork-detail-modal');
             if (artworkDetailModal) {
                 artworkDetailModal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+                document.body.classList.add('modal-open');
             } else {
-                document.body.style.overflow = 'auto';
+                document.body.style.overflow = '';
+                document.body.classList.remove('modal-open');
             }
         }
     } else {
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
     }
     
     document.removeEventListener('keydown', handleEditModalEscape);

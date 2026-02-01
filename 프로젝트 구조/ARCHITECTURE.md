@@ -1,6 +1,6 @@
 # 프로젝트 아키텍처
 
-**버전:** 12.1.0 | **업데이트:** 2026-02-01
+**버전:** 12.2.0 | **업데이트:** 2026-02-01
 
 ---
 
@@ -99,17 +99,19 @@ createPostTypeSelector('name', 'onChangeFn()')
 - 함수: `initBoard()`, `switchBoardType()`, `loadBoardPosts()`, `renderBoardList()`
 - 공통 모듈: `js/post/*.js` (8개), `css/post/*.css` (6개)
 
-### 통합 상세보기 모달 ⭐ (완전 통합 완료 + 모바일 최적화)
+### 통합 상세보기 모달 ⭐ (완전 통합 완료 + 모바일 최적화 v12.2.0)
 **파일:** `js/artwork/artworkDetail.js`, `js/post/postDetail.js`, `js/utils/touchGestures.js`
 - **단일 모달 사용**: `artwork-detail-modal` (모든 post_type 공통)
 - `openArtworkDetail()`: 모든 게시물 타입 처리 (gallery/feed 구분 없음)
 - `openFeedDetail()`: `openArtworkDetail()` 호출 (하위 호환성)
 - **UI 스타일**: 인스타그램 스타일 (좌우 레이아웃) - 모든 타입 동일
-- 스크롤 위치 복원: 모달 닫기 시 자동 복원
+- **스크롤 위치 복원** ⭐ (v12.2.0 개선):
+  - 히스토리 state로 단일화 (로컬 변수 제거)
+  - X 버튼/뒤로가기 통합 처리
+  - 정확한 위치 복원 (0px 포함)
 - 히스토리 관리: 단일 `post-detail` 타입으로 통합
 - **모바일 UX 최적화** ⭐:
-  - 스와이프 다운으로 모달 닫기
-  - 캐러셀 좌우 스와이프 제스처
+  - 캐러셀 좌우 스와이프 제스처 (스와이프 다운 제거됨)
   - 터치 피드백 애니메이션
   - iOS 안전 영역 지원
   - 키보드 올라올 때 레이아웃 자동 조정
@@ -121,10 +123,16 @@ createPostTypeSelector('name', 'onChangeFn()')
 - `getAvatarHTML(profile)`, `updateProfile(userId, updates)`
 - `clearProfilesCache(userId)` - 메모리 캐싱
 
-### 히스토리 관리
+### 히스토리 관리 ⭐ (v12.2.0 개선)
 **파일:** `js/utils/historyManager.js`
 - 지원: 탭, 서브탭, 모달
 - 메서드: `pushTabState()`, `pushModalState()`, `goBack()`, `isRestoringState()`
+- **스크롤 관리:** `getScrollContainer()`, `getCurrentScrollPosition()`, `restoreScrollPosition()`
+- **개선사항:**
+  - 스크롤 위치 히스토리 state로 단일화
+  - 스크롤 컨테이너 자동 감지 (contentArea/boardContainer/window)
+  - 복원 타이밍 최적화 (2단계: requestAnimationFrame + 100ms)
+  - body.style.overflow 통일 (빈 문자열 + modal-open 클래스)
 
 ### 템플릿 시스템
 **위치:** `js/templates/`

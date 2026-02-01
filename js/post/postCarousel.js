@@ -134,6 +134,7 @@ export function openImageViewer(postId, allFiles, startIndex = 0) {
     
     // body 스크롤 방지
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
     
     // ESC 키로 닫기
     document.addEventListener('keydown', handleImageViewerEscape);
@@ -147,7 +148,8 @@ export function closeImageViewer() {
     if (viewer) {
         viewer.remove();
     }
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', handleImageViewerEscape);
     window._imageViewerData = null;
 }

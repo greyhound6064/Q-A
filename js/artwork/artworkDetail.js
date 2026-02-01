@@ -8,15 +8,13 @@ import { renderArtworksGrid } from './artworkGrid.js';
 import { isSaved, toggleSave as toggleSaveService } from '../services/saveService.js';
 import { decrementArtworkTags } from '../services/tagService.js';
 import { historyManager } from '../utils/historyManager.js';
-import { addSwipeToCloseGesture, addCarouselSwipeGesture } from '../utils/touchGestures.js';
+import { addCarouselSwipeGesture } from '../utils/touchGestures.js';
 
 // ========== 전역 상태 ==========
 let currentArtworkId = null;
 let currentArtworkImages = [];
 let currentArtworkImageIndex = 0;
 export let currentArtworkData = null;
-let savedScrollPosition = 0; // 스크롤 위치 저장
-let swipeCleanup = null; // 스와이프 제스처 클린업 함수
 let carouselSwipeCleanup = null; // 캐러셀 스와이프 클린업 함수
 
 /**
@@ -42,10 +40,6 @@ export function getCurrentArtworkId() {
 export async function openArtworkDetail(artworkId, showComments = false, feedPosts = []) {
     const modal = document.getElementById('artwork-detail-modal');
     if (!modal) return;
-    
-    // 현재 스크롤 위치 저장 (모달 열기 전)
-    savedScrollPosition = historyManager.getCurrentScrollPosition();
-    console.log('모달 열기 전 스크롤 위치 저장:', savedScrollPosition);
     
     // 피드의 모든 비디오 일시정지
     pauseAllFeedVideos();
@@ -274,48 +268,43 @@ export async function openArtworkDetail(artworkId, showComments = false, feedPos
             await window.loadArtworkComments(artworkId, showComments);
         }
         
+        // ⭐ 중요: 모달 표시 전에 스크롤 위치 저장
+        let savedScrollPosition = 0;
+        if (!historyManager.isRestoringState()) {
+            savedScrollPosition = historyManager.getCurrentScrollPosition();
+            console.log('모달 열기 전 스크롤 위치 저장:', savedScrollPosition);
+        }
+        
         // 모달 표시
         modal.style.display = 'flex';
-        document.body.classList.add('modal-open');
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
         
-        // 히스토리 추가 (모달 열기 전 스크롤 위치를 히스토리에 저장)
+        // 히스토리 추가 (모달 열기 전에 저장한 스크롤 위치 사용)
         if (!historyManager.isRestoringState()) {
             // 게시물 타입 확인
             const postType = artwork.post_type || 'gallery';
             // 모달 상태를 히스토리에 추가 (이전 스크롤 위치 포함)
             historyManager.pushArtworkDetailState(artworkId, postType, savedScrollPosition);
-            console.log('히스토리 추가 - artworkId:', artworkId, 'postType:', postType, 'savedScrollPosition:', savedScrollPosition);
+            console.log('히스토리 추가 - artworkId:', artworkId, 'postType:', postType, 'scrollPosition:', savedScrollPosition);
         }
         
         // ESC 키로 모달 닫기
         document.addEventListener('keydown', handleArtworkModalEscape);
         
-        // 모바일 터치 제스처 추가
-        if (window.innerWidth <= 968) {
-            // 스와이프 다운으로 모달 닫기 기능 제거됨 (사용자 요청)
-            // const modalContent = document.querySelector('.artwork-modal-content');
-            // if (modalContent) {
-            //     swipeCleanup = addSwipeToCloseGesture(modalContent, closeArtworkDetail, {
-            //         threshold: 100,
-            //         velocityThreshold: 0.3
-            //     });
-            // }
-            
-            // 캐러셀 스와이프 제스처
-            if (currentArtworkImages.length > 1) {
-                const carouselContent = document.getElementById('artwork-carousel-content');
-                if (carouselContent) {
-                    carouselSwipeCleanup = addCarouselSwipeGesture(
-                        carouselContent,
-                        () => nextArtworkImage(), // 왼쪽 스와이프 = 다음
-                        () => prevArtworkImage(), // 오른쪽 스와이프 = 이전
-                        {
-                            threshold: 50,
-                            velocityThreshold: 0.3
-                        }
-                    );
-                }
+        // 모바일 캐러셀 스와이프 제스처
+        if (window.innerWidth <= 968 && currentArtworkImages.length > 1) {
+            const carouselContent = document.getElementById('artwork-carousel-content');
+            if (carouselContent) {
+                carouselSwipeCleanup = addCarouselSwipeGesture(
+                    carouselContent,
+                    () => nextArtworkImage(), // 왼쪽 스와이프 = 다음
+                    () => prevArtworkImage(), // 오른쪽 스와이프 = 이전
+                    {
+                        threshold: 50,
+                        velocityThreshold: 0.3
+                    }
+                );
             }
         }
         
@@ -344,11 +333,7 @@ export function closeArtworkDetail() {
     const modal = document.getElementById('artwork-detail-modal');
     if (!modal) return;
     
-    // 터치 제스처 클린업
-    if (swipeCleanup) {
-        swipeCleanup();
-        swipeCleanup = null;
-    }
+    // 캐러셀 터치 제스처 클린업
     if (carouselSwipeCleanup) {
         carouselSwipeCleanup();
         carouselSwipeCleanup = null;
@@ -362,7 +347,7 @@ export function closeArtworkDetail() {
     
     modal.style.display = 'none';
     document.body.classList.remove('modal-open');
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
     
     document.removeEventListener('keydown', handleArtworkModalEscape);
     
@@ -370,30 +355,22 @@ export function closeArtworkDetail() {
     currentArtworkImages = [];
     currentArtworkImageIndex = 0;
     
-    // 뒤로 가기 실행 (히스토리 복원 중이 아닐 때만)
     // X 버튼이나 ESC 키로 닫을 때만 뒤로가기 실행
-    // 뒤로가기 버튼으로 닫을 때는 historyManager가 스크롤 복원을 처리
+    // 뒤로가기 버튼으로 닫을 때는 historyManager가 이미 처리했으므로 goBack() 호출 안 함
     if (!historyManager.isRestoringState()) {
-        console.log('X 버튼으로 모달 닫기 - 스크롤 위치 복원:', savedScrollPosition);
-        // X 버튼으로 닫을 때는 직접 스크롤 복원 (뒤로가기 없이)
-        historyManager.restoreScrollPosition(savedScrollPosition);
-        // 히스토리에서 모달 상태 제거
+        console.log('[closeArtworkDetail] X 버튼/ESC로 닫기 - 히스토리 뒤로가기 실행');
         historyManager.goBack();
     } else {
-        console.log('뒤로가기 버튼으로 모달 닫기 - historyManager가 스크롤 복원 처리');
+        console.log('[closeArtworkDetail] 뒤로가기 버튼으로 닫기 - 히스토리 처리 완료됨');
     }
 }
 
 /**
- * 저장된 스크롤 위치로 복원 (deprecated - historyManager가 처리)
- * 하위 호환성을 위해 유지
+ * 저장된 스크롤 위치로 복원 (deprecated - 제거 예정)
+ * @deprecated historyManager가 자동으로 처리합니다
  */
 function restoreScrollPosition() {
-    console.log('[deprecated] restoreScrollPosition 호출 - historyManager 사용 권장');
-    // historyManager의 restoreScrollPosition 사용
-    if (historyManager && historyManager.restoreScrollPosition) {
-        historyManager.restoreScrollPosition(savedScrollPosition);
-    }
+    console.warn('[DEPRECATED] restoreScrollPosition 호출 - historyManager가 자동 처리합니다');
 }
 
 /**

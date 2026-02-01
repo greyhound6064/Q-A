@@ -128,6 +128,7 @@ export function openProfileEditModal() {
     
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
     
     // 히스토리 추가
     if (!historyManager.isRestoringState()) {
@@ -144,7 +145,8 @@ export function closeProfileEditModal() {
     if (!modal) return;
     
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     
     // 이벤트 리스너 제거
     document.removeEventListener('keydown', handleModalEscape);
@@ -662,6 +664,7 @@ export async function openFollowersModal() {
         
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
         
         // 히스토리 추가
         if (!historyManager.isRestoringState()) {
@@ -734,6 +737,7 @@ export async function openFollowingModal() {
         
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
         
         // 히스토리 추가
         if (!historyManager.isRestoringState()) {
@@ -797,7 +801,8 @@ export function closeFollowersModal() {
     if (!modal) return;
     
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     
     // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
     if (!historyManager.isRestoringState()) {
@@ -811,7 +816,8 @@ export function closeFollowingModal() {
     if (!modal) return;
     
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     
     // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
     if (!historyManager.isRestoringState()) {
@@ -1448,6 +1454,7 @@ window.openCustomStatusModal = function() {
     
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
 };
 
 // 커스텀 상태 모달 닫기
@@ -1456,7 +1463,8 @@ window.closeCustomStatusModal = function() {
     if (!modal) return;
     
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
 };
 
 // 이모지 선택
