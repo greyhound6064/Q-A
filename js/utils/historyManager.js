@@ -12,6 +12,7 @@
 class HistoryManager {
     constructor() {
         this.isRestoring = false; // 상태 복원 중 플래그
+        this._lastPostDetailScrollPosition = undefined; // 게시물 상세 모달 닫을 때 복원할 스크롤 (popstate 시 post-detail state 접근 불가 대비)
         this.init();
     }
 
@@ -73,41 +74,35 @@ class HistoryManager {
 
     /**
      * 탭 복원 (모든 모달 닫고 탭 전환)
+     * 주의: 게시물 상세 모달에서 뒤로갈 때 popstate에는 탭 state만 전달됨.
+     * post-detail의 previousScrollPosition은 접근 불가하므로 _lastPostDetailScrollPosition 사용.
      */
     restoreTab(state) {
+        const fromPostDetail = this._lastPostDetailScrollPosition !== undefined;
+        
         // 모든 모달 닫기 (히스토리 없이)
         this.closeAllModals();
         
-        // 탭 전환
-        if (window.switchToTab) {
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
+        
+        // 탭 전환 (게시물 상세→보드 복귀 시 생략 - initBoard 리로드가 스크롤 초기화하므로)
+        const skipTabSwitch = fromPostDetail && (state.tab === 'board' || state.tab === 'gallery' || state.tab === 'feed');
+        if (!skipTabSwitch && window.switchToTab) {
             window.switchToTab(state.tab);
         }
         
-        // 스크롤 위치 복원
-        if (state.scrollPosition !== undefined) {
-            requestAnimationFrame(() => {
-                const contentArea = document.querySelector('.content-area');
-                const boardContainer = document.querySelector('.board-container');
-                
-                if (contentArea) {
-                    contentArea.scrollTop = state.scrollPosition;
-                } else if (boardContainer) {
-                    boardContainer.scrollTop = state.scrollPosition;
-                } else {
-                    window.scrollTo(0, state.scrollPosition);
-                }
-                
-                // 추가 안전장치
-                setTimeout(() => {
-                    if (contentArea) {
-                        contentArea.scrollTop = state.scrollPosition;
-                    } else if (boardContainer) {
-                        boardContainer.scrollTop = state.scrollPosition;
-                    } else {
-                        window.scrollTo(0, state.scrollPosition);
-                    }
-                }, 50);
-            });
+        // 스크롤 위치 복원: 게시물 상세에서 돌아온 경우 우선 적용
+        const scrollToRestore = fromPostDetail
+            ? this._lastPostDetailScrollPosition
+            : state.scrollPosition;
+        
+        if (fromPostDetail) {
+            this._lastPostDetailScrollPosition = undefined;
+        }
+        
+        if (scrollToRestore !== undefined && scrollToRestore !== null) {
+            this.restoreScrollPosition(scrollToRestore);
         }
     }
 
@@ -280,6 +275,11 @@ class HistoryManager {
      * 모든 모달 닫기
      */
     closeAllModals() {
+        const detailModal = document.getElementById('artwork-detail-modal');
+        if (detailModal && detailModal.style.display !== 'none') {
+            const detailVideo = document.getElementById('artwork-detail-video');
+            if (detailVideo && !detailVideo.paused) detailVideo.pause();
+        }
         const modals = document.querySelectorAll('.modal');
         modals.forEach(modal => {
             modal.style.display = 'none';
@@ -362,6 +362,7 @@ class HistoryManager {
     pushArtworkDetailState(artworkId, postType = 'gallery', previousScrollPosition = 0) {
         if (this.isRestoring) return;
         
+        this._lastPostDetailScrollPosition = previousScrollPosition;
         console.log('pushArtworkDetailState - 이전 스크롤 위치 저장:', previousScrollPosition);
         
         history.pushState(

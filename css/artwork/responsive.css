@@ -45,16 +45,26 @@
 
 /* ========== 반응형: 모달 (모바일 - 최적화된 UX) ========== */
 @media (max-width: 968px) {
-    /* 모달 전체 화면 */
+    /* 모달 전체 화면 - 100dvh: 주소창 노출 시 실제 보이는 영역 기준 (윗부분 잘림 방지) */
     .artwork-modal {
         padding: 0;
         background: rgba(0, 0, 0, 1) !important; /* 완전한 검은 배경 */
+        /* 동적 뷰포트: 주소창 있음/없음에 따라 자동 조정 */
+        height: 100vh; /* 폴백 */
+        height: 100dvh;
+        min-height: -webkit-fill-available; /* 구형 iOS Safari 폴백 */
+        min-height: 100dvh;
+        align-items: stretch;
+        justify-content: stretch;
     }
     
     .artwork-modal-content {
         width: 100%;
-        height: 100vh;
-        max-height: 100vh;
+        height: 100vh; /* 폴백 */
+        height: 100dvh;
+        max-height: 100dvh;
+        min-height: -webkit-fill-available;
+        min-height: 100dvh;
         max-width: 100%;
         border-radius: 0;
     }
@@ -70,10 +80,11 @@
         height: 100%;
     }
     
-    /* 미디어 섹션 - 스와이프 가능한 영역 */
+    /* 미디어 섹션 - 스와이프 가능한 영역 (dvh: 주소창 고려) */
     .artwork-image-section {
         flex: 0 0 auto;
-        max-height: 45vh; /* 화면의 45% */
+        max-height: 45vh; /* 폴백 */
+        max-height: 45dvh;
         min-height: 280px;
         position: relative;
         /* 터치 스크롤 최적화 */
@@ -156,9 +167,10 @@
 
 /* ========== 모바일 세로 모드 최적화 ========== */
 @media (max-width: 768px) and (orientation: portrait) {
-    /* 미디어 영역 더 작게 */
+    /* 미디어 영역 더 작게 (dvh: 주소창 고려) */
     .artwork-image-section {
-        max-height: 40vh;
+        max-height: 40vh; /* 폴백 */
+        max-height: 40dvh;
         min-height: 240px;
     }
     
@@ -171,10 +183,12 @@
 
 /* ========== 모바일 가로 모드 최적화 ========== */
 @media (max-width: 968px) and (orientation: landscape) {
-    /* 미디어 영역 더 크게 */
+    /* 미디어 영역 더 크게 (dvh: 주소창 고려) */
     .artwork-image-section {
-        max-height: 70vh;
-        min-height: 60vh;
+        max-height: 70vh; /* 폴백 */
+        max-height: 70dvh;
+        min-height: 60vh; /* 폴백 */
+        min-height: 60dvh;
     }
     
     /* 정보 섹션 작게 */
@@ -192,9 +206,10 @@
 
 /* ========== 소형 모바일 (480px 이하) ========== */
 @media (max-width: 480px) {
-    /* 미디어 섹션 */
+    /* 미디어 섹션 (dvh: 주소창 고려) */
     .artwork-image-section {
-        max-height: 35vh;
+        max-height: 35vh; /* 폴백 */
+        max-height: 35dvh;
         min-height: 200px;
     }
     
@@ -248,10 +263,11 @@
         scroll-margin-bottom: 20px;
     }
     
-    /* 입력 중일 때 미디어 섹션 축소 */
+    /* 입력 중일 때 미디어 섹션 축소 (dvh: 주소창 고려) */
     .artwork-modal-content:has(.artwork-comment-input:focus) .artwork-image-section,
     .feed-detail-content:has(.feed-detail-comment-textarea:focus) .feed-detail-media-section {
-        max-height: 30vh;
+        max-height: 30vh; /* 폴백 */
+        max-height: 30dvh;
         min-height: 150px;
         transition: max-height 0.3s ease, min-height 0.3s ease;
     }
