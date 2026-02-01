@@ -5,6 +5,11 @@
  * - 인스타그램 스타일 카드 디자인
  */
 
+/* ========== 게시판 탭 전용 레이아웃 조정 ========== */
+.content-area:has(#board-tab-content.active) {
+    padding-top: 0rem;
+}
+
 /* ========== 게시판 컨테이너 ========== */
 .board-container {
     max-width: 600px;
@@ -109,8 +114,8 @@
 /* ========== 게시판 타입 전환 버튼 (서브탭) ========== */
 .board-type-switcher {
     display: flex;
-    gap: 8px;
-    padding: 16px 0;
+    gap: 20px;
+    padding:25px;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border);
 }
@@ -319,6 +324,7 @@
     overflow: hidden;
     cursor: pointer;
     z-index: 2;
+    touch-action: pan-x; /* 모바일에서 가로 스크롤만 허용 */
 }
 
 .board-item-image img {
@@ -468,17 +474,20 @@
     position: relative;
     width: 100%;
     overflow: hidden;
+    touch-action: pan-x; /* 가로 스크롤만 허용 */
 }
 
 .board-images-scroll-container {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden; /* 세로 스크롤 완전 차단 */
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     gap: 0;
+    touch-action: pan-x; /* 가로 스크롤만 허용 */
 }
 
 .board-images-scroll-container::-webkit-scrollbar {
@@ -492,6 +501,7 @@
     scroll-snap-align: start;
     position: relative;
     background: var(--bg);
+    touch-action: pan-x; /* 가로 스크롤만 허용 */
 }
 
 .board-scroll-image img {
@@ -500,6 +510,8 @@
     object-fit: cover;
     user-select: none;
     -webkit-user-drag: none;
+    pointer-events: none; /* 이미지 자체의 드래그 방지 */
+    touch-action: none; /* 이미지에서 터치 동작 차단 */
 }
 
 .board-scroll-page-indicator {

@@ -385,7 +385,7 @@ async function loadConversations() {
             return `
             <div class="conversation-item ${conv.unread ? 'unread' : ''} ${window._messageState.currentConversationUserId === conv.userId ? 'active' : ''}" 
                  onclick="selectConversation('${conv.userId}', '${safeNickname}', '${safeAvatarUrl}', this)">
-                <div class="conversation-avatar">
+                <div class="conversation-avatar" onclick="event.stopPropagation(); if(window.selectUserById) window.selectUserById('${conv.userId}');">
                     ${conv.avatarUrl 
                         ? `<img src="${conv.avatarUrl}" alt="${safeNickname}">` 
                         : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

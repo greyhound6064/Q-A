@@ -170,6 +170,13 @@ body.dark-mode .conversation-item.unread {
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.conversation-avatar:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
 }
 
 .conversation-avatar img {
@@ -205,7 +212,8 @@ body.dark-mode .conversation-item.unread {
     color: var(--text);
     transition: color 0.2s;
     cursor: pointer;
-    flex: 1;
+    display: inline-block;
+    max-width: fit-content;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

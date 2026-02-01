@@ -30,6 +30,18 @@ window._boardState = {
 // ========== 게시판 초기화 ==========
 export async function initBoard() {
     // 기본값: 작품 게시판
+    window._boardState.currentBoardType = 'gallery';
+    
+    // 서브탭 UI 업데이트 (작품 게시판을 활성화)
+    const buttons = document.querySelectorAll('.board-type-btn');
+    buttons.forEach(btn => {
+        if (btn.dataset.boardType === 'gallery') {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
     const posts = await loadBoardPosts('gallery');
     if (posts) {
         window._boardState.allPosts = posts;
@@ -117,10 +129,14 @@ function updateBoardTypeSwitchButton(type) {
             switchBtnMobile.title = '자유 게시판으로 전환';
         }
     } else {
-        // 자유 게시판 아이콘
+        // 자유 게시판 아이콘 (문서 아이콘)
         const feedIcon = `
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
         `;
         if (switchBtnDesktop) {
@@ -599,6 +615,25 @@ function setupBoardScrollObservers() {
                 pageIndicator.textContent = `${currentIndex + 1}/${totalImages}`;
             }, 50);
         });
+        
+        // 모바일에서 세로 스크롤 방지
+        let startY = 0;
+        let startX = 0;
+        
+        container.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].pageY;
+            startX = e.touches[0].pageX;
+        }, { passive: true });
+        
+        container.addEventListener('touchmove', (e) => {
+            const deltaY = Math.abs(e.touches[0].pageY - startY);
+            const deltaX = Math.abs(e.touches[0].pageX - startX);
+            
+            // 가로 스크롤이 세로 스크롤보다 크면 세로 스크롤 방지
+            if (deltaX > deltaY) {
+                e.stopPropagation();
+            }
+        }, { passive: false });
     });
 }
 

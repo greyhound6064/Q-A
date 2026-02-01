@@ -296,7 +296,7 @@ body.dark-mode .music-volume-control {
     position: absolute;
     left: 0;
     top: 0;
-    width: 200px;
+    width: 160px;
     height: 100%;
     background: transparent;
     border-radius: 0.5rem;
@@ -382,7 +382,7 @@ body.dark-mode .music-volume-control {
 }
 
 .tab-button.active:hover::after {
-    width: 200px;
+    width: 160px;
     background: var(--primary-hover);
 }
 
