@@ -293,14 +293,14 @@ export async function openArtworkDetail(artworkId, showComments = false, feedPos
         
         // 모바일 터치 제스처 추가
         if (window.innerWidth <= 968) {
-            const modalContent = document.querySelector('.artwork-modal-content');
-            if (modalContent) {
-                // 스와이프 다운으로 모달 닫기
-                swipeCleanup = addSwipeToCloseGesture(modalContent, closeArtworkDetail, {
-                    threshold: 100,
-                    velocityThreshold: 0.3
-                });
-            }
+            // 스와이프 다운으로 모달 닫기 기능 제거됨 (사용자 요청)
+            // const modalContent = document.querySelector('.artwork-modal-content');
+            // if (modalContent) {
+            //     swipeCleanup = addSwipeToCloseGesture(modalContent, closeArtworkDetail, {
+            //         threshold: 100,
+            //         velocityThreshold: 0.3
+            //     });
+            // }
             
             // 캐러셀 스와이프 제스처
             if (currentArtworkImages.length > 1) {
@@ -374,8 +374,10 @@ export function closeArtworkDetail() {
     // X 버튼이나 ESC 키로 닫을 때만 뒤로가기 실행
     // 뒤로가기 버튼으로 닫을 때는 historyManager가 스크롤 복원을 처리
     if (!historyManager.isRestoringState()) {
-        console.log('X 버튼으로 모달 닫기 - 뒤로가기 실행');
-        // 뒤로가기를 실행하면 historyManager가 스크롤 위치를 복원함
+        console.log('X 버튼으로 모달 닫기 - 스크롤 위치 복원:', savedScrollPosition);
+        // X 버튼으로 닫을 때는 직접 스크롤 복원 (뒤로가기 없이)
+        historyManager.restoreScrollPosition(savedScrollPosition);
+        // 히스토리에서 모달 상태 제거
         historyManager.goBack();
     } else {
         console.log('뒤로가기 버튼으로 모달 닫기 - historyManager가 스크롤 복원 처리');

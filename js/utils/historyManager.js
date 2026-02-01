@@ -187,6 +187,8 @@ class HistoryManager {
      * 통합 게시물 상세화면 닫기 및 이전 상태 복원 (뒤로가기 시)
      */
     closePostDetailAndRestore(currentState) {
+        console.log('[closePostDetailAndRestore] 시작 - currentState:', currentState);
+        
         // 통합 모달 닫기 (artwork-detail-modal만 사용)
         const modal = document.getElementById('artwork-detail-modal');
         if (modal && modal.style.display !== 'none') {
@@ -202,7 +204,7 @@ class HistoryManager {
         
         // 이전 상태(모달 열기 전 상태)의 스크롤 위치 복원
         const scrollPosition = currentState?.previousScrollPosition || 0;
-        console.log('뒤로가기 - 이전 스크롤 위치 복원:', scrollPosition, 'currentState:', currentState);
+        console.log('[closePostDetailAndRestore] 복원할 스크롤 위치:', scrollPosition);
         
         // 스크롤 위치 복원
         this.restoreScrollPosition(scrollPosition);
@@ -212,32 +214,84 @@ class HistoryManager {
      * 스크롤 위치 복원 헬퍼 함수
      */
     restoreScrollPosition(scrollPosition) {
-        requestAnimationFrame(() => {
+        console.log('[restoreScrollPosition] 복원 시작 - 목표 위치:', scrollPosition);
+        
+        if (scrollPosition === 0) {
+            console.log('[restoreScrollPosition] 목표 위치가 0이므로 복원 불필요');
+            return;
+        }
+        
+        // 스크롤 복원 함수
+        const performRestore = () => {
             const contentArea = document.querySelector('.content-area');
             const boardContainer = document.querySelector('.board-container');
             
+            let currentScroll = 0;
+            let target = null;
+            
             if (contentArea) {
                 contentArea.scrollTop = scrollPosition;
-                console.log('contentArea 스크롤 복원:', scrollPosition);
+                currentScroll = contentArea.scrollTop;
+                target = 'contentArea';
             } else if (boardContainer) {
                 boardContainer.scrollTop = scrollPosition;
-                console.log('boardContainer 스크롤 복원:', scrollPosition);
+                currentScroll = boardContainer.scrollTop;
+                target = 'boardContainer';
             } else {
                 window.scrollTo(0, scrollPosition);
-                console.log('window 스크롤 복원:', scrollPosition);
+                currentScroll = window.scrollY || window.pageYOffset;
+                target = 'window';
             }
             
-            // 추가 안전장치 - 더 긴 지연으로 확실하게 복원
+            const success = Math.abs(currentScroll - scrollPosition) < 10; // 10px 오차 허용
+            console.log(`[restoreScrollPosition] ${target} 복원 시도 - 목표: ${scrollPosition}, 현재: ${currentScroll}, 성공: ${success}`);
+            
+            return { target, currentScroll, success };
+        };
+        
+        // 첫 번째 시도 (즉시)
+        let result = performRestore();
+        
+        // 성공하면 종료
+        if (result.success) {
+            console.log('[restoreScrollPosition] 즉시 복원 성공');
+            return;
+        }
+        
+        // 두 번째 시도 (다음 프레임)
+        requestAnimationFrame(() => {
+            result = performRestore();
+            
+            if (result.success) {
+                console.log('[restoreScrollPosition] 1프레임 후 복원 성공');
+                return;
+            }
+            
+            // 세 번째 시도 (50ms 후)
             setTimeout(() => {
-                if (contentArea) {
-                    contentArea.scrollTop = scrollPosition;
-                } else if (boardContainer) {
-                    boardContainer.scrollTop = scrollPosition;
-                } else {
-                    window.scrollTo(0, scrollPosition);
+                result = performRestore();
+                
+                if (result.success) {
+                    console.log('[restoreScrollPosition] 50ms 후 복원 성공');
+                    return;
                 }
-                console.log('스크롤 복원 재시도 완료');
-            }, 150);
+                
+                // 네 번째 시도 (100ms 후)
+                setTimeout(() => {
+                    result = performRestore();
+                    
+                    if (result.success) {
+                        console.log('[restoreScrollPosition] 100ms 후 복원 성공');
+                        return;
+                    }
+                    
+                    // 다섯 번째 시도 (200ms 후 - 최종)
+                    setTimeout(() => {
+                        result = performRestore();
+                        console.log(`[restoreScrollPosition] 최종 복원 완료 (${result.target}) - 목표: ${scrollPosition}, 최종: ${result.currentScroll}`);
+                    }, 200);
+                }, 100);
+            }, 50);
         });
     }
     
@@ -379,13 +433,22 @@ class HistoryManager {
         const contentArea = document.querySelector('.content-area');
         const boardContainer = document.querySelector('.board-container');
         
+        let scrollPos = 0;
+        let source = 'none';
+        
         if (contentArea) {
-            return contentArea.scrollTop;
+            scrollPos = contentArea.scrollTop;
+            source = 'contentArea';
         } else if (boardContainer) {
-            return boardContainer.scrollTop;
+            scrollPos = boardContainer.scrollTop;
+            source = 'boardContainer';
         } else {
-            return window.scrollY || window.pageYOffset;
+            scrollPos = window.scrollY || window.pageYOffset;
+            source = 'window';
         }
+        
+        console.log(`[getCurrentScrollPosition] ${source}에서 스크롤 위치 가져옴:`, scrollPos);
+        return scrollPos;
     }
 
     /**
