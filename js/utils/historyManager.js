@@ -62,8 +62,8 @@ class HistoryManager {
             case 'artwork-detail':
             case 'feed-detail':
             case 'post-detail':
-                // 뒤로가기 시 상세화면 닫기만 처리 (통합)
-                this.closePostDetailOnly(state);
+                // 뒤로가기 시 상세화면 닫기 및 이전 상태 복원
+                this.closePostDetailAndRestore(state);
                 break;
             default:
                 console.warn('Unknown history state type:', state.type);
@@ -184,9 +184,9 @@ class HistoryManager {
     }
 
     /**
-     * 통합 게시물 상세화면 닫기 (뒤로가기 시)
+     * 통합 게시물 상세화면 닫기 및 이전 상태 복원 (뒤로가기 시)
      */
-    closePostDetailOnly(previousState) {
+    closePostDetailAndRestore(currentState) {
         // 통합 모달 닫기 (artwork-detail-modal만 사용)
         const modal = document.getElementById('artwork-detail-modal');
         if (modal && modal.style.display !== 'none') {
@@ -195,27 +195,39 @@ class HistoryManager {
                 detailVideo.pause();
             }
             modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
         }
         
         document.body.style.overflow = 'auto';
         
+        // 이전 상태(모달 열기 전 상태)의 스크롤 위치 복원
+        const scrollPosition = currentState?.previousScrollPosition || 0;
+        console.log('뒤로가기 - 이전 스크롤 위치 복원:', scrollPosition, 'currentState:', currentState);
+        
         // 스크롤 위치 복원
+        this.restoreScrollPosition(scrollPosition);
+    }
+    
+    /**
+     * 스크롤 위치 복원 헬퍼 함수
+     */
+    restoreScrollPosition(scrollPosition) {
         requestAnimationFrame(() => {
-            const scrollPosition = previousState?.scrollPosition || 0;
-            console.log('뒤로가기 - 스크롤 위치 복원:', scrollPosition, previousState);
-            
             const contentArea = document.querySelector('.content-area');
             const boardContainer = document.querySelector('.board-container');
             
             if (contentArea) {
                 contentArea.scrollTop = scrollPosition;
+                console.log('contentArea 스크롤 복원:', scrollPosition);
             } else if (boardContainer) {
                 boardContainer.scrollTop = scrollPosition;
+                console.log('boardContainer 스크롤 복원:', scrollPosition);
             } else {
                 window.scrollTo(0, scrollPosition);
+                console.log('window 스크롤 복원:', scrollPosition);
             }
             
-            // 추가 안전장치
+            // 추가 안전장치 - 더 긴 지연으로 확실하게 복원
             setTimeout(() => {
                 if (contentArea) {
                     contentArea.scrollTop = scrollPosition;
@@ -224,19 +236,24 @@ class HistoryManager {
                 } else {
                     window.scrollTo(0, scrollPosition);
                 }
-            }, 100);
+                console.log('스크롤 복원 재시도 완료');
+            }, 150);
         });
     }
     
     /**
-     * 하위 호환성을 위한 별칭
+     * 하위 호환성을 위한 별칭 (deprecated)
      */
+    closePostDetailOnly(previousState) {
+        this.closePostDetailAndRestore(previousState);
+    }
+    
     closeArtworkDetailOnly(previousState) {
-        this.closePostDetailOnly(previousState);
+        this.closePostDetailAndRestore(previousState);
     }
     
     closeFeedDetailOnly(previousState) {
-        this.closePostDetailOnly(previousState);
+        this.closePostDetailAndRestore(previousState);
     }
 
     /**
@@ -317,29 +334,21 @@ class HistoryManager {
 
     /**
      * 작품 상세 열기 시 히스토리 추가 (통합)
+     * @param {string} artworkId - 게시물 ID
+     * @param {string} postType - 게시물 타입
+     * @param {number} previousScrollPosition - 모달 열기 전 스크롤 위치
      */
-    pushArtworkDetailState(artworkId, postType = 'gallery') {
+    pushArtworkDetailState(artworkId, postType = 'gallery', previousScrollPosition = 0) {
         if (this.isRestoring) return;
         
-        // 현재 스크롤 위치 저장
-        const contentArea = document.querySelector('.content-area');
-        const boardContainer = document.querySelector('.board-container');
-        let scrollPosition = 0;
-        
-        if (contentArea) {
-            scrollPosition = contentArea.scrollTop;
-        } else if (boardContainer) {
-            scrollPosition = boardContainer.scrollTop;
-        } else {
-            scrollPosition = window.scrollY || window.pageYOffset;
-        }
+        console.log('pushArtworkDetailState - 이전 스크롤 위치 저장:', previousScrollPosition);
         
         history.pushState(
             { 
                 type: 'post-detail',
                 postId: artworkId,
                 postType: postType,
-                scrollPosition: scrollPosition 
+                previousScrollPosition: previousScrollPosition  // 모달 열기 전 위치 저장
             },
             '',
             `#post/${artworkId}`
@@ -349,18 +358,34 @@ class HistoryManager {
     /**
      * 피드 상세 열기 시 히스토리 추가 (통합)
      */
-    pushFeedDetailState(postId, postType = 'feed') {
+    pushFeedDetailState(postId, postType = 'feed', previousScrollPosition = 0) {
         if (this.isRestoring) return;
         
         // pushArtworkDetailState와 통합
-        this.pushArtworkDetailState(postId, postType);
+        this.pushArtworkDetailState(postId, postType, previousScrollPosition);
     }
     
     /**
      * 게시물 상세 열기 시 히스토리 추가 (통합 함수)
      */
-    pushPostDetailState(postId, postType = 'gallery') {
-        this.pushArtworkDetailState(postId, postType);
+    pushPostDetailState(postId, postType = 'gallery', previousScrollPosition = 0) {
+        this.pushArtworkDetailState(postId, postType, previousScrollPosition);
+    }
+    
+    /**
+     * 현재 스크롤 위치 가져오기
+     */
+    getCurrentScrollPosition() {
+        const contentArea = document.querySelector('.content-area');
+        const boardContainer = document.querySelector('.board-container');
+        
+        if (contentArea) {
+            return contentArea.scrollTop;
+        } else if (boardContainer) {
+            return boardContainer.scrollTop;
+        } else {
+            return window.scrollY || window.pageYOffset;
+        }
     }
 
     /**
@@ -371,15 +396,17 @@ class HistoryManager {
     }
 
     /**
-     * 현재 히스토리 상태에 스크롤 위치 업데이트
+     * 현재 히스토리 상태에 스크롤 위치 업데이트 (deprecated)
+     * 이제 pushArtworkDetailState에서 previousScrollPosition으로 처리
      */
     updateCurrentStateScrollPosition(scrollPosition) {
+        console.log('[deprecated] updateCurrentStateScrollPosition - pushArtworkDetailState의 previousScrollPosition 사용 권장');
         if (this.isRestoring) return;
         
         const currentState = history.state;
         if (currentState) {
             history.replaceState(
-                { ...currentState, scrollPosition: scrollPosition },
+                { ...currentState, previousScrollPosition: scrollPosition },
                 '',
                 window.location.hash
             );

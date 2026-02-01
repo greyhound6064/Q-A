@@ -68,6 +68,21 @@ body {
     display: flex;
 }
 
+/* 모달이 열렸을 때 배경 스크롤 완전 차단 */
+body.modal-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+body.modal-open .content-area,
+body.modal-open .board-container,
+body.modal-open .board-list {
+    overflow: hidden !important;
+    touch-action: none;
+}
+
 h1 {
     text-align: center;
     color: var(--text);

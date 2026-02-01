@@ -19,6 +19,8 @@
     overscroll-behavior: contain;
     /* 모달 페이드 인 애니메이션 */
     animation: fadeIn 0.2s ease-out;
+    /* 배경 스크롤 차단 */
+    touch-action: none;
 }
 
 @keyframes fadeIn {

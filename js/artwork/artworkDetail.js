@@ -43,18 +43,9 @@ export async function openArtworkDetail(artworkId, showComments = false, feedPos
     const modal = document.getElementById('artwork-detail-modal');
     if (!modal) return;
     
-    // 현재 스크롤 위치 저장
-    const contentArea = document.querySelector('.content-area');
-    const boardContainer = document.querySelector('.board-container');
-    if (contentArea) {
-        savedScrollPosition = contentArea.scrollTop;
-    } else if (boardContainer) {
-        savedScrollPosition = boardContainer.scrollTop;
-    } else {
-        savedScrollPosition = window.scrollY || window.pageYOffset;
-    }
-    
-    console.log('스크롤 위치 저장:', savedScrollPosition);
+    // 현재 스크롤 위치 저장 (모달 열기 전)
+    savedScrollPosition = historyManager.getCurrentScrollPosition();
+    console.log('모달 열기 전 스크롤 위치 저장:', savedScrollPosition);
     
     // 피드의 모든 비디오 일시정지
     pauseAllFeedVideos();
@@ -285,14 +276,16 @@ export async function openArtworkDetail(artworkId, showComments = false, feedPos
         
         // 모달 표시
         modal.style.display = 'flex';
+        document.body.classList.add('modal-open');
         document.body.style.overflow = 'hidden';
         
-        // 히스토리 추가 (현재 상태에 스크롤 위치 저장)
+        // 히스토리 추가 (모달 열기 전 스크롤 위치를 히스토리에 저장)
         if (!historyManager.isRestoringState()) {
-            // 현재 히스토리 상태에 스크롤 위치 저장
-            historyManager.updateCurrentStateScrollPosition(savedScrollPosition);
-            // 새로운 상태 추가
-            historyManager.pushArtworkDetailState(artworkId);
+            // 게시물 타입 확인
+            const postType = artwork.post_type || 'gallery';
+            // 모달 상태를 히스토리에 추가 (이전 스크롤 위치 포함)
+            historyManager.pushArtworkDetailState(artworkId, postType, savedScrollPosition);
+            console.log('히스토리 추가 - artworkId:', artworkId, 'postType:', postType, 'savedScrollPosition:', savedScrollPosition);
         }
         
         // ESC 키로 모달 닫기
@@ -368,6 +361,7 @@ export function closeArtworkDetail() {
     }
     
     modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
     document.body.style.overflow = 'auto';
     
     document.removeEventListener('keydown', handleArtworkModalEscape);
@@ -376,53 +370,29 @@ export function closeArtworkDetail() {
     currentArtworkImages = [];
     currentArtworkImageIndex = 0;
     
-    // 저장된 스크롤 위치로 복원
-    restoreScrollPosition();
-    
     // 뒤로 가기 실행 (히스토리 복원 중이 아닐 때만)
-    // X 버튼 클릭 시에만 뒤로가기 실행
+    // X 버튼이나 ESC 키로 닫을 때만 뒤로가기 실행
+    // 뒤로가기 버튼으로 닫을 때는 historyManager가 스크롤 복원을 처리
     if (!historyManager.isRestoringState()) {
-        // 약간의 지연을 두고 뒤로가기 실행하여 모달이 완전히 닫힌 후 히스토리 이동
-        setTimeout(() => {
-            historyManager.goBack();
-        }, 50);
+        console.log('X 버튼으로 모달 닫기 - 뒤로가기 실행');
+        // 뒤로가기를 실행하면 historyManager가 스크롤 위치를 복원함
+        historyManager.goBack();
+    } else {
+        console.log('뒤로가기 버튼으로 모달 닫기 - historyManager가 스크롤 복원 처리');
     }
 }
 
 /**
- * 저장된 스크롤 위치로 복원
+ * 저장된 스크롤 위치로 복원 (deprecated - historyManager가 처리)
+ * 하위 호환성을 위해 유지
  */
 function restoreScrollPosition() {
-    console.log('스크롤 위치 복원:', savedScrollPosition);
-    
-    // 다음 프레임에서 스크롤 복원 (DOM 업데이트 후)
-    requestAnimationFrame(() => {
-        const contentArea = document.querySelector('.content-area');
-        const boardContainer = document.querySelector('.board-container');
-        
-        if (contentArea) {
-            contentArea.scrollTop = savedScrollPosition;
-        } else if (boardContainer) {
-            boardContainer.scrollTop = savedScrollPosition;
-        } else {
-            window.scrollTo(0, savedScrollPosition);
-        }
-        
-        // 추가 안전장치: 약간의 지연 후 다시 한 번 복원
-        setTimeout(() => {
-            if (contentArea) {
-                contentArea.scrollTop = savedScrollPosition;
-            } else if (boardContainer) {
-                boardContainer.scrollTop = savedScrollPosition;
-            } else {
-                window.scrollTo(0, savedScrollPosition);
-            }
-        }, 50);
-    });
+    console.log('[deprecated] restoreScrollPosition 호출 - historyManager 사용 권장');
+    // historyManager의 restoreScrollPosition 사용
+    if (historyManager && historyManager.restoreScrollPosition) {
+        historyManager.restoreScrollPosition(savedScrollPosition);
+    }
 }
-
-// 전역 함수로 노출 (historyManager에서 사용)
-window.restoreArtworkScrollPosition = restoreScrollPosition;
 
 /**
  * 작품 미디어 업데이트 (이미지, 비디오, 오디오)
