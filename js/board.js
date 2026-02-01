@@ -36,6 +36,9 @@ export async function initBoard() {
         window._boardState.filteredPosts = posts;
         await applyBoardSearchAndFilter(posts);
     }
+    
+    // 플로팅 버튼 아이콘 초기화
+    updateBoardTypeSwitchButton('gallery');
 }
 
 // ========== 게시판 타입 전환 ==========
@@ -52,12 +55,82 @@ export async function switchBoardType(type) {
         }
     });
     
+    // 플로팅 버튼 아이콘 업데이트
+    updateBoardTypeSwitchButton(type);
+    
     // 해당 타입의 게시물 로드
     const posts = await loadBoardPosts(type);
     if (posts) {
         window._boardState.allPosts = posts;
         window._boardState.filteredPosts = posts;
         await applyBoardSearchAndFilter(posts);
+    }
+}
+
+// ========== 플로팅 버튼으로 게시판 전환 ==========
+export async function toggleBoardTypeFromButton() {
+    // 현재 게시판 타입 확인
+    const currentType = window._boardState.currentBoardType;
+    const newType = currentType === 'gallery' ? 'feed' : 'gallery';
+    
+    // 게시판 전환
+    await switchBoardType(newType);
+    
+    // 화면 맨 위로 스크롤
+    const boardContainer = document.querySelector('.board-container');
+    if (boardContainer) {
+        boardContainer.scrollTop = 0;
+    }
+    
+    // content-area도 스크롤 초기화
+    const contentArea = document.querySelector('.content-area');
+    if (contentArea) {
+        contentArea.scrollTop = 0;
+    }
+    
+    // 전체 페이지 스크롤 초기화
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== 플로팅 버튼 아이콘 업데이트 ==========
+function updateBoardTypeSwitchButton(type) {
+    const switchBtnDesktop = document.getElementById('board-type-switch-btn');
+    const switchBtnMobile = document.querySelector('.floating-switch-btn');
+    
+    // 현재 게시판에 맞는 아이콘으로 변경 (현재 위치의 아이콘 표시)
+    if (type === 'gallery') {
+        // 작품 게시판 아이콘
+        const galleryIcon = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+        `;
+        if (switchBtnDesktop) {
+            switchBtnDesktop.innerHTML = galleryIcon;
+            switchBtnDesktop.title = '자유 게시판으로 전환';
+        }
+        if (switchBtnMobile) {
+            switchBtnMobile.innerHTML = galleryIcon;
+            switchBtnMobile.title = '자유 게시판으로 전환';
+        }
+    } else {
+        // 자유 게시판 아이콘
+        const feedIcon = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        `;
+        if (switchBtnDesktop) {
+            switchBtnDesktop.innerHTML = feedIcon;
+            switchBtnDesktop.title = '작품 게시판으로 전환';
+        }
+        if (switchBtnMobile) {
+            switchBtnMobile.innerHTML = feedIcon;
+            switchBtnMobile.title = '작품 게시판으로 전환';
+        }
     }
 }
 
@@ -808,6 +881,7 @@ export function nextBoardImage(postId, files) {
 // ========== 전역 함수 노출 ==========
 window.initBoard = initBoard;
 window.switchBoardType = switchBoardType;
+window.toggleBoardTypeFromButton = toggleBoardTypeFromButton;
 window.toggleBoardDescription = toggleBoardDescription;
 window.performBoardSearch = performBoardSearch;
 window.clearBoardSearch = clearBoardSearch;
