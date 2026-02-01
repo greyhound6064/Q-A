@@ -1,6 +1,6 @@
 # 프로젝트 아키텍처
 
-**버전:** 12.0.0 | **업데이트:** 2026-02-01
+**버전:** 12.1.0 | **업데이트:** 2026-02-01
 
 ---
 
@@ -10,6 +10,7 @@
 - 반응형: `css/responsive/` 컴포넌트별 파일 수정
 - 공통 카드 스타일: `shared-responsive.css` (중복 금지)
 - 새 컴포넌트: 새 파일 생성 → `responsive.css`에 import
+- 모바일 터치 최적화: `base.css`에 전역 터치 스타일 포함
 
 ### 템플릿/모달 작업
 1. `js/templates/shared/icons.js`, `components.js` 먼저 확인
@@ -61,7 +62,7 @@ createPostTypeSelector('name', 'onChangeFn()')
 │       ├── messages-responsive.css (656줄)
 │       ├── user-search-responsive.css, upload-responsive.css, welcome-responsive.css
 │
-├── js/ (43개)
+├── js/ (44개)
 │   ├── main.js, auth.js, tabs.js
 │   ├── board.js (통합 게시판) ⭐
 │   ├── darkMode.js, backgroundMusic.js
@@ -74,7 +75,7 @@ createPostTypeSelector('name', 'onChangeFn()')
 │   │   ├── commentService.js, likeService.js, tagService.js
 │   │   ├── followService.js, saveService.js, sortingService.js
 │   │   └── profileService.js (프로필 캐싱) ⭐
-│   ├── utils/ (4) - errorHandler, uiHelpers, historyManager, typeUtils
+│   ├── utils/ (5) - errorHandler, uiHelpers, historyManager, typeUtils, touchGestures ⭐
 │   ├── post/ (8) - core, detail, comments, carousel, sort, search, video, likes
 │   ├── artwork/ (3) - grid, detail, comments
 │   ├── profile.js, nicknameValidator.js, carousel.js
@@ -97,6 +98,22 @@ createPostTypeSelector('name', 'onChangeFn()')
 - 최적화: 배치 조회, 초기 30개, Intersection Observer
 - 함수: `initBoard()`, `switchBoardType()`, `loadBoardPosts()`, `renderBoardList()`
 - 공통 모듈: `js/post/*.js` (8개), `css/post/*.css` (6개)
+
+### 통합 상세보기 모달 ⭐ (완전 통합 완료 + 모바일 최적화)
+**파일:** `js/artwork/artworkDetail.js`, `js/post/postDetail.js`, `js/utils/touchGestures.js`
+- **단일 모달 사용**: `artwork-detail-modal` (모든 post_type 공통)
+- `openArtworkDetail()`: 모든 게시물 타입 처리 (gallery/feed 구분 없음)
+- `openFeedDetail()`: `openArtworkDetail()` 호출 (하위 호환성)
+- **UI 스타일**: 인스타그램 스타일 (좌우 레이아웃) - 모든 타입 동일
+- 스크롤 위치 복원: 모달 닫기 시 자동 복원
+- 히스토리 관리: 단일 `post-detail` 타입으로 통합
+- **모바일 UX 최적화** ⭐:
+  - 스와이프 다운으로 모달 닫기
+  - 캐러셀 좌우 스와이프 제스처
+  - 터치 피드백 애니메이션
+  - iOS 안전 영역 지원
+  - 키보드 올라올 때 레이아웃 자동 조정
+  - 부드러운 페이드/슬라이드 애니메이션
 
 ### 프로필 서비스 ⭐
 **파일:** `js/services/profileService.js`

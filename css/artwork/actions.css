@@ -75,3 +75,99 @@
     stroke: var(--success);
 }
 
+/* ========== 모바일 반응형 (액션 버튼) ========== */
+@media (max-width: 768px) {
+    /* 액션 버튼 */
+    .artwork-actions {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+    
+    .artwork-action-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+        /* 터치 영역 확대 */
+        min-height: 44px;
+        gap: 6px;
+    }
+    
+    .artwork-action-btn svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+    
+    /* 호버 효과 제거 (터치 디바이스) */
+    @media (hover: none) {
+        .artwork-action-btn:hover {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+        
+        .artwork-action-btn.like-btn:hover {
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        .artwork-action-btn.save-btn:hover {
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        /* 활성 상태는 유지 */
+        .artwork-action-btn.liked:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+        
+        .artwork-action-btn.disliked:hover {
+            color: #6366f1;
+            border-color: #6366f1;
+        }
+        
+        .artwork-action-btn.saved:hover {
+            color: var(--success);
+            border-color: var(--success);
+        }
+    }
+    
+    /* 터치 피드백 */
+    .artwork-action-btn:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+}
+
+/* ========== 소형 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    /* 액션 버튼 */
+    .artwork-actions {
+        padding: 10px 12px;
+        gap: 6px;
+    }
+    
+    .artwork-action-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-height: 40px;
+        gap: 5px;
+    }
+    
+    .artwork-action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* 매우 작은 화면에서는 텍스트 숨기고 아이콘만 */
+    @media (max-width: 360px) {
+        .artwork-action-btn {
+            padding: 8px;
+            min-width: 44px;
+        }
+        
+        .artwork-action-btn span {
+            display: none;
+        }
+    }
+}

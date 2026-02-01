@@ -14,6 +14,20 @@
     -webkit-backdrop-filter: none !important;
     /* 배경을 단순하게 */
     background: rgba(0, 0, 0, 0.8) !important;
+    /* 터치 스크롤 최적화 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* 모달 페이드 인 애니메이션 */
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .artwork-modal-content {
@@ -30,6 +44,21 @@
     transform: translateZ(0);
     will-change: transform;
     contain: layout style paint;
+    /* 터치 제스처 애니메이션 */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    /* 모달 슬라이드 업 애니메이션 */
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* 파일이 없는 경우 모달 컨텐츠 크기 조정 */
@@ -118,6 +147,11 @@
     /* backdrop-filter 영향 제거 */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    /* 터치 제스처 최적화 */
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .artwork-carousel {

@@ -16,6 +16,20 @@
     justify-content: center;
     z-index: 1001;
     padding: 20px;
+    /* 터치 스크롤 최적화 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* 모달 페이드 인 애니메이션 */
+    animation: feedModalFadeIn 0.2s ease-out;
+}
+
+@keyframes feedModalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .feed-detail-content {
@@ -29,6 +43,21 @@
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: row;
+    /* 터치 제스처 애니메이션 */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    /* 모달 슬라이드 업 애니메이션 */
+    animation: feedModalSlideUp 0.3s ease-out;
+}
+
+@keyframes feedModalSlideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* 파일이 없는 경우 단일 컬럼 */
@@ -53,6 +82,11 @@
     isolation: isolate;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    /* 터치 제스처 최적화 */
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .feed-detail-media-section img {
@@ -309,6 +343,9 @@
     flex-direction: column;
     min-height: 0;
     overflow-y: auto; /* 여기서 스크롤 ⭐ */
+    /* 터치 스크롤 최적화 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .feed-detail-post {
@@ -767,7 +804,7 @@
     gap: 12px;
 }
 
-/* ========== 반응형 ========== */
+/* ========== 반응형: 태블릿 ========== */
 @media (max-width: 1024px) {
     .feed-detail-content {
         flex-direction: column;
@@ -785,9 +822,12 @@
     }
 }
 
+/* ========== 반응형: 모바일 (최적화된 UX) ========== */
 @media (max-width: 768px) {
+    /* 모달 전체 화면 */
     .feed-detail-modal {
         padding: 0;
+        background: rgba(0, 0, 0, 1) !important; /* 완전한 검은 배경 */
     }
 
     .feed-detail-content {
@@ -795,14 +835,229 @@
         max-height: 100vh;
         height: 100vh;
         border-radius: 0;
+        flex-direction: column;
     }
-
+    
+    /* 미디어 섹션 - 스와이프 가능 */
+    .feed-detail-media-section {
+        flex: 0 0 auto;
+        max-height: 45vh; /* 화면의 45% */
+        min-height: 280px;
+        /* 터치 스크롤 최적화 */
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    /* 정보 섹션 */
+    .feed-detail-info-section {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* 헤더 - iOS 안전 영역 고려 */
+    .feed-detail-header {
+        padding: 12px 16px;
+        padding-top: max(12px, env(safe-area-inset-top));
+        flex-shrink: 0;
+    }
+    
+    /* 본문 - 스크롤 최적화 */
     .feed-detail-body {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0;
+    }
+    
+    .feed-detail-post {
         padding: 16px;
     }
-
+    
+    .feed-detail-comments {
+        padding: 16px;
+    }
+    
+    /* 댓글 입력 폼 - 하단 고정 + iOS 키보드 대응 */
+    .feed-detail-comment-form {
+        padding: 12px 16px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+        flex-shrink: 0;
+    }
+    
+    /* 닫기 버튼 - 터치 최적화 */
+    .feed-detail-close {
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* 메뉴 버튼 - 터치 최적화 */
+    .feed-detail-menu-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* 대댓글 들여쓰기 */
     .feed-detail-replies {
         margin-left: 32px;
+    }
+    
+    /* 캐러셀 네비게이션 - 터치 최적화 */
+    .feed-detail-carousel-nav {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .feed-detail-carousel-nav.feed-detail-carousel-prev {
+        left: 12px;
+    }
+    
+    .feed-detail-carousel-nav.feed-detail-carousel-next {
+        right: 12px;
+    }
+    
+    /* 캐러셀 인디케이터 */
+    .feed-detail-carousel-indicators {
+        bottom: 12px;
+        bottom: max(12px, env(safe-area-inset-bottom));
+    }
+}
+
+/* ========== 모바일 세로 모드 최적화 ========== */
+@media (max-width: 768px) and (orientation: portrait) {
+    /* 미디어 영역 더 작게 */
+    .feed-detail-media-section {
+        max-height: 40vh;
+        min-height: 240px;
+    }
+    
+    /* 정보 영역 더 크게 */
+    .feed-detail-info-section {
+        flex: 1;
+    }
+}
+
+/* ========== 모바일 가로 모드 최적화 ========== */
+@media (max-width: 968px) and (orientation: landscape) {
+    /* 미디어 영역 더 크게 */
+    .feed-detail-media-section {
+        max-height: 70vh;
+        min-height: 60vh;
+    }
+    
+    /* 정보 영역 작게 */
+    .feed-detail-info-section {
+        flex: 0 0 auto;
+        max-height: 30vh;
+    }
+}
+
+/* ========== 소형 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    /* 미디어 섹션 */
+    .feed-detail-media-section {
+        max-height: 35vh;
+        min-height: 200px;
+    }
+    
+    /* 헤더 */
+    .feed-detail-header {
+        padding: 10px 12px;
+        padding-top: max(10px, env(safe-area-inset-top));
+    }
+    
+    .feed-detail-header-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .feed-detail-header-name {
+        font-size: 14px;
+    }
+    
+    .feed-detail-header-date {
+        font-size: 11px;
+    }
+    
+    /* 본문 */
+    .feed-detail-post {
+        padding: 12px;
+    }
+    
+    .feed-detail-title {
+        font-size: 18px;
+    }
+    
+    .feed-detail-description {
+        font-size: 15px;
+    }
+    
+    /* 댓글 */
+    .feed-detail-comments {
+        padding: 12px;
+    }
+    
+    .feed-detail-comment-form {
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .feed-detail-comment-textarea {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    
+    .feed-detail-comment-submit {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    /* 댓글 아이템 */
+    .feed-detail-comment-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .feed-detail-comment-author {
+        font-size: 13px;
+    }
+    
+    .feed-detail-comment-text {
+        font-size: 13px;
+    }
+    
+    /* 대댓글 */
+    .feed-detail-replies {
+        margin-left: 28px;
+    }
+    
+    /* 버튼 */
+    .feed-detail-close,
+    .feed-detail-menu-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* 캐러셀 네비게이션 */
+    .feed-detail-carousel-nav {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .feed-detail-carousel-nav.feed-detail-carousel-prev {
+        left: 8px;
+    }
+    
+    .feed-detail-carousel-nav.feed-detail-carousel-next {
+        right: 8px;
+    }
+    
+    /* 캐러셀 인디케이터 */
+    .feed-detail-carousel-indicators {
+        bottom: 8px;
+        bottom: max(8px, env(safe-area-inset-bottom));
     }
 }
 

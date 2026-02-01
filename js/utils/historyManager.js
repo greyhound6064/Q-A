@@ -51,7 +51,7 @@ class HistoryManager {
         
         switch (state.type) {
             case 'tab':
-                this.restoreTab(state.tab);
+                this.restoreTab(state);
                 break;
             case 'modal':
                 this.restoreModal(state);
@@ -60,12 +60,10 @@ class HistoryManager {
                 this.restoreProfileTab(state);
                 break;
             case 'artwork-detail':
-                // 뒤로가기 시 상세화면 닫기만 처리
-                this.closeArtworkDetailOnly();
-                break;
             case 'feed-detail':
-                // 뒤로가기 시 상세화면 닫기만 처리
-                this.closeFeedDetailOnly();
+            case 'post-detail':
+                // 뒤로가기 시 상세화면 닫기만 처리 (통합)
+                this.closePostDetailOnly(state);
                 break;
             default:
                 console.warn('Unknown history state type:', state.type);
@@ -76,13 +74,40 @@ class HistoryManager {
     /**
      * 탭 복원 (모든 모달 닫고 탭 전환)
      */
-    restoreTab(tab) {
+    restoreTab(state) {
         // 모든 모달 닫기 (히스토리 없이)
         this.closeAllModals();
         
         // 탭 전환
         if (window.switchToTab) {
-            window.switchToTab(tab);
+            window.switchToTab(state.tab);
+        }
+        
+        // 스크롤 위치 복원
+        if (state.scrollPosition !== undefined) {
+            requestAnimationFrame(() => {
+                const contentArea = document.querySelector('.content-area');
+                const boardContainer = document.querySelector('.board-container');
+                
+                if (contentArea) {
+                    contentArea.scrollTop = state.scrollPosition;
+                } else if (boardContainer) {
+                    boardContainer.scrollTop = state.scrollPosition;
+                } else {
+                    window.scrollTo(0, state.scrollPosition);
+                }
+                
+                // 추가 안전장치
+                setTimeout(() => {
+                    if (contentArea) {
+                        contentArea.scrollTop = state.scrollPosition;
+                    } else if (boardContainer) {
+                        boardContainer.scrollTop = state.scrollPosition;
+                    } else {
+                        window.scrollTo(0, state.scrollPosition);
+                    }
+                }, 50);
+            });
         }
     }
 
@@ -159,34 +184,59 @@ class HistoryManager {
     }
 
     /**
-     * 작품 상세화면 닫기만 처리 (뒤로가기 시)
+     * 통합 게시물 상세화면 닫기 (뒤로가기 시)
      */
-    closeArtworkDetailOnly() {
+    closePostDetailOnly(previousState) {
+        // 통합 모달 닫기 (artwork-detail-modal만 사용)
         const modal = document.getElementById('artwork-detail-modal');
         if (modal && modal.style.display !== 'none') {
-            // 상세보기 내 비디오 정지
             const detailVideo = document.getElementById('artwork-detail-video');
             if (detailVideo && !detailVideo.paused) {
                 detailVideo.pause();
             }
-            
             modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        }
+        
+        document.body.style.overflow = 'auto';
+        
+        // 스크롤 위치 복원
+        requestAnimationFrame(() => {
+            const scrollPosition = previousState?.scrollPosition || 0;
+            console.log('뒤로가기 - 스크롤 위치 복원:', scrollPosition, previousState);
             
-            // ESC 리스너 제거는 closeArtworkDetail에서 처리되므로 생략
-        }
+            const contentArea = document.querySelector('.content-area');
+            const boardContainer = document.querySelector('.board-container');
+            
+            if (contentArea) {
+                contentArea.scrollTop = scrollPosition;
+            } else if (boardContainer) {
+                boardContainer.scrollTop = scrollPosition;
+            } else {
+                window.scrollTo(0, scrollPosition);
+            }
+            
+            // 추가 안전장치
+            setTimeout(() => {
+                if (contentArea) {
+                    contentArea.scrollTop = scrollPosition;
+                } else if (boardContainer) {
+                    boardContainer.scrollTop = scrollPosition;
+                } else {
+                    window.scrollTo(0, scrollPosition);
+                }
+            }, 100);
+        });
     }
-
+    
     /**
-     * 피드 상세화면 닫기만 처리 (뒤로가기 시)
+     * 하위 호환성을 위한 별칭
      */
-    closeFeedDetailOnly() {
-        const modal = document.getElementById('feed-detail-modal');
-        if (modal) {
-            modal.remove();
-            document.body.style.overflow = 'auto';
-            window._currentFeedDetailPostId = null;
-        }
+    closeArtworkDetailOnly(previousState) {
+        this.closePostDetailOnly(previousState);
+    }
+    
+    closeFeedDetailOnly(previousState) {
+        this.closePostDetailOnly(previousState);
     }
 
     /**
@@ -215,8 +265,25 @@ class HistoryManager {
     pushTabState(tab) {
         if (this.isRestoring) return;
         
+        // 현재 스크롤 위치 저장
+        const contentArea = document.querySelector('.content-area');
+        const boardContainer = document.querySelector('.board-container');
+        let scrollPosition = 0;
+        
+        if (contentArea) {
+            scrollPosition = contentArea.scrollTop;
+        } else if (boardContainer) {
+            scrollPosition = boardContainer.scrollTop;
+        } else {
+            scrollPosition = window.scrollY || window.pageYOffset;
+        }
+        
         history.pushState(
-            { type: 'tab', tab: tab },
+            { 
+                type: 'tab', 
+                tab: tab,
+                scrollPosition: scrollPosition 
+            },
             '',
             `#${tab}`
         );
@@ -249,29 +316,51 @@ class HistoryManager {
     }
 
     /**
-     * 작품 상세 열기 시 히스토리 추가
+     * 작품 상세 열기 시 히스토리 추가 (통합)
      */
-    pushArtworkDetailState(artworkId) {
+    pushArtworkDetailState(artworkId, postType = 'gallery') {
         if (this.isRestoring) return;
         
+        // 현재 스크롤 위치 저장
+        const contentArea = document.querySelector('.content-area');
+        const boardContainer = document.querySelector('.board-container');
+        let scrollPosition = 0;
+        
+        if (contentArea) {
+            scrollPosition = contentArea.scrollTop;
+        } else if (boardContainer) {
+            scrollPosition = boardContainer.scrollTop;
+        } else {
+            scrollPosition = window.scrollY || window.pageYOffset;
+        }
+        
         history.pushState(
-            { type: 'artwork-detail', artworkId: artworkId },
+            { 
+                type: 'post-detail',
+                postId: artworkId,
+                postType: postType,
+                scrollPosition: scrollPosition 
+            },
             '',
-            `#artwork/${artworkId}`
+            `#post/${artworkId}`
         );
     }
 
     /**
-     * 피드 상세 열기 시 히스토리 추가
+     * 피드 상세 열기 시 히스토리 추가 (통합)
      */
-    pushFeedDetailState(postId, showComments = false) {
+    pushFeedDetailState(postId, postType = 'feed') {
         if (this.isRestoring) return;
         
-        history.pushState(
-            { type: 'feed-detail', postId: postId, showComments: showComments },
-            '',
-            `#feed/${postId}`
-        );
+        // pushArtworkDetailState와 통합
+        this.pushArtworkDetailState(postId, postType);
+    }
+    
+    /**
+     * 게시물 상세 열기 시 히스토리 추가 (통합 함수)
+     */
+    pushPostDetailState(postId, postType = 'gallery') {
+        this.pushArtworkDetailState(postId, postType);
     }
 
     /**
@@ -279,6 +368,22 @@ class HistoryManager {
      */
     goBack() {
         history.back();
+    }
+
+    /**
+     * 현재 히스토리 상태에 스크롤 위치 업데이트
+     */
+    updateCurrentStateScrollPosition(scrollPosition) {
+        if (this.isRestoring) return;
+        
+        const currentState = history.state;
+        if (currentState) {
+            history.replaceState(
+                { ...currentState, scrollPosition: scrollPosition },
+                '',
+                window.location.hash
+            );
+        }
     }
 }
 

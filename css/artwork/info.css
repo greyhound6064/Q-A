@@ -220,3 +220,182 @@
     color: var(--primary-hover);
     text-decoration: underline;
 }
+
+/* ========== 모바일 반응형 (정보 섹션) ========== */
+@media (max-width: 768px) {
+    /* 정보 섹션 */
+    .artwork-info-section {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        border-left: none;
+        border-right: none;
+    }
+    
+    /* 작성자 정보 */
+    .artwork-author {
+        padding: 12px 16px;
+        padding-right: 56px; /* 닫기 버튼 공간 */
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
+    
+    .artwork-author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .artwork-author-name {
+        font-size: 14px;
+    }
+    
+    .artwork-date {
+        font-size: 11px;
+    }
+    
+    /* 메뉴 버튼 - 터치 최적화 */
+    .artwork-menu-btn {
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+    }
+    
+    /* 메뉴 드롭다운 */
+    .artwork-menu-dropdown {
+        min-width: 160px;
+    }
+    
+    .artwork-menu-item {
+        padding: 12px 14px;
+        font-size: 13px;
+        /* 터치 영역 확대 */
+        min-height: 44px;
+    }
+    
+    /* 컨텐츠 */
+    .artwork-content {
+        padding: 16px;
+    }
+    
+    .artwork-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .artwork-description {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    
+    /* 태그 */
+    .artwork-tags {
+        gap: 6px;
+        margin-top: 10px;
+    }
+    
+    .artwork-tag {
+        padding: 5px 10px;
+        font-size: 12px;
+        /* 터치 영역 확대 */
+        min-height: 28px;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    /* Vibe 링크 */
+    .artwork-vibe-link {
+        margin-top: 10px;
+        padding: 10px 12px;
+    }
+    
+    .artwork-vibe-link-label {
+        font-size: 13px;
+    }
+    
+    .artwork-vibe-link-text {
+        font-size: 13px;
+    }
+}
+
+/* ========== 소형 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    /* 작성자 정보 */
+    .artwork-author {
+        padding: 10px 12px;
+        padding-right: 52px;
+        padding-top: max(10px, env(safe-area-inset-top));
+        gap: 10px;
+    }
+    
+    .artwork-author-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .artwork-author-name {
+        font-size: 13px;
+    }
+    
+    .artwork-date {
+        font-size: 10px;
+    }
+    
+    /* 메뉴 버튼 */
+    .artwork-menu-btn {
+        width: 36px;
+        height: 36px;
+        padding: 8px;
+    }
+    
+    /* 메뉴 드롭다운 */
+    .artwork-menu-dropdown {
+        min-width: 150px;
+    }
+    
+    .artwork-menu-item {
+        padding: 10px 12px;
+        font-size: 12px;
+        min-height: 40px;
+    }
+    
+    /* 컨텐츠 */
+    .artwork-content {
+        padding: 12px;
+    }
+    
+    .artwork-title {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .artwork-description {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    /* 태그 */
+    .artwork-tags {
+        gap: 5px;
+        margin-top: 8px;
+    }
+    
+    .artwork-tag {
+        padding: 4px 8px;
+        font-size: 11px;
+        min-height: 26px;
+    }
+    
+    /* Vibe 링크 */
+    .artwork-vibe-link {
+        margin-top: 8px;
+        padding: 8px 10px;
+    }
+    
+    .artwork-vibe-link-label {
+        font-size: 12px;
+    }
+    
+    .artwork-vibe-link-text {
+        font-size: 12px;
+    }
+}

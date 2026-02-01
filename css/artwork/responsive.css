@@ -1,6 +1,6 @@
 /**
  * @file responsive.css
- * @description 작품 그리드 및 모달 반응형 스타일
+ * @description 작품 그리드 및 모달 반응형 스타일 (모바일 UX 최적화)
  */
 
 /* ========== 반응형: 그리드 ========== */
@@ -18,7 +18,7 @@
     }
 }
 
-/* ========== 반응형: 모달 ========== */
+/* ========== 반응형: 모달 (태블릿) ========== */
 @media (max-width: 1200px) {
     .artwork-modal-body {
         flex-direction: column;
@@ -43,19 +43,223 @@
     }
 }
 
+/* ========== 반응형: 모달 (모바일 - 최적화된 UX) ========== */
 @media (max-width: 968px) {
+    /* 모달 전체 화면 */
+    .artwork-modal {
+        padding: 0;
+        background: rgba(0, 0, 0, 1) !important; /* 완전한 검은 배경 */
+    }
+    
     .artwork-modal-content {
         width: 100%;
         height: 100vh;
         max-height: 100vh;
+        max-width: 100%;
         border-radius: 0;
+    }
+    
+    /* 미디어 없는 경우 */
+    .artwork-modal-content.no-media {
+        max-width: 100%;
+    }
+    
+    /* 모달 바디 레이아웃 */
+    .artwork-modal-body {
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    /* 미디어 섹션 - 스와이프 가능한 영역 */
+    .artwork-image-section {
+        flex: 0 0 auto;
+        max-height: 45vh; /* 화면의 45% */
+        min-height: 280px;
+        position: relative;
+        /* 터치 스크롤 최적화 */
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    /* 미디어가 없는 경우 */
+    .artwork-modal-body.no-media .artwork-image-section {
+        display: none;
+    }
+    
+    /* 정보 섹션 - 스크롤 가능 */
+    .artwork-info-section {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border-left: none;
+        border-right: none;
+    }
+    
+    /* 댓글 섹션 */
+    .artwork-comments-section {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        border-left: none;
     }
     
     .artwork-comments-list {
         padding: 12px 16px;
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     
     .artwork-comment-form {
-        padding: 10px 16px;
+        padding: 12px 16px;
+        flex-shrink: 0;
+        /* iOS 키보드 대응 */
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+    
+    /* 닫기 버튼 - 터치 최적화 */
+    .artwork-close {
+        width: 44px;
+        height: 44px;
+        top: 12px;
+        right: 12px;
+        /* iOS 안전 영역 고려 */
+        top: max(12px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+    }
+    
+    /* 캐러셀 네비게이션 - 터치 최적화 */
+    .artwork-carousel-nav {
+        width: 44px;
+        height: 44px;
+        /* 터치 영역 확대 */
+        padding: 12px;
+    }
+    
+    .artwork-carousel-nav.prev {
+        left: 12px;
+    }
+    
+    .artwork-carousel-nav.next {
+        right: 12px;
+    }
+    
+    /* 캐러셀 인디케이터 */
+    .artwork-carousel-indicators {
+        bottom: 12px;
+        /* iOS 안전 영역 고려 */
+        bottom: max(12px, env(safe-area-inset-bottom));
+    }
+}
+
+/* ========== 모바일 세로 모드 최적화 ========== */
+@media (max-width: 768px) and (orientation: portrait) {
+    /* 미디어 영역 더 작게 */
+    .artwork-image-section {
+        max-height: 40vh;
+        min-height: 240px;
+    }
+    
+    /* 정보 + 댓글 영역 더 크게 */
+    .artwork-info-section,
+    .artwork-comments-section {
+        flex: 1;
+    }
+}
+
+/* ========== 모바일 가로 모드 최적화 ========== */
+@media (max-width: 968px) and (orientation: landscape) {
+    /* 미디어 영역 더 크게 */
+    .artwork-image-section {
+        max-height: 70vh;
+        min-height: 60vh;
+    }
+    
+    /* 정보 섹션 작게 */
+    .artwork-info-section {
+        flex: 0 0 auto;
+        max-height: 30vh;
+    }
+    
+    /* 댓글 섹션 */
+    .artwork-comments-section {
+        flex: 1;
+        max-height: 30vh;
+    }
+}
+
+/* ========== 소형 모바일 (480px 이하) ========== */
+@media (max-width: 480px) {
+    /* 미디어 섹션 */
+    .artwork-image-section {
+        max-height: 35vh;
+        min-height: 200px;
+    }
+    
+    /* 닫기 버튼 */
+    .artwork-close {
+        width: 40px;
+        height: 40px;
+        top: 8px;
+        right: 8px;
+        top: max(8px, env(safe-area-inset-top));
+        right: max(8px, env(safe-area-inset-right));
+    }
+    
+    /* 캐러셀 네비게이션 */
+    .artwork-carousel-nav {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .artwork-carousel-nav.prev {
+        left: 8px;
+    }
+    
+    .artwork-carousel-nav.next {
+        right: 8px;
+    }
+    
+    /* 캐러셀 인디케이터 */
+    .artwork-carousel-indicators {
+        bottom: 8px;
+        bottom: max(8px, env(safe-area-inset-bottom));
+    }
+    
+    /* 댓글 폼 */
+    .artwork-comment-form {
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .artwork-comments-list {
+        padding: 10px 12px;
+    }
+}
+
+/* ========== 키보드 올라올 때 최적화 ========== */
+@media (max-width: 968px) {
+    /* 입력 포커스 시 모달 높이 조정 */
+    .artwork-comment-input:focus,
+    .feed-detail-comment-textarea:focus {
+        /* iOS 키보드로 인한 뷰포트 변경 대응 */
+        scroll-margin-bottom: 20px;
+    }
+    
+    /* 입력 중일 때 미디어 섹션 축소 */
+    .artwork-modal-content:has(.artwork-comment-input:focus) .artwork-image-section,
+    .feed-detail-content:has(.feed-detail-comment-textarea:focus) .feed-detail-media-section {
+        max-height: 30vh;
+        min-height: 150px;
+        transition: max-height 0.3s ease, min-height 0.3s ease;
+    }
+    
+    /* 입력 중일 때 정보 섹션 확대 */
+    .artwork-modal-content:has(.artwork-comment-input:focus) .artwork-comments-section,
+    .feed-detail-content:has(.feed-detail-comment-textarea:focus) .feed-detail-info-section {
+        flex: 1;
+        transition: flex 0.3s ease;
     }
 }

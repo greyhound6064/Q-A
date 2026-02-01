@@ -8,12 +8,16 @@ import { renderArtworksGrid } from './artworkGrid.js';
 import { isSaved, toggleSave as toggleSaveService } from '../services/saveService.js';
 import { decrementArtworkTags } from '../services/tagService.js';
 import { historyManager } from '../utils/historyManager.js';
+import { addSwipeToCloseGesture, addCarouselSwipeGesture } from '../utils/touchGestures.js';
 
 // ========== 전역 상태 ==========
 let currentArtworkId = null;
 let currentArtworkImages = [];
 let currentArtworkImageIndex = 0;
 export let currentArtworkData = null;
+let savedScrollPosition = 0; // 스크롤 위치 저장
+let swipeCleanup = null; // 스와이프 제스처 클린업 함수
+let carouselSwipeCleanup = null; // 캐러셀 스와이프 클린업 함수
 
 /**
  * 현재 작품 데이터 가져오기
@@ -30,11 +34,27 @@ export function getCurrentArtworkId() {
 }
 
 /**
- * 작품 상세보기 열기
+ * 통합 게시물 상세보기 열기 (모든 post_type 지원)
+ * @param {string} artworkId - 게시물 ID
+ * @param {boolean} showComments - 댓글 포커스 여부
+ * @param {Array} feedPosts - 로컬 게시물 배열 (선택사항)
  */
-export async function openArtworkDetail(artworkId, showComments = false) {
+export async function openArtworkDetail(artworkId, showComments = false, feedPosts = []) {
     const modal = document.getElementById('artwork-detail-modal');
     if (!modal) return;
+    
+    // 현재 스크롤 위치 저장
+    const contentArea = document.querySelector('.content-area');
+    const boardContainer = document.querySelector('.board-container');
+    if (contentArea) {
+        savedScrollPosition = contentArea.scrollTop;
+    } else if (boardContainer) {
+        savedScrollPosition = boardContainer.scrollTop;
+    } else {
+        savedScrollPosition = window.scrollY || window.pageYOffset;
+    }
+    
+    console.log('스크롤 위치 저장:', savedScrollPosition);
     
     // 피드의 모든 비디오 일시정지
     pauseAllFeedVideos();
@@ -42,7 +62,7 @@ export async function openArtworkDetail(artworkId, showComments = false) {
     currentArtworkId = artworkId;
     
     try {
-        // 작품 정보 가져오기
+        // 게시물 정보 가져오기
         const { data: artwork, error } = await window._supabase
             .from('artworks')
             .select('*')
@@ -50,12 +70,12 @@ export async function openArtworkDetail(artworkId, showComments = false) {
             .single();
         
         if (error) {
-            console.error('작품 조회 에러:', error);
-            alert('작품을 불러올 수 없습니다.');
+            console.error('게시물 조회 에러:', error);
+            alert('게시물을 불러올 수 없습니다.');
             return;
         }
         
-        // 현재 작품 데이터 저장
+        // 현재 게시물 데이터 저장
         currentArtworkData = artwork;
         
         // 현재 사용자 확인
@@ -267,13 +287,44 @@ export async function openArtworkDetail(artworkId, showComments = false) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // 히스토리 추가
+        // 히스토리 추가 (현재 상태에 스크롤 위치 저장)
         if (!historyManager.isRestoringState()) {
+            // 현재 히스토리 상태에 스크롤 위치 저장
+            historyManager.updateCurrentStateScrollPosition(savedScrollPosition);
+            // 새로운 상태 추가
             historyManager.pushArtworkDetailState(artworkId);
         }
         
         // ESC 키로 모달 닫기
         document.addEventListener('keydown', handleArtworkModalEscape);
+        
+        // 모바일 터치 제스처 추가
+        if (window.innerWidth <= 968) {
+            const modalContent = document.querySelector('.artwork-modal-content');
+            if (modalContent) {
+                // 스와이프 다운으로 모달 닫기
+                swipeCleanup = addSwipeToCloseGesture(modalContent, closeArtworkDetail, {
+                    threshold: 100,
+                    velocityThreshold: 0.3
+                });
+            }
+            
+            // 캐러셀 스와이프 제스처
+            if (currentArtworkImages.length > 1) {
+                const carouselContent = document.getElementById('artwork-carousel-content');
+                if (carouselContent) {
+                    carouselSwipeCleanup = addCarouselSwipeGesture(
+                        carouselContent,
+                        () => nextArtworkImage(), // 왼쪽 스와이프 = 다음
+                        () => prevArtworkImage(), // 오른쪽 스와이프 = 이전
+                        {
+                            threshold: 50,
+                            velocityThreshold: 0.3
+                        }
+                    );
+                }
+            }
+        }
         
     } catch (err) {
         console.error('작품 상세보기 에러:', err);
@@ -300,6 +351,16 @@ export function closeArtworkDetail() {
     const modal = document.getElementById('artwork-detail-modal');
     if (!modal) return;
     
+    // 터치 제스처 클린업
+    if (swipeCleanup) {
+        swipeCleanup();
+        swipeCleanup = null;
+    }
+    if (carouselSwipeCleanup) {
+        carouselSwipeCleanup();
+        carouselSwipeCleanup = null;
+    }
+    
     // 상세보기 내 비디오 정지
     const detailVideo = document.getElementById('artwork-detail-video');
     if (detailVideo && !detailVideo.paused) {
@@ -315,6 +376,9 @@ export function closeArtworkDetail() {
     currentArtworkImages = [];
     currentArtworkImageIndex = 0;
     
+    // 저장된 스크롤 위치로 복원
+    restoreScrollPosition();
+    
     // 뒤로 가기 실행 (히스토리 복원 중이 아닐 때만)
     // X 버튼 클릭 시에만 뒤로가기 실행
     if (!historyManager.isRestoringState()) {
@@ -324,6 +388,41 @@ export function closeArtworkDetail() {
         }, 50);
     }
 }
+
+/**
+ * 저장된 스크롤 위치로 복원
+ */
+function restoreScrollPosition() {
+    console.log('스크롤 위치 복원:', savedScrollPosition);
+    
+    // 다음 프레임에서 스크롤 복원 (DOM 업데이트 후)
+    requestAnimationFrame(() => {
+        const contentArea = document.querySelector('.content-area');
+        const boardContainer = document.querySelector('.board-container');
+        
+        if (contentArea) {
+            contentArea.scrollTop = savedScrollPosition;
+        } else if (boardContainer) {
+            boardContainer.scrollTop = savedScrollPosition;
+        } else {
+            window.scrollTo(0, savedScrollPosition);
+        }
+        
+        // 추가 안전장치: 약간의 지연 후 다시 한 번 복원
+        setTimeout(() => {
+            if (contentArea) {
+                contentArea.scrollTop = savedScrollPosition;
+            } else if (boardContainer) {
+                boardContainer.scrollTop = savedScrollPosition;
+            } else {
+                window.scrollTo(0, savedScrollPosition);
+            }
+        }, 50);
+    });
+}
+
+// 전역 함수로 노출 (historyManager에서 사용)
+window.restoreArtworkScrollPosition = restoreScrollPosition;
 
 /**
  * 작품 미디어 업데이트 (이미지, 비디오, 오디오)

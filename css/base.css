@@ -103,3 +103,92 @@ body.dark-mode .linkified-url {
 body.dark-mode .linkified-url:hover {
     color: #93c5fd;
 }
+
+/* ========== 모바일 터치 최적화 ========== */
+@media (max-width: 968px) {
+    /* 터치 디바이스 최적화 */
+    * {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        -webkit-touch-callout: none;
+    }
+    
+    /* 버튼, 링크 터치 영역 최적화 */
+    button,
+    a,
+    .clickable {
+        min-height: 44px; /* iOS 권장 터치 영역 */
+        min-width: 44px;
+    }
+    
+    /* 스크롤 최적화 */
+    body,
+    .scrollable {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* 텍스트 선택 방지 (UI 요소) */
+    button,
+    .no-select {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    /* 입력 요소는 선택 가능 */
+    input,
+    textarea,
+    [contenteditable] {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+    
+    /* iOS 안전 영역 지원 */
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
+
+/* ========== 터치 피드백 애니메이션 ========== */
+@media (hover: none) {
+    /* 터치 디바이스에서 버튼 피드백 */
+    button:active,
+    .btn:active,
+    .clickable:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+        transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+    
+    /* 카드 터치 피드백 */
+    .card:active,
+    .post-item:active,
+    .artwork-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* ========== 스크롤바 스타일 (모바일 제외) ========== */
+@media (min-width: 969px) {
+    /* 커스텀 스크롤바 */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-light);
+    }
+}
