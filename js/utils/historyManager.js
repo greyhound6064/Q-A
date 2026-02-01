@@ -60,10 +60,12 @@ class HistoryManager {
                 this.restoreProfileTab(state);
                 break;
             case 'artwork-detail':
-                this.restoreArtworkDetail(state);
+                // 뒤로가기 시 상세화면 닫기만 처리
+                this.closeArtworkDetailOnly();
                 break;
             case 'feed-detail':
-                this.restoreFeedDetail(state);
+                // 뒤로가기 시 상세화면 닫기만 처리
+                this.closeFeedDetailOnly();
                 break;
             default:
                 console.warn('Unknown history state type:', state.type);
@@ -157,20 +159,33 @@ class HistoryManager {
     }
 
     /**
-     * 작품 상세 복원
+     * 작품 상세화면 닫기만 처리 (뒤로가기 시)
      */
-    restoreArtworkDetail(state) {
-        if (state.artworkId && window.openArtworkDetail) {
-            window.openArtworkDetail(state.artworkId);
+    closeArtworkDetailOnly() {
+        const modal = document.getElementById('artwork-detail-modal');
+        if (modal && modal.style.display !== 'none') {
+            // 상세보기 내 비디오 정지
+            const detailVideo = document.getElementById('artwork-detail-video');
+            if (detailVideo && !detailVideo.paused) {
+                detailVideo.pause();
+            }
+            
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // ESC 리스너 제거는 closeArtworkDetail에서 처리되므로 생략
         }
     }
 
     /**
-     * 피드 상세 복원
+     * 피드 상세화면 닫기만 처리 (뒤로가기 시)
      */
-    restoreFeedDetail(state) {
-        if (state.postId && window.openFeedDetail) {
-            window.openFeedDetail(state.postId, state.showComments || false);
+    closeFeedDetailOnly() {
+        const modal = document.getElementById('feed-detail-modal');
+        if (modal) {
+            modal.remove();
+            document.body.style.overflow = 'auto';
+            window._currentFeedDetailPostId = null;
         }
     }
 

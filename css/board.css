@@ -324,7 +324,7 @@
     overflow: hidden;
     cursor: pointer;
     z-index: 2;
-    touch-action: pan-x; /* 모바일에서 가로 스크롤만 허용 */
+    touch-action: pan-y; /* 모바일에서 세로 스크롤 허용 */
 }
 
 .board-item-image img {
@@ -474,7 +474,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    touch-action: pan-x; /* 가로 스크롤만 허용 */
+    touch-action: pan-x pan-y; /* 가로/세로 스크롤 모두 허용 */
 }
 
 .board-images-scroll-container {
@@ -487,7 +487,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     gap: 0;
-    touch-action: pan-x; /* 가로 스크롤만 허용 */
+    touch-action: pan-x pan-y; /* 가로/세로 스크롤 모두 허용 */
 }
 
 .board-images-scroll-container::-webkit-scrollbar {
@@ -501,7 +501,7 @@
     scroll-snap-align: start;
     position: relative;
     background: var(--bg);
-    touch-action: pan-x; /* 가로 스크롤만 허용 */
+    touch-action: pan-x pan-y; /* 가로/세로 스크롤 모두 허용 */
 }
 
 .board-scroll-image img {
@@ -511,7 +511,7 @@
     user-select: none;
     -webkit-user-drag: none;
     pointer-events: none; /* 이미지 자체의 드래그 방지 */
-    touch-action: none; /* 이미지에서 터치 동작 차단 */
+    touch-action: pan-y; /* 이미지에서 세로 스크롤 허용 */
 }
 
 .board-scroll-page-indicator {

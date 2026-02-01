@@ -369,9 +369,13 @@ export function closeFeedDetail() {
     document.removeEventListener('keydown', handleFeedDetailEscape);
     window._currentFeedDetailPostId = null;
     
-    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
+    // 뒤로 가기 실행 (히스토리 복원 중이 아닐 때만)
+    // X 버튼 클릭 시에만 뒤로가기 실행
     if (!historyManager.isRestoringState()) {
-        historyManager.goBack();
+        // 약간의 지연을 두고 뒤로가기 실행하여 모달이 완전히 닫힌 후 히스토리 이동
+        setTimeout(() => {
+            historyManager.goBack();
+        }, 50);
     }
 }
 
