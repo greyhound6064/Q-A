@@ -46,19 +46,20 @@ createPostTypeSelector('name', 'onChangeFn()')
 ## 📁 디렉토리 구조
 
 ```
-├── css/ (27개)
+├── css/ (28개)
 │   ├── base.css, layout.css, profile.css
 │   ├── post.css (게시물 공통), artworkBoard.css (작품 게시판)
-│   ├── board.css (통합 게시판) ⭐
+│   ├── board.css (통합 게시판), vibing.css (바이빙 탭) ⭐
 │   ├── messages.css, upload.css, user-search.css
 │   ├── components/ (6) - modal, button, form, state, welcome, loginRequired
 │   ├── post/ (6) - layout, item, filters, detail, comments, video
 │   ├── artwork/ (6) - gallery, info, actions, comments, modal, responsive
-│   └── responsive/ (9) ⭐
+│   └── responsive/ (10) ⭐
 │       ├── layout-responsive.css (234줄)
 │       ├── profile-responsive.css (681줄)
 │       ├── shared-responsive.css (382줄) - 공통 카드
 │       ├── artworkBoard-responsive.css, post-responsive.css
+│       ├── vibing-responsive.css
 │       ├── messages-responsive.css (656줄)
 │       ├── user-search-responsive.css, upload-responsive.css, welcome-responsive.css
 │
@@ -98,6 +99,11 @@ createPostTypeSelector('name', 'onChangeFn()')
 - 최적화: 배치 조회, 초기 30개, Intersection Observer
 - 함수: `initBoard()`, `switchBoardType()`, `loadBoardPosts()`, `renderBoardList()`
 - 공통 모듈: `js/post/*.js` (8개), `css/post/*.css` (6개)
+
+### 바이빙 탭
+**파일:** `css/vibing.css`, `css/responsive/vibing-responsive.css`
+- 좌측/하단 네비: 게시판 아래 "바이빙" 탭
+- 콘텐츠: 서비스 준비중 안내 (empty-state)
 
 ### 통합 상세보기 모달 ⭐ (완전 통합 완료 + 모바일 최적화 v12.2.0)
 **파일:** `js/artwork/artworkDetail.js`, `js/post/postDetail.js`, `js/utils/touchGestures.js`
@@ -323,6 +329,7 @@ css/responsive/
 ├── profile-responsive.css - 프로필 헤더, 탭, 통계
 ├── shared-responsive.css - 공통 카드 ⭐
 ├── artworkBoard-responsive.css, post-responsive.css
+├── vibing-responsive.css
 ├── messages-responsive.css, user-search-responsive.css
 ├── upload-responsive.css, welcome-responsive.css
 ```

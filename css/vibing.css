@@ -1,0 +1,19 @@
+/**
+ * @file vibing.css
+ * @description 바이빙 탭 전용 스타일 (서비스 준비중 안내)
+ */
+
+/* ========== 바이빙 컨테이너 ========== */
+.vibing-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.vibing-container .empty-state {
+    min-height: 320px;
+}

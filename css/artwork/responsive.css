@@ -74,10 +74,19 @@
         max-width: 100%;
     }
     
-    /* 모달 바디 레이아웃 */
+    /* 모달 전체 스크롤: 컨텐츠 박스를 스크롤 컨테이너로 */
+    .artwork-modal-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* 모달 바디 - 높이 자동 확장 (댓글 포함 전체가 한 컬럼으로 길어짐) */
     .artwork-modal-body {
         flex-direction: column;
-        height: 100%;
+        height: auto;
+        min-height: 100%;
     }
     
     /* 미디어 섹션 - 스와이프 가능한 영역 (dvh: 주소창 고려) */
@@ -97,30 +106,28 @@
         display: none;
     }
     
-    /* 정보 섹션 - 스크롤 가능 */
+    /* 정보 섹션 - 개별 스크롤 제거, 콘텐츠만큼 높이 확장 */
     .artwork-info-section {
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        flex: none;
+        overflow: visible;
         border-left: none;
         border-right: none;
     }
     
-    /* 댓글 섹션 */
+    /* 댓글 섹션 - 개별 스크롤 제거, 콘텐츠만큼 확장 */
     .artwork-comments-section {
-        flex: 1;
-        min-height: 0;
+        flex: none;
         display: flex;
         flex-direction: column;
         border-left: none;
+        overflow: visible;
     }
     
+    /* 댓글 리스트 - 개별 스크롤 제거 (모달 전체 스크롤로 대체) */
     .artwork-comments-list {
         padding: 12px 16px;
-        flex: 1;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        flex: none;
+        overflow: visible;
     }
     
     .artwork-comment-form {
@@ -163,6 +170,21 @@
         /* iOS 안전 영역 고려 */
         bottom: max(12px, env(safe-area-inset-bottom));
     }
+    
+    /* 모달 전체 스크롤바 (모바일 단일 스크롤 컨테이너) */
+    .artwork-modal-content::-webkit-scrollbar {
+        width: 6px;
+    }
+    .artwork-modal-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .artwork-modal-content::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+    }
+    .artwork-modal-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.3);
+    }
 }
 
 /* ========== 모바일 세로 모드 최적화 ========== */
@@ -173,12 +195,7 @@
         max-height: 40dvh;
         min-height: 240px;
     }
-    
-    /* 정보 + 댓글 영역 더 크게 */
-    .artwork-info-section,
-    .artwork-comments-section {
-        flex: 1;
-    }
+    /* 정보/댓글 영역은 모달 전체 스크롤로 콘텐츠만큼 확장 (flex: none 유지) */
 }
 
 /* ========== 모바일 가로 모드 최적화 ========== */

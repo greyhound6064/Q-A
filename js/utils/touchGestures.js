@@ -29,8 +29,8 @@ export function addSwipeToCloseGesture(modalElement, onClose, options = {}) {
             if (!targetElement) return;
         }
 
-        // 스크롤 가능한 요소 내부에서는 제스처 비활성화
-        const scrollableParent = e.target.closest('[style*="overflow-y: auto"], [style*="overflow: auto"], .artwork-comments-list, .feed-detail-body');
+        // 스크롤 가능한 요소 내부에서는 제스처 비활성화 (모바일: 모달 전체 스크롤 컨테이너 포함)
+        const scrollableParent = e.target.closest('[style*="overflow-y: auto"], [style*="overflow: auto"], .artwork-modal-content, .artwork-comments-list, .feed-detail-body');
         if (scrollableParent) {
             const isAtTop = scrollableParent.scrollTop === 0;
             if (!isAtTop) return; // 스크롤이 최상단이 아니면 제스처 비활성화

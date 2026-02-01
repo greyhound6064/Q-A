@@ -1,0 +1,26 @@
+/**
+ * @file vibing-responsive.css
+ * @description 바이빙 탭 반응형 스타일
+ */
+
+/* ========== 바이빙 - 태블릿/모바일 ========== */
+@media (max-width: 768px) {
+    .vibing-container {
+        padding: 2rem 1rem;
+    }
+
+    .vibing-container .empty-state {
+        min-height: 280px;
+        padding: 60px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vibing-container .empty-state h3 {
+        font-size: 20px;
+    }
+
+    .vibing-container .empty-state p {
+        font-size: 14px;
+    }
+}

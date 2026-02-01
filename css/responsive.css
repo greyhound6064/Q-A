@@ -25,6 +25,9 @@
 /* 게시물(포스트) 전용 (검색, 필터) */
 @import url('responsive/post-responsive.css');
 
+/* 바이빙 탭 */
+@import url('responsive/vibing-responsive.css');
+
 /* 쪽지 시스템 */
 @import url('responsive/messages-responsive.css');
 

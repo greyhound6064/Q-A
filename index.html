@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="css/post.css">
     <link rel="stylesheet" href="css/artworkBoard.css">
     <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/vibing.css">
     <link rel="stylesheet" href="css/messages.css">
     <link rel="stylesheet" href="css/user-search.css">
     <link rel="stylesheet" href="css/nickname-validation.css">
@@ -121,6 +122,16 @@
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
                     <span>게시판</span>
+                </button>
+                <button class="tab-button" data-tab="vibing">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    <span>바이빙</span>
                 </button>
                 <button class="tab-button" data-tab="messages">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -298,7 +309,7 @@
                                     <line x1="12" y1="16" x2="12" y2="12"></line>
                                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                                 </svg>
-                                <span>다른 사람은 '작품 게시판'과 '자유 게시판'의 게시물만 볼 수 있습니다.</span>
+                                <span>다른 사람은 '작품 게시판'의 게시물만 볼 수 있습니다.</span>
                             </div>
                             
                             <!-- 게시물 그리드 -->
@@ -384,6 +395,24 @@
                         <div class="user-search-results-list" id="user-search-results-list">
                             <!-- 검색 결과가 여기에 표시됩니다 -->
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="vibing-tab-content" class="tab-content" style="display:none;">
+                <div class="vibing-container">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </div>
+                        <h3>서비스 준비중</h3>
+                        <p>바이빙 서비스가 준비되고 있어요. 조금만 기다려 주세요.</p>
                     </div>
                 </div>
             </div>
@@ -932,6 +961,16 @@
                     <rect x="3" y="14" width="7" height="7"></rect>
                 </svg>
                 <span>게시판</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="vibing">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                <span>바이빙</span>
             </button>
             <button class="mobile-nav-item" data-tab="messages">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

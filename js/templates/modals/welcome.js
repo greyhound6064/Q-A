@@ -53,7 +53,7 @@ export function createWelcomeModal() {
                         </div>
                         <div class="terminal-line terminal-feature">
                             <span class="feature-number">-</span>
-                            <span class="feature-text"> 서로의 바이브를 'Vibing'하세요.</span>
+                            <span class="feature-text"> 함께 'Vibing' 하세요.</span>
                         </div>
                     </div>
                     <div class="terminal-line terminal-blank"></div>
