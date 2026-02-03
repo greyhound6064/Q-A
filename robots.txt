@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# 크롤링 제외 디렉토리
+Disallow: /js/
+Disallow: /css/
+Disallow: /sql/
+
+# 사이트맵 위치
+Sitemap: https://vibing.kr/sitemap.xml

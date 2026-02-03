@@ -118,11 +118,11 @@ class HistoryManager {
             window.switchToTab('profile');
         }
         
-        // 프로필 내부 탭 전환 (클릭 이벤트로 처리)
+        // 프로필 내부 탭 전환 (팔로워/팔로잉은 통합 탭 'follow'로 매핑)
+        const subTab = (state.subTab === 'followers' || state.subTab === 'following') ? 'follow' : state.subTab;
         setTimeout(() => {
-            const profileTab = document.querySelector(`.profile-tab[data-profile-tab="${state.subTab}"]`);
+            const profileTab = document.querySelector(`.profile-tab[data-profile-tab="${subTab}"]`);
             if (profileTab) {
-                // 직접 탭 전환 (이벤트 발생 안 함)
                 const profileTabs = document.querySelectorAll('.profile-tab:not(.logout-tab)');
                 profileTabs.forEach(btn => btn.classList.remove('active'));
                 profileTab.classList.add('active');
@@ -133,10 +133,13 @@ class HistoryManager {
                     content.classList.remove('active');
                 });
                 
-                const targetContent = document.getElementById('profile-' + state.subTab + '-content');
+                const targetContent = document.getElementById('profile-' + subTab + '-content');
                 if (targetContent) {
                     targetContent.style.display = 'block';
                     targetContent.classList.add('active');
+                    if (subTab === 'follow' && window.renderFollowUnified) {
+                        window.renderFollowUnified();
+                    }
                 }
             }
         }, 50);

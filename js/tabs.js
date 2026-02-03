@@ -5,6 +5,7 @@
 
 import { showLoginRequiredModal } from './utils/errorHandler.js';
 import { historyManager } from './utils/historyManager.js';
+import { updateMetaTags, SEO_CONFIGS } from './utils/seoHelper.js';
 
 // ========== 메인 탭 전환 ==========
 export function initTabs() {
@@ -78,13 +79,27 @@ function initMobileNav() {
     });
 }
 
-// ========== 타인 프로필로 전환 (탭 활성화 없음) ==========
+// ========== 타인 프로필로 전환 (프로필 탭 표시 + 프로필 버튼 활성화) ==========
 export function switchToOtherProfile() {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     
-    // 모든 탭 버튼의 active 클래스 제거 (타인 프로필이므로 활성화 없음)
+    // 모든 탭 버튼의 active 클래스 제거
     tabButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // 프로필 탭 버튼만 active (타인 프로필이어도 프로필 화면이므로 프로필 탭이 선택된 상태로 표시)
+    const profileTabBtn = document.querySelector('.tab-button[data-tab="profile"]');
+    if (profileTabBtn) profileTabBtn.classList.add('active');
+    
+    // 모바일 네비도 프로필로 동기화
+    mobileNavItems.forEach(item => {
+        if (item.getAttribute('data-tab') === 'profile') {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
     
     // 모든 탭 콘텐츠 숨기기
     tabContents.forEach(content => {
@@ -137,6 +152,11 @@ export function switchToTab(targetTab) {
     if (targetContent) {
         targetContent.style.display = 'block';
         targetContent.classList.add('active');
+        
+        // SEO 메타 태그 업데이트
+        if (SEO_CONFIGS[targetTab]) {
+            updateMetaTags(SEO_CONFIGS[targetTab]);
+        }
         
         // 프로필 탭이 활성화되면 프로필 정보 업데이트 (본인 프로필로 복귀)
         if (targetTab === 'profile') {
@@ -218,12 +238,9 @@ export function initProfileTabs() {
             } else if (targetTab === 'saved') {
                 // 저장된 게시물 탭이 선택되면 저장된 게시물 렌더링
                 if (window.renderSavedArtworks) window.renderSavedArtworks();
-            } else if (targetTab === 'followers') {
-                // 팔로워 탭이 선택되면 팔로워 렌더링
-                if (window.renderFollowersInline) window.renderFollowersInline();
-            } else if (targetTab === 'following') {
-                // 팔로잉 탭이 선택되면 팔로잉 렌더링
-                if (window.renderFollowingInline) window.renderFollowingInline();
+            } else if (targetTab === 'follow') {
+                // 팔로워·팔로잉 통합 탭: 둘 다 렌더링
+                if (window.renderFollowUnified) window.renderFollowUnified();
             } else {
                 // 다른 탭에서는 플로팅 버튼 숨김
                 const floatingBtn = document.getElementById('floating-upload-btn');

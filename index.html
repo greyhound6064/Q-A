@@ -8,6 +8,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>바이브코딩으로 만든 바이브코딩 SNS</title>
     
+    <!-- SEO 메타 태그 -->
+    <meta name="description" content="바이브코딩 SNS - 창작자들이 작품을 공유하고 소통하는 커뮤니티. 작품 게시판, 자유 게시판, 실시간 메시지 기능을 제공합니다.">
+    <meta name="keywords" content="바이브코딩, SNS, 창작자 커뮤니티, 작품 공유, 게시판, 메시지">
+    <meta name="author" content="바이브코딩">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vibing.kr/">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="로고1_다크모드.png">
     
@@ -18,7 +25,7 @@
     <meta property="og:image" content="메타로고(최종).png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:url" content="">
+    <meta property="og:url" content="https://vibing.kr">
     
     <!-- Twitter Card 메타 태그 -->
     <meta name="twitter:card" content="summary_large_image">
@@ -45,6 +52,37 @@
     <link rel="stylesheet" href="css/responsive.css">
     
     <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- 구조화된 데이터 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "바이브코딩 SNS",
+      "alternateName": "Vibecoding SNS",
+      "url": "https://vibing.kr",
+      "description": "창작자들의 작품 공유 및 소통 플랫폼",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://vibing.kr/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "바이브코딩",
+      "url": "https://vibing.kr",
+      "logo": "https://vibing.kr/메타로고(최종).png",
+      "sameAs": []
+    }
+    </script>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -233,23 +271,14 @@
                             </svg>
                             <span>저장된 게시물</span>
                         </button>
-                        <button class="profile-tab" data-profile-tab="followers" id="profile-followers-tab">
+                        <button class="profile-tab" data-profile-tab="follow" id="profile-follow-tab">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="9" cy="7" r="4"></circle>
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
-                            <span>팔로워</span>
-                        </button>
-                        <button class="profile-tab" data-profile-tab="following" id="profile-following-tab">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="8.5" cy="7" r="4"></circle>
-                                <line x1="23" y1="11" x2="17" y2="11"></line>
-                                <line x1="20" y1="8" x2="20" y2="14"></line>
-                            </svg>
-                            <span>팔로잉</span>
+                            <span>팔로워 · 팔로잉</span>
                         </button>
                         <button class="profile-tab logout-tab" id="profile-logout-tab" onclick="handleProfileLogout()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -338,18 +367,30 @@
                                 <p>마음에 드는 작품을 저장하고 나중에 다시 감상하세요</p>
                             </div>
                         </div>
-                        <div id="profile-followers-content" class="profile-tab-content" style="display:none;">
-                            <div class="follow-list-container">
-                                <div id="followers-list-inline" class="follow-list">
-                                    <div class="follow-empty">로딩 중...</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="profile-following-content" class="profile-tab-content" style="display:none;">
-                            <div class="follow-list-container">
-                                <div id="following-list-inline" class="follow-list">
-                                    <div class="follow-empty">로딩 중...</div>
-                                </div>
+                        <div id="profile-follow-content" class="profile-tab-content" style="display:none;">
+                            <div class="follow-unified-container">
+                                <section class="follow-section" aria-label="팔로워">
+                                    <h3 class="follow-section-title">
+                                        <span>팔로워</span>
+                                        <span class="follow-section-count" id="follow-section-followers-count"></span>
+                                    </h3>
+                                    <div class="follow-list-container">
+                                        <div id="followers-list-inline" class="follow-list">
+                                            <div class="follow-empty">로딩 중...</div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="follow-section" aria-label="팔로잉">
+                                    <h3 class="follow-section-title">
+                                        <span>팔로잉</span>
+                                        <span class="follow-section-count" id="follow-section-following-count"></span>
+                                    </h3>
+                                    <div class="follow-list-container">
+                                        <div id="following-list-inline" class="follow-list">
+                                            <div class="follow-empty">로딩 중...</div>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>
@@ -452,14 +493,6 @@
                             </svg>
                         </button>
                         
-                        <!-- 검색 토글 버튼 -->
-                        <button class="board-desktop-search-btn" id="board-search-toggle" onclick="toggleBoardSearchPanel()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                            </svg>
-                        </button>
-                        
                         <!-- 게시판 전환 버튼 -->
                         <button class="board-desktop-switch-btn" id="board-type-switch-btn" onclick="toggleBoardTypeFromButton()" title="게시판 전환">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -470,10 +503,24 @@
                                 <polyline points="10 9 9 9 8 9"></polyline>
                             </svg>
                         </button>
+                        
+                        <!-- 검색 토글 버튼 -->
+                        <button class="board-desktop-search-btn" id="board-search-toggle" onclick="toggleBoardSearchPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- 플로팅 액션 버튼 그룹 (모바일) -->
                     <div class="floating-action-buttons">
+                        <button class="search-toggle-btn" id="board-search-toggle-mobile" onclick="toggleBoardSearchPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
                         <button class="floating-switch-btn" onclick="toggleBoardTypeFromButton()" title="게시판 전환">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -487,12 +534,6 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </button>
-                        <button class="search-toggle-btn" id="board-search-toggle-mobile" onclick="toggleBoardSearchPanel()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
                             </svg>
                         </button>
                     </div>

@@ -60,9 +60,9 @@
         padding: 16px;
     }
     
-    /* 프로필 게시물 그리드 */
+    /* 프로필 게시물 그리드 - 모바일에서 좌우 여백 축소 */
     #profile-posts-grid {
-        padding: 12px;
+        padding: 12px 6px;
     }
     
     /* 프로필 편집 모달 */
@@ -102,6 +102,20 @@
     
     .follow-modal-content .modal-body {
         max-height: calc(100vh - 120px);
+    }
+    
+    /* 팔로워·팔로잉 통합 화면 */
+    .follow-unified-container {
+        padding: 16px;
+        gap: 24px;
+    }
+    
+    .follow-section-title {
+        font-size: 15px;
+    }
+    
+    .follow-section-count {
+        font-size: 13px;
     }
     
     /* 닉네임 변경 제한 안내 */

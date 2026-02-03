@@ -705,8 +705,12 @@
 
 /* ========== 반응형 디자인 ========== */
 @media (max-width: 768px) {
+    .content-area:has(#board-tab-content.active) {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
     .board-container {
-        padding: 12px;
+        padding: 12px 6px;
         margin-left: 0;
     }
     
@@ -837,6 +841,13 @@
 
 /* ========== 모바일 전용 (480px 이하) ========== */
 @media (max-width: 480px) {
+    .content-area:has(#board-tab-content.active) {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    .board-container {
+        padding: 10px 4px;
+    }
     .board-scroll-image {
         height: 350px;
     }

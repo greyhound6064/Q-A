@@ -26,6 +26,12 @@ const STATUS_INFO = {
     developing: { emoji: '🔥', text: '작품 개발 중' }
 };
 
+/** onclick 등 HTML 속성에 넣을 값 이스케이프 (따옴표/역슬래시) */
+function escapeAttr(val) {
+    if (val == null) return '';
+    return String(val).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
 // 프로필 정보 업데이트
 export async function updateProfileInfo() {
     try {
@@ -689,11 +695,14 @@ export async function openFollowersModal() {
             if (!profile) continue;
             
             const following = await isFollowing(session.user.id, profile.user_id);
+            const uid = escapeAttr(profile.user_id);
+            const nick = escapeAttr(profile.nickname);
             
             const item = document.createElement('div');
             item.className = 'follow-item';
+            item.setAttribute('data-user-id', profile.user_id);
             item.innerHTML = `
-                <div class="follow-avatar" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-avatar" style="cursor: pointer;">
                     ${profile.avatar_url 
                         ? `<img src="${profile.avatar_url}" alt="${profile.nickname}">` 
                         : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -702,13 +711,13 @@ export async function openFollowersModal() {
                         </svg>`
                     }
                 </div>
-                <div class="follow-info" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-info" style="cursor: pointer;">
                     <p class="follow-nickname">${profile.nickname || '사용자'}</p>
                     <p class="follow-bio">${profile.bio || ''}</p>
                 </div>
                 ${profile.user_id !== session.user.id 
                     ? `<button class="follow-btn ${following ? 'following' : ''}" 
-                        onclick="handleFollowToggle('${profile.user_id}', '${profile.nickname}', this)">
+                        onclick="handleFollowToggle('${uid}', '${nick}', this)">
                         ${following ? '팔로잉' : '팔로우'}
                     </button>` 
                     : ''
@@ -766,10 +775,13 @@ export async function openFollowingModal() {
                 continue;
             }
             
+            const uid = escapeAttr(profile.user_id);
+            const nick = escapeAttr(profile.nickname);
             const item = document.createElement('div');
             item.className = 'follow-item';
+            item.setAttribute('data-user-id', profile.user_id);
             item.innerHTML = `
-                <div class="follow-avatar" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-avatar" style="cursor: pointer;">
                     ${profile.avatar_url 
                         ? `<img src="${profile.avatar_url}" alt="${profile.nickname}">` 
                         : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -778,12 +790,12 @@ export async function openFollowingModal() {
                         </svg>`
                     }
                 </div>
-                <div class="follow-info" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-info" style="cursor: pointer;">
                     <p class="follow-nickname">${profile.nickname || '사용자'}</p>
                     <p class="follow-bio">${profile.bio || ''}</p>
                 </div>
                 <button class="follow-btn following" 
-                    onclick="handleFollowToggle('${profile.user_id}', '${profile.nickname}', this)">
+                    onclick="handleFollowToggle('${uid}', '${nick}', this)">
                     팔로잉
                 </button>
             `;
@@ -795,8 +807,8 @@ export async function openFollowingModal() {
     }
 }
 
-// 팔로워 모달 닫기
-export function closeFollowersModal() {
+// 팔로워 모달 닫기 (skipGoBack: true면 히스토리 뒤로가기 생략 - 사용자 프로필로 이동 시 사용)
+export function closeFollowersModal(skipGoBack = false) {
     const modal = document.getElementById('followers-modal');
     if (!modal) return;
     
@@ -804,14 +816,13 @@ export function closeFollowersModal() {
     document.body.style.overflow = '';
     document.body.classList.remove('modal-open');
     
-    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
-    if (!historyManager.isRestoringState()) {
+    if (!skipGoBack && !historyManager.isRestoringState()) {
         historyManager.goBack();
     }
 }
 
-// 팔로잉 모달 닫기
-export function closeFollowingModal() {
+// 팔로잉 모달 닫기 (skipGoBack: true면 히스토리 뒤로가기 생략 - 사용자 프로필로 이동 시 사용)
+export function closeFollowingModal(skipGoBack = false) {
     const modal = document.getElementById('following-modal');
     if (!modal) return;
     
@@ -819,8 +830,7 @@ export function closeFollowingModal() {
     document.body.style.overflow = '';
     document.body.classList.remove('modal-open');
     
-    // 뒤로 가기 (히스토리 복원 중이 아닐 때만)
-    if (!historyManager.isRestoringState()) {
+    if (!skipGoBack && !historyManager.isRestoringState()) {
         historyManager.goBack();
     }
 }
@@ -879,8 +889,7 @@ export function showOwnProfileUI() {
     const uploadBtn = document.getElementById('profile-upload-btn');
     const postsTabLabel = document.getElementById('profile-posts-tab-label');
     const savedTab = document.getElementById('profile-saved-tab');
-    const followersTab = document.getElementById('profile-followers-tab');
-    const followingTab = document.getElementById('profile-following-tab');
+    const followTab = document.getElementById('profile-follow-tab');
     const logoutTab = document.getElementById('profile-logout-tab');
     const subTabs = document.querySelector('.profile-sub-tabs'); // 서브 탭
     const privacyNotice = document.getElementById('profile-privacy-notice'); // 안내 문구
@@ -892,8 +901,7 @@ export function showOwnProfileUI() {
     if (uploadBtn) uploadBtn.style.display = 'flex';
     if (postsTabLabel) postsTabLabel.textContent = '내 게시물';
     if (savedTab) savedTab.style.display = 'flex';
-    if (followersTab) followersTab.style.display = 'flex';
-    if (followingTab) followingTab.style.display = 'flex';
+    if (followTab) followTab.style.display = 'flex';
     if (logoutTab) logoutTab.style.display = 'flex';
     if (subTabs) subTabs.style.display = 'flex'; // 본인 프로필에서는 서브 탭 표시
     if (privacyNotice) privacyNotice.style.display = 'flex'; // 본인 프로필에서는 안내 문구 표시
@@ -910,8 +918,7 @@ export function showOtherProfileUI() {
     const messageBtn = document.getElementById('profile-message-btn');
     const postsTabLabel = document.getElementById('profile-posts-tab-label');
     const savedTab = document.getElementById('profile-saved-tab');
-    const followersTab = document.getElementById('profile-followers-tab');
-    const followingTab = document.getElementById('profile-following-tab');
+    const followTab = document.getElementById('profile-follow-tab');
     const logoutTab = document.getElementById('profile-logout-tab');
     const subTabs = document.querySelector('.profile-sub-tabs'); // 서브 탭
     const privacyNotice = document.getElementById('profile-privacy-notice'); // 안내 문구
@@ -924,8 +931,7 @@ export function showOtherProfileUI() {
     if (messageBtn) messageBtn.style.display = 'flex'; // 쪽지 버튼 표시
     if (postsTabLabel) postsTabLabel.textContent = `${username}님의 작품`;
     if (savedTab) savedTab.style.display = 'none';
-    if (followersTab) followersTab.style.display = 'none';
-    if (followingTab) followingTab.style.display = 'none';
+    if (followTab) followTab.style.display = 'none';
     if (logoutTab) logoutTab.style.display = 'none';
     if (subTabs) subTabs.style.display = 'none'; // 타인 프로필에서는 서브 탭 숨김
     if (privacyNotice) privacyNotice.style.display = 'none'; // 타인 프로필에서는 안내 문구 숨김
@@ -947,35 +953,51 @@ export function getCurrentViewingUserId() {
 // 사용자 ID로 프로필 로드 (팔로워/팔로잉 목록에서 클릭 시)
 export async function loadUserProfileById(userId) {
     try {
+        userId = (userId || '').trim();
+        if (!userId) return;
+        
         const { data: { session } } = await _supabase.auth.getSession();
         
-        // 본인 프로필인 경우
-        if (session && session.user && session.user.id === userId) {
-            // 프로필 탭으로 전환
-            if (window.switchTab) {
-                window.switchTab('profile');
-            }
-            // 본인 프로필 정보 업데이트
-            if (window.updateProfileInfo) {
-                await window.updateProfileInfo();
-            }
-            // 모달 닫기
+        // 본인 프로필인 경우 (문자열 비교로 타입 차이 방지)
+        const currentId = session?.user?.id ? String(session.user.id) : '';
+        if (currentId && currentId === String(userId)) {
+            if (window.switchTab) window.switchTab('profile');
+            if (window.updateProfileInfo) await window.updateProfileInfo();
             closeFollowersModal();
             closeFollowingModal();
             return;
         }
         
-        // 타인 프로필인 경우 - userSearch의 loadUserProfile 호출
-        if (window.selectUserById) {
-            await window.selectUserById(userId);
-            // 모달 닫기
-            closeFollowersModal();
-            closeFollowingModal();
+        // 타인 프로필: 프로필 탭으로 전환 후 해당 사용자 프로필 로드
+        if (typeof window.selectUserById !== 'function') {
+            console.error('selectUserById not available');
+            alert('프로필을 불러올 수 없습니다.');
+            return;
         }
+        await window.selectUserById(userId);
+        // 모달만 닫고 goBack() 호출 안 함 → 히스토리 복원으로 본인 프로필로 덮어씌워지는 것 방지
+        closeFollowersModal(true);
+        closeFollowingModal(true);
     } catch (error) {
         console.error('프로필 로드 에러:', error);
         alert('프로필을 불러오는 중 오류가 발생했습니다.');
     }
+}
+
+/** 팔로워/팔로잉 목록에서 아바타·이름 클릭 시 프로필로 이동 (이벤트 위임, 전파 차단) */
+function initFollowListClickDelegation() {
+    document.addEventListener('click', (e) => {
+        const avatarOrInfo = e.target.closest('.follow-avatar') || e.target.closest('.follow-info');
+        if (!avatarOrInfo) return;
+        if (e.target.closest('.follow-btn')) return;
+        const item = avatarOrInfo.closest('.follow-item');
+        if (!item) return;
+        const uid = item.getAttribute('data-user-id');
+        if (!uid) return;
+        e.preventDefault();
+        e.stopPropagation();
+        if (window.loadUserProfileById) window.loadUserProfileById(uid);
+    }, true);
 }
 
 /**
@@ -1142,6 +1164,27 @@ export async function filterProfilePosts(filter) {
     await renderArtworksGrid(userId, filter);
 }
 
+// ========== 팔로워·팔로잉 통합 화면 렌더링 ==========
+export async function renderFollowUnified() {
+    const followersCountEl = document.getElementById('follow-section-followers-count');
+    const followingCountEl = document.getElementById('follow-section-following-count');
+    try {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (session?.user) {
+            const stats = await getFollowStats(currentViewingUserId || session.user.id);
+            if (followersCountEl) followersCountEl.textContent = `(${stats.followers})`;
+            if (followingCountEl) followingCountEl.textContent = `(${stats.following})`;
+        } else {
+            if (followersCountEl) followersCountEl.textContent = '';
+            if (followingCountEl) followingCountEl.textContent = '';
+        }
+    } catch (err) {
+        if (followersCountEl) followersCountEl.textContent = '';
+        if (followingCountEl) followingCountEl.textContent = '';
+    }
+    await Promise.all([renderFollowersInline(), renderFollowingInline()]);
+}
+
 // ========== 인라인 팔로워 렌더링 ==========
 export async function renderFollowersInline() {
     const listEl = document.getElementById('followers-list-inline');
@@ -1173,11 +1216,14 @@ export async function renderFollowersInline() {
             
             // 팔로우 상태 확인
             const following = await isFollowing(session.user.id, profile.user_id);
+            const uid = escapeAttr(profile.user_id);
+            const nick = escapeAttr(profile.nickname);
             
             const item = document.createElement('div');
             item.className = 'follow-item';
+            item.setAttribute('data-user-id', profile.user_id);
             item.innerHTML = `
-                <div class="follow-avatar" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-avatar" style="cursor: pointer;">
                     ${profile.avatar_url 
                         ? `<img src="${profile.avatar_url}" alt="${profile.nickname}">` 
                         : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1186,13 +1232,13 @@ export async function renderFollowersInline() {
                         </svg>`
                     }
                 </div>
-                <div class="follow-info" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-info" style="cursor: pointer;">
                     <p class="follow-nickname">${profile.nickname || '사용자'}</p>
                     <p class="follow-bio">${profile.bio || ''}</p>
                 </div>
                 ${profile.user_id !== session.user.id 
                     ? `<button class="follow-btn ${following ? 'following' : ''}" 
-                        onclick="handleFollowToggle('${profile.user_id}', '${profile.nickname}', this)">
+                        onclick="handleFollowToggle('${uid}', '${nick}', this)">
                         ${following ? '팔로잉' : '팔로우'}
                     </button>` 
                     : ''
@@ -1235,10 +1281,13 @@ export async function renderFollowingInline() {
             const profile = follow.following_profile;
             if (!profile) continue;
             
+            const uid = escapeAttr(profile.user_id);
+            const nick = escapeAttr(profile.nickname);
             const item = document.createElement('div');
             item.className = 'follow-item';
+            item.setAttribute('data-user-id', profile.user_id);
             item.innerHTML = `
-                <div class="follow-avatar" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-avatar" style="cursor: pointer;">
                     ${profile.avatar_url 
                         ? `<img src="${profile.avatar_url}" alt="${profile.nickname}">` 
                         : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1247,12 +1296,12 @@ export async function renderFollowingInline() {
                         </svg>`
                     }
                 </div>
-                <div class="follow-info" onclick="window.loadUserProfileById('${profile.user_id}')" style="cursor: pointer;">
+                <div class="follow-info" style="cursor: pointer;">
                     <p class="follow-nickname">${profile.nickname || '사용자'}</p>
                     <p class="follow-bio">${profile.bio || ''}</p>
                 </div>
                 <button class="follow-btn following" 
-                    onclick="handleFollowToggle('${profile.user_id}', '${profile.nickname}', this)">
+                    onclick="handleFollowToggle('${uid}', '${nick}', this)">
                     팔로잉
                 </button>
             `;
@@ -1544,8 +1593,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 외부 클릭 시 드롭다운 닫기
+// 외부 클릭 시 드롭다운 닫기 + 팔로우 목록 클릭 위임 (전파 차단으로 잘못된 탭 전환 방지)
 document.addEventListener('DOMContentLoaded', () => {
+    initFollowListClickDelegation();
     document.addEventListener('click', (e) => {
         const dropdown = document.getElementById('profile-status-dropdown');
         const addBtn = document.getElementById('profile-status-add-btn');
@@ -1567,5 +1617,6 @@ window.getCurrentViewingUserId = getCurrentViewingUserId;
 window.loadUserProfileById = loadUserProfileById;
 window.renderSavedArtworks = renderSavedArtworks;
 window.filterProfilePosts = filterProfilePosts;
+window.renderFollowUnified = renderFollowUnified;
 window.renderFollowersInline = renderFollowersInline;
 window.renderFollowingInline = renderFollowingInline;
