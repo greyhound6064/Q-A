@@ -1,0 +1,6 @@
+# sitemap.xml과 robots.txt는 리다이렉트하지 않음
+/sitemap.xml  /sitemap.xml  200
+/robots.txt   /robots.txt   200
+
+# 나머지 모든 요청은 index.html로 (SPA 라우팅)
+/*  /index.html  200
