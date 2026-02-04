@@ -404,10 +404,6 @@ body.dark-mode .music-volume-control {
     visibility: visible;
 }
 
-.music-control:hover .sidebar-music-tooltip {
-    color: white;
-}
-
 /* 활성 탭 배경 */
 .tab-button.active::after {
     background: var(--primary);

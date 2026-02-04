@@ -50,6 +50,10 @@ let isVolumeControlVisible = false;
 const MOBILE_VOLUME_BAR_AUTO_HIDE_MS = 2500;
 let mobileVolumeBarHideTimeoutId = null;
 
+// 데스크톱 재생바 자동 숨김 (표시 후 2.5초 뒤 숨김, 그 전에는 호버 풀려도 유지)
+const DESKTOP_VOLUME_BAR_AUTO_HIDE_MS = 2500;
+let desktopVolumeBarHideTimeoutId = null;
+
 // 목표 볼륨 (슬라이더/저장값, 크로스페이드 끝에도 적용)
 let targetVolume = parseFloat(localStorage.getItem('musicVolume')) || 0.3;
 currentBgm.volume = targetVolume;
@@ -76,6 +80,28 @@ function clearMobileVolumeBarAutoHide() {
     if (mobileVolumeBarHideTimeoutId) {
         clearTimeout(mobileVolumeBarHideTimeoutId);
         mobileVolumeBarHideTimeoutId = null;
+    }
+}
+
+/** 데스크톱에서 재생바 자동 숨김 타이머 예약 (표시 후 2.5초 뒤 숨김, 호버 풀려도 유지) */
+function scheduleDesktopVolumeBarAutoHide() {
+    if (desktopVolumeBarHideTimeoutId) {
+        clearTimeout(desktopVolumeBarHideTimeoutId);
+        desktopVolumeBarHideTimeoutId = null;
+    }
+    if (window.innerWidth <= 768) return;
+    desktopVolumeBarHideTimeoutId = setTimeout(() => {
+        volumeControl.classList.remove('show');
+        isVolumeControlVisible = false;
+        desktopVolumeBarHideTimeoutId = null;
+    }, DESKTOP_VOLUME_BAR_AUTO_HIDE_MS);
+}
+
+/** 데스크톱 재생바 자동 숨김 타이머 취소 */
+function clearDesktopVolumeBarAutoHide() {
+    if (desktopVolumeBarHideTimeoutId) {
+        clearTimeout(desktopVolumeBarHideTimeoutId);
+        desktopVolumeBarHideTimeoutId = null;
     }
 }
 
@@ -148,10 +174,11 @@ musicToggleBtn.addEventListener('click', (e) => {
         playMusic();
     }
     
-    // 데스크톱에서 클릭 시 볼륨바 표시
+    // 데스크톱에서 클릭 시 볼륨바 표시 (2.5초 후 자동 숨김, 그 전에는 호버 풀려도 유지)
     if (window.innerWidth > 768) {
         volumeControl.classList.add('show');
         isVolumeControlVisible = true;
+        scheduleDesktopVolumeBarAutoHide();
     }
 });
 
@@ -182,15 +209,7 @@ if (contentArea) {
     });
 }
 
-// 마우스 이탈 시 볼륨바 숨김 (데스크톱용)
-if (musicControl) {
-    musicControl.addEventListener('mouseleave', () => {
-        if (window.innerWidth > 768 && isVolumeControlVisible) {
-            volumeControl.classList.remove('show');
-            isVolumeControlVisible = false;
-        }
-    });
-}
+// 데스크톱: 볼륨바는 2.5초 후 자동 숨김만 적용 (마우스 이탈 시 즉시 숨기지 않음)
 
 // 음악 재생 함수 (배경음 폴더에서 랜덤 트랙으로 시작)
 function playMusic() {
@@ -299,6 +318,10 @@ volumeSlider.addEventListener('input', (e) => {
     // 모바일: 슬라이더 조작 시 자동 숨김 타이머 리셋
     if (window.innerWidth <= 768 && isVolumeControlVisible) {
         scheduleMobileVolumeBarAutoHide();
+    }
+    // 데스크톱: 볼륨 조정 중에는 2.5초 자동 숨김 타이머 리셋
+    if (window.innerWidth > 768 && isVolumeControlVisible) {
+        scheduleDesktopVolumeBarAutoHide();
     }
 });
 
