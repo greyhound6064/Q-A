@@ -40,6 +40,7 @@ const musicPauseIcon = document.querySelector('.music-pause');
 const volumeSlider = document.getElementById('music-volume-slider');
 const volumePercentage = document.getElementById('volume-percentage');
 const volumeControl = document.getElementById('music-volume-control');
+const musicChangeTrackBtn = document.getElementById('music-change-track-btn');
 const musicControl = document.querySelector('.music-control');
 
 // 음악 재생 상태 (기본값: false - 음소거)
@@ -60,6 +61,9 @@ currentBgm.volume = targetVolume;
 nextBgm.volume = 0;
 volumeSlider.value = targetVolume * 100;
 volumePercentage.textContent = Math.round(targetVolume * 100) + '%';
+
+// 이번 사이클에서 이미 재생한 곡 (전체 재생 후에만 다시 선택 가능)
+const playedTracksThisCycle = new Set();
 
 /** 모바일에서 재생바 자동 숨김 타이머 예약 (표시 후 MOBILE_VOLUME_BAR_AUTO_HIDE_MS 뒤에 숨김) */
 function scheduleMobileVolumeBarAutoHide() {
@@ -105,10 +109,31 @@ function clearDesktopVolumeBarAutoHide() {
     }
 }
 
-/** 배경음 목록에서 랜덤 트랙 경로 반환 (이전 곡 제외 가능, src는 절대 URL일 수 있음) */
+/** src(절대 URL 또는 상대 경로)를 BGM_TRACKS 형식 경로로 정규화 (예: '배경음/1.mp3') */
+function normalizeTrackPath(src) {
+    if (!src) return '';
+    const s = src.split('?')[0];
+    const idx = s.indexOf('배경음/');
+    if (idx !== -1) return s.substring(idx);
+    const parts = s.split('/').filter(Boolean);
+    return parts.length ? '배경음/' + parts[parts.length - 1] : '';
+}
+
+/** 이번 사이클에서 재생한 곡으로 기록 (전체 곡 재생 후에만 다시 선택 가능) */
+function markTrackAsPlayed(src) {
+    const path = normalizeTrackPath(src);
+    if (path) playedTracksThisCycle.add(path);
+}
+
+/** 배경음 목록에서 랜덤 트랙 경로 반환. 이번 사이클에서 아직 안 들은 곡만 선택, 다 들으면 사이클 초기화 후 선택 */
 function getRandomTrack(excludeSrc = '') {
-    const isCurrent = (path) => path === excludeSrc || (excludeSrc && excludeSrc.endsWith(path));
-    const list = excludeSrc ? BGM_TRACKS.filter(p => !isCurrent(p)) : BGM_TRACKS;
+    const excludePath = normalizeTrackPath(excludeSrc);
+    const isCurrent = (path) => path === excludePath || path === excludeSrc || (excludeSrc && excludeSrc.endsWith(path));
+    let list = BGM_TRACKS.filter(p => !playedTracksThisCycle.has(p) && !isCurrent(p));
+    if (list.length === 0) {
+        playedTracksThisCycle.clear();
+        list = excludePath ? BGM_TRACKS.filter(p => !isCurrent(p)) : BGM_TRACKS;
+    }
     if (list.length === 0) return BGM_TRACKS[0];
     return list[Math.floor(Math.random() * list.length)];
 }
@@ -122,6 +147,7 @@ function startCrossfade() {
     crossfadeStarted = true;
     const nextSrc = getRandomTrack(currentBgm.src || '');
     nextBgm.src = nextSrc;
+    markTrackAsPlayed(nextSrc);
     nextBgm.volume = 0;
     nextBgm.load();
     nextBgm.play().catch(err => console.log('다음 곡 재생 실패:', err));
@@ -146,11 +172,24 @@ function startCrossfade() {
     }, CROSSFADE_INTERVAL_MS);
 }
 
+/** 볼륨바 "음악 바꾸기" 버튼용: 다음 랜덤 곡으로 전환 (재생 중이면 재생, 일시정지면 로드만) */
+function changeToNextTrack() {
+    const src = getRandomTrack(currentBgm.src || '');
+    currentBgm.src = src;
+    markTrackAsPlayed(src);
+    currentBgm.volume = targetVolume;
+    currentBgm.load();
+    if (isMusicPlaying) {
+        currentBgm.play().catch(err => console.log('재생 실패:', err));
+    }
+}
+
 /** 다음 곡 즉시 재생 (크로스페이드 미적용: 짧은 곡/폴백) */
 function playNextRandom() {
     if (!isMusicPlaying) return;
     const src = getRandomTrack(currentBgm.src || '');
     currentBgm.src = src;
+    markTrackAsPlayed(src);
     currentBgm.volume = targetVolume;
     currentBgm.load();
     currentBgm.play().catch(err => console.log('재생 실패:', err));
@@ -211,15 +250,36 @@ if (contentArea) {
 
 // 데스크톱: 볼륨바는 2.5초 후 자동 숨김만 적용 (마우스 이탈 시 즉시 숨기지 않음)
 
-// 음악 재생 함수 (배경음 폴더에서 랜덤 트랙으로 시작)
+// 음악 재생 함수 (이미 로드된 곡이 있으면 이어서 재생, 없으면 랜덤 트랙으로 시작)
 function playMusic() {
     crossfadeStarted = false;
     if (crossfadeIntervalId) {
         clearInterval(crossfadeIntervalId);
         crossfadeIntervalId = null;
     }
+    // 이미 로드된 곡이 있으면 이어서 재생 (헤드셋 재클릭 시 음악 바꾸지 않음)
+    const hasLoadedTrack = currentBgm.src && (currentBgm.currentTime > 0 || (currentBgm.duration && !isNaN(currentBgm.duration) && currentBgm.duration > 0));
+    if (hasLoadedTrack) {
+        currentBgm.volume = targetVolume;
+        nextBgm.volume = 0;
+        isMusicPlaying = true;
+        localStorage.setItem('musicPlaying', 'true');
+        updateMusicIcon();
+        currentBgm.play()
+            .then(() => {
+                if (window.innerWidth <= 768) {
+                    volumeControl.classList.add('show');
+                    isVolumeControlVisible = true;
+                    scheduleMobileVolumeBarAutoHide();
+                }
+            })
+            .catch(error => console.log('음악 재생 실패:', error));
+        return;
+    }
+    // 새로 재생 시작
     const src = getRandomTrack();
     currentBgm.src = src;
+    markTrackAsPlayed(src);
     currentBgm.volume = targetVolume;
     nextBgm.volume = 0;
     currentBgm.load();
@@ -307,6 +367,20 @@ function onBgmError(e) {
 }
 bgMusic.addEventListener('error', onBgmError);
 bgMusicNext.addEventListener('error', onBgmError);
+
+// 음악 바꾸기 버튼: 다음 랜덤 곡으로 전환
+if (musicChangeTrackBtn) {
+    musicChangeTrackBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        changeToNextTrack();
+        if (window.innerWidth <= 768 && isVolumeControlVisible) {
+            scheduleMobileVolumeBarAutoHide();
+        }
+        if (window.innerWidth > 768 && isVolumeControlVisible) {
+            scheduleDesktopVolumeBarAutoHide();
+        }
+    });
+}
 
 // 음량 슬라이더: 목표 볼륨 반영 (현재 재생 중인 곡에 즉시 적용)
 volumeSlider.addEventListener('input', (e) => {

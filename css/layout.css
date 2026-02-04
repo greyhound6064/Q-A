@@ -259,6 +259,32 @@
     text-align: right;
 }
 
+/* 음악 바꾸기 버튼 (볼륨바 내) */
+.music-change-track-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 0.375rem;
+    background: var(--border);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.music-change-track-btn:hover {
+    background: var(--primary);
+    color: var(--bg);
+}
+
+.music-change-track-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 /* 다크모드 음악 컨트롤 */
 body.dark-mode .music-toggle-btn {
     color: rgba(255, 255, 255, 0.7);
@@ -281,6 +307,10 @@ body.dark-mode .music-toggle-btn.playing:hover {
 body.dark-mode .music-volume-control {
     background: var(--card-bg);
     border: 1px solid var(--border);
+}
+
+body.dark-mode .music-change-track-btn:hover {
+    color: var(--card-bg);
 }
 
 .sidebar #auth-section {
