@@ -1,7 +1,20 @@
 /**
  * @file backgroundMusic.js
- * @description 배경음악 재생/일시정지 기능
+ * @description 배경음악 재생/일시정지, 배경음 폴더 랜덤 재생
  */
+
+// 배경음 폴더 내 mp3 목록 (랜덤 재생용)
+const BGM_TRACKS = [
+    '배경음/1.mp3',
+    '배경음/2.mp3',
+    '배경음/3.mp3',
+    '배경음/4.mp3',
+    '배경음/5.mp3',
+    '배경음/Untitled (1).mp3',
+    '배경음/Untitled (2).mp3',
+    '배경음/Untitled (3).mp3',
+    '배경음/Untitled.mp3',
+];
 
 // 배경음악 요소
 const bgMusic = document.getElementById('background-music');
@@ -22,17 +35,22 @@ bgMusic.volume = savedVolume;
 volumeSlider.value = savedVolume * 100;
 volumePercentage.textContent = Math.round(savedVolume * 100) + '%';
 
-// 부드러운 루프를 위한 설정
-bgMusic.preload = 'auto'; // 전체 파일 미리 로드
-bgMusic.loop = true; // 기본 루프 활성화
+bgMusic.preload = 'auto';
+bgMusic.loop = false; // 랜덤 연속 재생으로 대체
 
-// 루프 끊김 방지: 끝나기 직전에 처음으로 되돌리기
-bgMusic.addEventListener('timeupdate', () => {
-    // 음악이 끝나기 0.5초 전에 처음으로 되돌림 (더 부드러운 루프)
-    if (bgMusic.duration > 0 && bgMusic.currentTime >= bgMusic.duration - 0.5) {
-        bgMusic.currentTime = 0;
-    }
-});
+/** 배경음 목록에서 랜덤 트랙 경로 반환 */
+function getRandomTrack() {
+    return BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
+}
+
+/** 다음 곡을 랜덤으로 설정하고 재생 (재생 중일 때만) */
+function playNextRandom() {
+    if (!isMusicPlaying) return;
+    const src = getRandomTrack();
+    bgMusic.src = src;
+    bgMusic.load();
+    bgMusic.play().catch(err => console.log('재생 실패:', err));
+}
 
 // 페이지 로드 시 음소거 상태로 시작
 window.addEventListener('DOMContentLoaded', () => {
@@ -78,20 +96,20 @@ if (contentArea) {
     });
 }
 
-// 음악 재생 함수
+// 음악 재생 함수 (배경음 폴더에서 랜덤 트랙으로 시작)
 function playMusic() {
+    const src = getRandomTrack();
+    bgMusic.src = src;
+    bgMusic.load();
+    isMusicPlaying = true;
+    localStorage.setItem('musicPlaying', 'true');
+    updateMusicIcon();
+
     bgMusic.play()
         .then(() => {
-            isMusicPlaying = true;
-            localStorage.setItem('musicPlaying', 'true');
-            updateMusicIcon();
-            
-            // 모바일에서 음악 재생 성공 시 음량 조절 바 표시
             if (window.innerWidth <= 768) {
-                console.log('모바일: 음량 조절 바 표시');
                 volumeControl.classList.add('show');
                 isVolumeControlVisible = true;
-                console.log('show 클래스 추가됨:', volumeControl.classList.contains('show'));
             }
         })
         .catch(error => {
@@ -128,11 +146,13 @@ function updateMusicIcon() {
     }
 }
 
-// 음악 종료 시 이벤트 (loop 속성이 있어서 실제로는 발생하지 않음)
+// 곡이 끝나면 다음 곡 랜덤 재생
 bgMusic.addEventListener('ended', () => {
-    isMusicPlaying = false;
-    localStorage.setItem('musicPlaying', 'false');
-    updateMusicIcon();
+    if (isMusicPlaying) {
+        playNextRandom();
+    } else {
+        updateMusicIcon();
+    }
 });
 
 // 음악 로드 에러 처리
