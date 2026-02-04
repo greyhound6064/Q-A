@@ -4,8 +4,8 @@
 
 export function updateMetaTags(config) {
     const {
-        title = '바이브코딩으로 만든 바이브코딩 SNS',
-        description = '바이브코딩 SNS - 창작자들이 작품을 공유하고 소통하는 커뮤니티',
+        title = 'Vibing: AI 바이브코딩 결과물 공유 커뮤니티',
+        description = '당신의 바이브를 공유하세요, Vibing에서',
         url = window.location.href,
         image = 'https://vibing.kr/메타로고(최종).png'
     } = config;
@@ -58,27 +58,27 @@ function updateCanonicalUrl(url) {
 // 페이지별 SEO 설정
 export const SEO_CONFIGS = {
     board: {
-        title: '게시판 - 바이브코딩 SNS',
+        title: '게시판 - 바이브코딩 커뮤니티',
         description: '바이브코딩 커뮤니티의 작품 게시판과 자유 게시판을 확인하세요.',
         url: 'https://vibing.kr/#/board'
     },
     profile: {
-        title: '프로필 - 바이브코딩 SNS',
+        title: '프로필 - 바이브코딩 커뮤니티',
         description: '내 프로필과 작품을 관리하고 팔로워와 소통하세요.',
         url: 'https://vibing.kr/#/profile'
     },
     vibing: {
-        title: '바이빙 - 바이브코딩 SNS',
+        title: '바이빙 - 바이브코딩 커뮤니티',
         description: '바이브코딩 커뮤니티의 바이빙 기능을 경험하세요.',
         url: 'https://vibing.kr/#/vibing'
     },
     messages: {
-        title: '메시지 - 바이브코딩 SNS',
+        title: '메시지 - 바이브코딩 커뮤니티',
         description: '다른 창작자들과 실시간으로 메시지를 주고받으세요.',
         url: 'https://vibing.kr/#/messages'
     },
     'user-search': {
-        title: '사용자 검색 - 바이브코딩 SNS',
+        title: '사용자 검색 - 바이브코딩 커뮤니티',
         description: '바이브코딩 커뮤니티의 다른 창작자들을 찾아보세요.',
         url: 'https://vibing.kr/#/user-search'
     }
