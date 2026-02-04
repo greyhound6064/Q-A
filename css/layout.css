@@ -69,6 +69,25 @@
     font-weight: 500;
 }
 
+/* 음악 컨트롤 툴팁 */
+.sidebar-music-tooltip {
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    background: transparent;
+    padding: 0.75rem 1rem 0.75rem 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease, color 0.3s ease;
+    pointer-events: auto;
+    z-index: 1000;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
 /* ========== 배경음악 컨트롤 ========== */
 .music-control {
     display: flex;
@@ -81,6 +100,19 @@
     gap: 0;
     position: relative;
     order: 2;
+}
+
+/* 재생바까지 이어지는 호버 영역 (버튼↔재생바 갭에서 mouseleave 방지) */
+.music-control::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 220px;
+    height: 56px;
+    z-index: 1;
+    pointer-events: auto;
 }
 
 .music-toggle-btn {
@@ -162,13 +194,18 @@
 }
 
 
-/* 호버 시 볼륨 컨트롤 표시 */
-.music-control:hover .music-volume-control,
-.music-volume-control:hover {
+/* 클릭 시 볼륨 컨트롤 표시 (데스크톱) */
+.music-volume-control.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(-50%) translateX(0);
     pointer-events: auto;
+}
+
+/* 재생바가 열려 있을 때 Lo-fi 툴팁 숨김 */
+.music-control:has(.music-volume-control.show) .sidebar-music-tooltip {
+    opacity: 0;
+    visibility: hidden;
 }
 
 
@@ -361,12 +398,14 @@ body.dark-mode .music-volume-control {
     visibility: visible;
 }
 
-.sidebar:hover .music-volume-control,
-.music-volume-control:hover {
+.sidebar:hover .sidebar-music-tooltip,
+.sidebar-music-tooltip:hover {
     opacity: 1;
     visibility: visible;
-    transform: translateY(-50%) translateX(0);
-    pointer-events: auto;
+}
+
+.music-control:hover .sidebar-music-tooltip {
+    color: white;
 }
 
 /* 활성 탭 배경 */

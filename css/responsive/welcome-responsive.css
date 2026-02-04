@@ -1,16 +1,46 @@
 /**
  * @file welcome-responsive.css
- * @description 웰컴 모달 반응형 스타일
- * @version 1.0.0
- * @updated 2026-01-31
+ * @description 웰컴 모달 반응형 스타일 (하단 잘림 방지)
+ * @version 1.1.0
+ * @updated 2026-02-04
  */
+
+/* ========== 짧은 뷰포트 (높이 제한) - 모든 너비 ========== */
+@media (max-height: 700px) {
+    #welcome-modal.modal {
+        padding: 12px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .welcome-modal-content {
+        max-height: calc(100vh - 24px);
+        max-height: min(88vh, calc(100dvh - 24px), calc(100vh - 24px));
+    }
+
+    .welcome-modal-content .modal-body {
+        padding: 20px 24px;
+    }
+
+    .welcome-actions {
+        margin-bottom: 12px;
+    }
+
+    .welcome-footer {
+        padding-top: 10px;
+    }
+}
 
 /* ========== 태블릿 (768px 이하) ========== */
 @media (max-width: 768px) {
+    #welcome-modal.modal {
+        padding: 12px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
     .welcome-modal-content {
         max-width: 90%;
-        max-height: 90vh;
-        margin: 10px auto;
+        max-height: min(90vh, calc(100dvh - 24px), calc(100vh - 24px));
+        margin: 0 auto;
         border-radius: 12px;
         overflow-y: auto;
         display: flex;
@@ -118,10 +148,15 @@
 
 /* ========== 모바일 (480px 이하) ========== */
 @media (max-width: 480px) {
+    #welcome-modal.modal {
+        padding: 8px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+    }
+
     .welcome-modal-content {
         max-width: 95%;
-        max-height: 95vh;
-        margin: 5px auto;
+        max-height: min(92vh, calc(100dvh - 16px), calc(100vh - 16px));
+        margin: 0 auto;
         border-radius: 10px;
     }
 
@@ -223,10 +258,15 @@
 
 /* ========== 작은 모바일 (360px 이하) ========== */
 @media (max-width: 360px) {
+    #welcome-modal.modal {
+        padding: 6px;
+        padding-bottom: max(6px, env(safe-area-inset-bottom));
+    }
+
     .welcome-modal-content {
         max-width: 98%;
-        max-height: 96vh;
-        margin: 3px auto;
+        max-height: min(94vh, calc(100dvh - 12px), calc(100vh - 12px));
+        margin: 0 auto;
     }
 
     .welcome-terminal-header {
@@ -293,10 +333,16 @@
 
 /* ========== 가로 모드 (모바일) ========== */
 @media (max-height: 500px) and (orientation: landscape) {
+    #welcome-modal.modal {
+        padding: 6px;
+        padding-bottom: max(6px, env(safe-area-inset-bottom));
+        align-items: center;
+    }
+
     .welcome-modal-content {
-        max-height: 95vh;
+        max-height: min(92vh, calc(100dvh - 12px), calc(100vh - 12px));
         max-width: 85%;
-        margin: 3px auto;
+        margin: 0 auto;
         overflow-y: auto;
     }
 

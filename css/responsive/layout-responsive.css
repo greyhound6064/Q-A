@@ -60,6 +60,10 @@
         display: none;
     }
     
+    .sidebar-music-tooltip {
+        display: none;
+    }
+    
     /* 모바일 힌트 텍스트 */
     .mobile-hint-text {
         display: flex;
@@ -97,6 +101,11 @@
     /* 배경음악 컨트롤 순서 조정 */
     .music-control {
         order: 4;
+    }
+    
+    /* 데스크톱용 호버 영역 확장은 모바일에서 비활성화 */
+    .music-control::before {
+        display: none;
     }
     
     /* 배경음악 컨트롤을 오른쪽 구석에 배치 (로고와 대칭) */

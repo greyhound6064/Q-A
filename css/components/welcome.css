@@ -1,16 +1,35 @@
 /**
  * 웰컴 모달 스타일 - 터미널 테마
+ * 반응형: 모든 뷰포트에서 하단 잘림 방지 (max-height + 스크롤)
  */
+
+/* 오버레이: 가운데 정렬, 스크롤·패딩으로 작은 화면에서 전체 모달 노출 */
+#welcome-modal.modal {
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+}
 
 .welcome-modal-content {
     max-width: 680px;
+    width: 100%;
+    max-height: calc(100vh - 32px);
+    max-height: min(90vh, calc(100dvh - 32px), calc(100vh - 32px));
     padding: 0;
     border-radius: 14px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     background: #ffffff;
     border: 1px solid #e0e0e0;
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* 다크모드 */
@@ -77,6 +96,8 @@ body.dark-mode .welcome-terminal-title {
     background: #ffffff;
     color: #333333;
     transition: all 0.3s ease;
+    min-height: 0;
+    flex: 1 1 auto;
 }
 
 body.dark-mode .welcome-modal-content .modal-body {
