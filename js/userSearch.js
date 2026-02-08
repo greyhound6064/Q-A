@@ -237,9 +237,9 @@ async function loadUserProfile(userId) {
                 postsContent.classList.add('active');
             }
             
-            // 해당 사용자의 작품 로드 (renderArtworksGrid 사용)
+            // 해당 사용자의 작품 로드 (작품관만 표시)
             if (window.renderArtworksGrid) {
-                await window.renderArtworksGrid(userId);
+                await window.renderArtworksGrid(userId, 'gallery');
             }
         }
     } catch (error) {

@@ -38,8 +38,8 @@ export async function renderArtworksGrid(targetUserId = null, filter = 'all') {
             userId = session.user.id;
         }
         
-        // 본인 프로필인지 확인
-        const isOwnProfile = session && session.user && session.user.id === userId;
+        // 본인 프로필인지 확인 (문자열로 통일해 타입 차이로 인한 오판 방지)
+        const isOwnProfile = session && session.user && String(session.user.id) === String(userId);
         
         // 사용자의 작품 가져오기 (필터 적용)
         let query = window._supabase
@@ -47,7 +47,7 @@ export async function renderArtworksGrid(targetUserId = null, filter = 'all') {
             .select('*')
             .eq('user_id', userId);
         
-        // 타인 프로필인 경우 자유 게시판 공개 게시물만 표시
+        // 타인 프로필인 경우 작품관(gallery) 공개 게시물만 표시
         if (!isOwnProfile) {
             query = query.eq('is_public', true).eq('post_type', 'gallery');
         } else {

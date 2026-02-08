@@ -20,14 +20,22 @@
 
 /* ========== 반응형: 모달 (태블릿) ========== */
 @media (max-width: 1200px) {
+    /* 세로 레이아웃 시 본문이 90vh를 넘을 수 있으므로 전체 스크롤 허용 */
+    .artwork-modal-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .artwork-modal-body {
         flex-direction: column;
+        min-height: min-content;
     }
-    
+
     .artwork-image-section {
         flex: 0 0 50%;
     }
-    
+
     .artwork-info-section {
         flex: 0 0 auto;
         border-left: none;
@@ -35,7 +43,7 @@
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
     }
-    
+
     .artwork-comments-section {
         flex: 1;
         border-left: none;

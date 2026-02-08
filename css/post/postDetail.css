@@ -808,19 +808,25 @@
 
 /* ========== 반응형: 태블릿 ========== */
 @media (max-width: 1024px) {
+    /* 세로 레이아웃 시 본문이 90vh를 넘을 수 있으므로 전체 스크롤 허용 */
     .feed-detail-content {
         flex-direction: column;
         max-width: 600px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
     }
-    
+
     .feed-detail-media-section {
         flex: 0 0 auto;
         max-height: 50vh;
     }
-    
+
+    /* flex: 1 영역이 컨테이너 높이를 넘지 않도록 축소 가능하게 (내부 .feed-detail-body 스크롤 동작) */
     .feed-detail-info-section {
         width: 100%;
         flex: 1;
+        min-height: 0;
     }
 }
 
